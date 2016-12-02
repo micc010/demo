@@ -24,22 +24,34 @@ public class DruidDataSourceConfiguration {
     @Autowired
     private DataSourceProperties properties;
 
+    /**
+     *
+     * @return
+     */
     @Bean
     public ServletRegistrationBean druidServlet() {
-        LOGGER.debug("Registered druid servlet");
+        LOGGER.debug("======Registered druid servlet======");
         return new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
     }
 
+    /**
+     *
+     * @return
+     */
     @Bean
     public FilterRegistrationBean druidFilter() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(new WebStatFilter());
         filterRegistrationBean.addUrlPatterns("/*");
         filterRegistrationBean.addInitParameter("exclusions", "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*");
-        LOGGER.debug("Registered druid filter");
+        LOGGER.debug("======Registered druid filter======");
         return filterRegistrationBean;
     }
 
+    /**
+     *
+     * @return
+     */
     @Bean(initMethod = "init", destroyMethod = "close")
     public DataSource druidDataSource() {
         DruidDataSource druidDataSource = new DruidDataSource();
@@ -52,8 +64,8 @@ public class DruidDataSourceConfiguration {
         druidDataSource.setValidationQuery(properties.getValidationQuery());
         druidDataSource.setDriverClassName(properties.getDriverClassName());
         try {
-            LOGGER.debug("Setting 'application.properties' into druid");
-            druidDataSource.setFilters("stat, wall");
+            LOGGER.debug("======Setting 'application.properties' into druid======");
+            druidDataSource.setFilters("stat, wall"); // TODO filter
         } catch (SQLException e) {
             throw new IllegalStateException("Could not initial Druid DataSource\n" + e);
         }

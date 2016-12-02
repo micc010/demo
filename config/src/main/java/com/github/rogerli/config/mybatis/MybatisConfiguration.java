@@ -1,7 +1,7 @@
 package com.github.rogerli.config.mybatis;
 
-import com.github.pagehelper.PageHelper;
 import com.github.rogerli.config.datasource.DruidDataSourceConfiguration;
+import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -34,11 +35,11 @@ public class MybatisConfiguration {
     @Autowired
     private ResourceLoader resourceLoader = new DefaultResourceLoader();
 
-    @Bean(name = "sessionFactory")
+    @Bean(name = "sqlSessionFactory")
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource,
-                                               @Value("${mybatis.pagination-enable:false}") boolean isPaginationEnable) throws Exception {
+                                                   @Value("${mybatis.pagination-enable:false}") boolean isPaginationEnable) throws Exception{
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
-        LOGGER.debug("Mybatis SqlSessionFactoryBean set datasource");
+        LOGGER.debug("======Mybatis SqlSessionFactoryBean set datasource======");
         factory.setDataSource(dataSource);
         if (StringUtils.hasText(properties.getConfig())) {
             LOGGER.debug("Loading mybatis configuration file");
@@ -57,7 +58,7 @@ public class MybatisConfiguration {
     }
 
     private void enablePagination(SqlSessionFactoryBean factory) {
-        LOGGER.debug("Enabling pagination component (PageHelper)");
+        LOGGER.debug("======Enabling pagination component (PageHelper)======");
         // pagination setting
         final PageHelper pageHelper = new PageHelper();
         final Properties pageHelperPros = new Properties();

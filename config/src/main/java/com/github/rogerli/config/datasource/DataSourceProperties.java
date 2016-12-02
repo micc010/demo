@@ -27,6 +27,8 @@ public class DataSourceProperties {
 
     private String validationQuery;
 
+    // TODO
+
     public String getUrl() {
         return url;
     }
