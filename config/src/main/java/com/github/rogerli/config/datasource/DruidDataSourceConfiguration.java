@@ -5,7 +5,7 @@ import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -21,11 +21,7 @@ import java.sql.SQLException;
 public class DruidDataSourceConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(DruidDataSourceConfiguration.class);
 
-    @Autowired
-    private DataSourceProperties properties;
-
     /**
-     *
      * @return
      */
     @Bean
@@ -35,7 +31,6 @@ public class DruidDataSourceConfiguration {
     }
 
     /**
-     *
      * @return
      */
     @Bean
@@ -49,23 +44,29 @@ public class DruidDataSourceConfiguration {
     }
 
     /**
-     *
      * @return
      */
     @Bean(initMethod = "init", destroyMethod = "close")
-    public DataSource druidDataSource() {
+    public DataSource druidDataSource(@Value("${spring.datasource.driverClassName}") String driver,
+                                      @Value("${spring.datasource.url}") String url,
+                                      @Value("${spring.datasource.username}") String username,
+                                      @Value("${spring.datasource.password}") String password,
+                                      @Value("${spring.datasource.initialSize}") int initialSize,
+                                      @Value("${spring.datasource.maxActive}") int maxActive,
+                                      @Value("${spring.datasource.minIdle}") int minIdle,
+                                      @Value("${spring.datasource.validationQuery}") String validationQuery) {
         DruidDataSource druidDataSource = new DruidDataSource();
-        druidDataSource.setUrl(properties.getUrl());
-        druidDataSource.setUsername(properties.getUsername());
-        druidDataSource.setPassword(properties.getPassword());
-        druidDataSource.setInitialSize(properties.getInitialSize());
-        druidDataSource.setMinIdle(properties.getMinIdle());
-        druidDataSource.setMaxActive(properties.getMaxActive());
-        druidDataSource.setValidationQuery(properties.getValidationQuery());
-        druidDataSource.setDriverClassName(properties.getDriverClassName());
+        druidDataSource.setUrl(url);
+        druidDataSource.setUsername(username);
+        druidDataSource.setPassword(password);
+        druidDataSource.setInitialSize(initialSize);
+        druidDataSource.setMinIdle(maxActive);
+        druidDataSource.setMaxActive(minIdle);
+        druidDataSource.setValidationQuery(validationQuery);
+        druidDataSource.setDriverClassName(driver);
         try {
             LOGGER.debug("======Setting 'application.properties' into druid======");
-            druidDataSource.setFilters("stat, wall"); // TODO filter
+            druidDataSource.setFilters("stat, wall");
         } catch (SQLException e) {
             throw new IllegalStateException("Could not initial Druid DataSource\n" + e);
         }

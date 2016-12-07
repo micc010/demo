@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  * @create 2016/12/1 0:47
  */
 @Service
-public class LoginService extends AbstractService<Login, LoginMapper>{
+public class LoginService extends AbstractService<Login, String, LoginMapper>{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Login.class);
 

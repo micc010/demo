@@ -11,9 +11,16 @@
     <name>system Maven Webapp</name>
     <url>http://maven.apache.org</url>
     <dependencies>
+        <!-- junit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -31,6 +38,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -39,17 +47,51 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- Mybatis -->
         <dependency>
-            <groupId>com.github.rogerli</groupId>
-            <artifactId>common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
         </dependency>
 
-        <!-- Mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.mybatis.caches</groupId>
             <artifactId>mybatis-redis</artifactId>
         </dependency>
+
+        <!-- Apache commons -->
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+        </dependency>
+
+        <!-- joda time -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+
+        <!-- freemarker -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+
+        <!-- Guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>system</finalName>
@@ -59,6 +101,13 @@
                 <includes>
                     <include>**/*.xml</include>
                     <include>**/*.txt</include>
+                    <include>**/*.ftl</include>
+                    <include>**/*.html</include>
+                    <include>**/*.js</include>
+                    <include>**/*.css</include>
+                    <include>**/*.jpg</include>
+                    <include>**/*.gif</include>
+                    <include>**/*.png</include>
                     <include>**/*.properties</include>
                 </includes>
                 <filtering>false</filtering>
@@ -68,6 +117,12 @@
                 <includes>
                     <include>**/*.xml</include>
                     <include>**/*.txt</include>
+                    <include>**/*.html</include>
+                    <include>**/*.js</include>
+                    <include>**/*.css</include>
+                    <include>**/*.jpg</include>
+                    <include>**/*.gif</include>
+                    <include>**/*.png</include>
                     <include>**/*.properties</include>
                 </includes>
                 <filtering>false</filtering>
@@ -78,6 +133,12 @@
                     <include>**/*.xml</include>
                     <include>**/*.txt</include>
                     <include>**/*.ftl</include>
+                    <include>**/*.html</include>
+                    <include>**/*.js</include>
+                    <include>**/*.css</include>
+                    <include>**/*.jpg</include>
+                    <include>**/*.gif</include>
+                    <include>**/*.png</include>
                     <include>**/*.properties</include>
                 </includes>
                 <filtering>false</filtering>
@@ -88,12 +149,19 @@
                     <include>**/*.xml</include>
                     <include>**/*.txt</include>
                     <include>**/*.ftl</include>
+                    <include>**/*.html</include>
+                    <include>**/*.js</include>
+                    <include>**/*.css</include>
+                    <include>**/*.jpg</include>
+                    <include>**/*.gif</include>
+                    <include>**/*.png</include>
                     <include>**/*.properties</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>
         </resources>
         <plugins>
+            <!--
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
@@ -111,6 +179,8 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
         </plugins>
+
     </build>
 </project>

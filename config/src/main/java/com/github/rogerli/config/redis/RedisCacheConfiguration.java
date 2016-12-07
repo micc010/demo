@@ -35,7 +35,7 @@ public class RedisCacheConfiguration {
      * @param redisTemplate
      * @return
      */
-    @Bean
+    @Bean(name = "cacheManager")
     public CacheManager cacheManager(RedisTemplate<?, ?> redisTemplate) {
         LOGGER.debug("======Creating spring redis cache manager======");
         CacheManager cacheManager = new RedisCacheManager(redisTemplate);

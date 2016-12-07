@@ -34,7 +34,7 @@ public final class SerializeStringUtils {
             return null;
         } else {
             try {
-                return new String(bytes);
+                return new String(bytes, "UTF-8");
             } catch (Exception e) {
                 throw new CacheException(e);
             }

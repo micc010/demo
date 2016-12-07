@@ -68,7 +68,8 @@ public class RedisShiroCache<K, V> implements Cache<K, V> {
 
     @Override
     public int size() {
-        if (keys() == null)
+        Set<K> keys = keys();
+        if (keys == null || keys.size() == 0)
             return 0;
         return keys().size();
     }
