@@ -1,40 +1,5 @@
 package com.github.rogerli.config.shiro;
 
-import com.github.rogerli.config.datasource.DruidDataSourceConfiguration;
-import com.github.rogerli.config.mybatis.MybatisConfiguration;
-import com.github.rogerli.security.matcher.RetryLimitHashedCredentialsMatcher;
-import com.github.rogerli.security.session.eis.RedisSessionDAO;
-import com.github.rogerli.config.redis.RedisCacheConfiguration;
-import com.github.rogerli.security.realm.UserRoleRealm;
-import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.cache.CacheManager;
-import org.apache.shiro.codec.Base64;
-import org.apache.shiro.mgt.RememberMeManager;
-import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.SessionListener;
-import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.session.mgt.eis.SessionDAO;
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
-import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.mgt.CookieRememberMeManager;
-import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.servlet.SimpleCookie;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
-
-import java.util.Collection;
-import java.util.LinkedHashMap;
-
 /**
  * @author roger.li
  */

@@ -21,15 +21,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -74,12 +78,23 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         return localValidatorFactoryBean;
     }
 
+    /**
+     * 优化restful
+     *
+     * @return
+     */
     @Override
     protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
         LOGGER.info("======RequestMappingHandlerMapping======");
         return new RestfulRequestMappingHandlerMapping();
     }
 
+    /**
+     * freemarker配置
+     *
+     * @param templateLoaderPath
+     * @return
+     */
     @Bean
     public FreeMarkerConfigurer freeMarkerConfigurer(@Value("${spring.freemarker.template-loader-path}") String[] templateLoaderPath) {
         LOGGER.info("======FreeMarkerConfigurer======");
@@ -91,22 +106,33 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         return configurer;
     }
 
-//    @Bean(name = "viewResolver")
-//    public FreeMarkerViewResolver viewResolver() {
-//        LOGGER.info("======ViewResolver======");
-//        FreeMarkerViewResolver viewResolver = new FreeMarkerViewResolver();
-//        viewResolver.setCache(true);
-//        viewResolver.setPrefix("");
-//        viewResolver.setSuffix(".ftl");
-//        viewResolver.setContentType("text/html;charset=UTF-8");
-//        viewResolver.setRequestContextAttribute("request");
-//        viewResolver.setExposeSpringMacroHelpers(true);
-//        viewResolver.setExposeRequestAttributes(true);
-//        viewResolver.setExposeSessionAttributes(true);
-//        return viewResolver;
-//    }
+    /**
+     * freemarker视图
+     *
+     * @return
+     */
+    @Bean(name = "viewResolver")
+    public FreeMarkerViewResolver viewResolver() {
+        LOGGER.info("======ViewResolver======");
+        FreeMarkerViewResolver viewResolver = new FreeMarkerViewResolver();
+        viewResolver.setCache(true);
+        viewResolver.setPrefix("");
+        viewResolver.setSuffix(".ftl");
+        viewResolver.setContentType("text/html;charset=UTF-8");
+        viewResolver.setRequestContextAttribute("req");
+        viewResolver.setExposeSpringMacroHelpers(true);
+        viewResolver.setExposeRequestAttributes(true);
+        viewResolver.setExposeSessionAttributes(true);
+        return viewResolver;
+    }
 
-
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addViewController("/index1").setViewName("index1");
+//        registry.addViewController("/").setViewName("index");
+//        registry.addViewController("/hello").setViewName("hello");
+//        registry.addViewController("/login").setViewName("login");
+    }
 
     @Bean(name = "messageSource")
     public MessageSource messageSource() {
@@ -127,8 +153,70 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         return resolver;
     }
 
-    @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+//    @Bean
+//    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+//        LOGGER.info("======MappingJackson2HttpMessageConverter======");
+//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+//        List<MediaType> list = new ArrayList<MediaType>();
+//        list.add(new MediaType("text", "html", UTF_8));
+//        list.add(new MediaType("text", "json"));
+//        list.add(MediaType.APPLICATION_JSON);
+//        converter.setSupportedMediaTypes(list);
+//        return converter;
+//    }
+
+    /**
+     * 增加resourceHandlerMapping
+     *
+     * @param registry
+     */
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        LOGGER.info("======addResourceHandlers======");
+        registry.addResourceHandler("/js/**").addResourceLocations(new String[]{"classpath:/static/js/"});
+        registry.addResourceHandler("/images/**").addResourceLocations(new String[]{"classpath:/static/images/"});
+        registry.addResourceHandler("/css/**").addResourceLocations(new String[]{"classpath:/static/css/"});
+        registry.addResourceHandler("/fonts/**").addResourceLocations(new String[]{"classpath:/static/fonts/"});
+        registry.addResourceHandler("/**").addResourceLocations(new String[]{"classpath:/static/"});
+    }
+
+    /**
+     * 自定义解析器实现请求参数绑定方法
+     *
+     * @param argumentResolvers
+     */
+    @Override
+    protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+
+    }
+
+    /**
+     * 自定义处理器实现返回值处理
+     *
+     * @param returnValueHandlers
+     */
+    @Override
+    protected void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
+
+    }
+
+    /**
+     * 配置messageConverter
+     * ByteArrayHttpMessageConverter
+     * ResourceHttpMessageConverter
+     * SourceHttpMessageConverter
+     * AllEncompassingFormHttpMessageConverter
+     * 根据环境还可能有
+     * romePresent：AtomFeedHttpMessageConverter，RssChannelHttpMessageConverter
+     * jackson2XmlPresent：MappingJackson2XmlHttpMessageConverter
+     * jaxb2Present：Jaxb2RootElementHttpMessageConverter
+     * jackson2Present：MappingJackson2HttpMessageConverter
+     * gsonPresent：GsonHttpMessageConverter
+     *
+     * @param converters
+     */
+    @Override
+    protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         LOGGER.info("======MappingJackson2HttpMessageConverter======");
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         List<MediaType> list = new ArrayList<MediaType>();
@@ -136,25 +224,27 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         list.add(new MediaType("text", "json"));
         list.add(MediaType.APPLICATION_JSON);
         converter.setSupportedMediaTypes(list);
-        return converter;
+        converters.add(converter);
     }
 
+    /**
+     * 配置messageConverter, 默认的有
+     * ByteArrayHttpMessageConverter
+     * ResourceHttpMessageConverter
+     * SourceHttpMessageConverter
+     * AllEncompassingFormHttpMessageConverter
+     * 根据环境还可能有
+     * romePresent：AtomFeedHttpMessageConverter，RssChannelHttpMessageConverter
+     * jackson2XmlPresent：MappingJackson2XmlHttpMessageConverter
+     * jaxb2Present：Jaxb2RootElementHttpMessageConverter
+     * jackson2Present：MappingJackson2HttpMessageConverter
+     * gsonPresent：GsonHttpMessageConverter
+     *
+     * @param converters
+     */
     @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        LOGGER.info("======addResourceHandlers======");
-        registry.addResourceHandler("/**").addResourceLocations(new String[]{"classpath:/static/"});
-    }
+    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
 
-    @Bean
-    public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
-        LOGGER.info("======RequestMappingHandlerAdapter======");
-        return super.requestMappingHandlerAdapter();
-    }
-
-    @Bean
-    public HandlerMapping resourceHandlerMapping() {
-        LOGGER.info("======HandlerMapping======");
-        return super.resourceHandlerMapping();
     }
 
 }

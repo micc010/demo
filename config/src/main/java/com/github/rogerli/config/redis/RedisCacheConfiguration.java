@@ -20,7 +20,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import java.lang.reflect.Method;
 
 /**
- * shiro redis cache配置
+ * redis cache配置
  */
 @Configuration
 @EnableCaching

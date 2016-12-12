@@ -80,12 +80,6 @@
             <artifactId>joda-time</artifactId>
         </dependency>
 
-        <!-- freemarker -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-        </dependency>
-
         <!-- Guava -->
         <dependency>
             <groupId>com.google.guava</groupId>

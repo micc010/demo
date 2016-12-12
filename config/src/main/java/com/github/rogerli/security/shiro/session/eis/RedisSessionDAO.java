@@ -1,4 +1,4 @@
-package com.github.rogerli.security.session.eis;
+package com.github.rogerli.security.shiro.session.eis;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;

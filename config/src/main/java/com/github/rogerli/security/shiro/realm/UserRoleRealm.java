@@ -1,4 +1,4 @@
-package com.github.rogerli.security.realm;
+package com.github.rogerli.security.shiro.realm;
 
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;

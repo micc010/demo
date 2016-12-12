@@ -1,4 +1,4 @@
-package com.github.rogerli.security.session.listener;
+package com.github.rogerli.security.shiro.session.listener;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListenerAdapter;

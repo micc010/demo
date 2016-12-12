@@ -23,6 +23,7 @@
         <junit.version>4.12</junit.version>
         <guava.version>18.0</guava.version>
         <spring-boot.version>1.3.2.RELEASE</spring-boot.version>
+        <spring.session.version>1.2.2.RELEASE</spring.session.version>
         <druid.version>1.0.16</druid.version>
         <mybatis.version>3.3.0</mybatis.version>
         <mybatis-spring.version>1.2.4</mybatis-spring.version>
@@ -69,13 +70,11 @@
                 <version>${spring-boot.version}</version>
             </dependency>
 
-            <!--
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-freemarker</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
-            -->
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -88,6 +87,12 @@
                 <artifactId>spring-boot-starter-test</artifactId>
                 <version>${spring-boot.version}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${spring-boot.version}</version>
             </dependency>
 
             <dependency>
@@ -305,5 +310,20 @@
         </pluginManagement>
 
     </build>
+
+    <repositories>
+        <repository>
+            <id>spring-releases</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-releases</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>

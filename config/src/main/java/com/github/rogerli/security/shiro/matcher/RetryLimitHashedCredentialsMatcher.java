@@ -1,4 +1,4 @@
-package com.github.rogerli.security.matcher;
+package com.github.rogerli.security.shiro.matcher;
 
 import com.github.rogerli.config.shiro.RedisShiroCache;
 import org.apache.shiro.authc.AuthenticationInfo;
