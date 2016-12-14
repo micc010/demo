@@ -12,14 +12,14 @@ import com.github.rogerli.config.restful.RestfulRequestMappingHandlerMapping;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -30,12 +30,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.HandlerMapping;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
@@ -57,16 +54,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
         useDefaultFilters = false,
         includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class, ControllerAdvice.class})
         })
-@EnableWebMvc
-@EnableAutoConfiguration
+@AutoConfigureAfter({LocalizationConfiguration.class})
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfiguration.class);
 
-    @Value("${spring.messages.basename}")
-    private String BASE_NAME;
-    @Value("${spring.messages.cache-seconds}")
-    private int CACHE_SECONDS;
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     protected Validator getValidator() {
@@ -74,9 +68,22 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         LocalValidatorFactoryBean localValidatorFactoryBean =
                 new LocalValidatorFactoryBean();
         localValidatorFactoryBean.setProviderClass(HibernateValidator.class);
-        localValidatorFactoryBean.setValidationMessageSource(messageSource());
+        localValidatorFactoryBean.setValidationMessageSource(messageSource);
         return localValidatorFactoryBean;
     }
+
+//    @Bean
+//    public AccessTokenVerifyInterceptor tokenVerifyInterceptor() {
+//        LOGGER.info("======AccessTokenVerifyInterceptor======");
+//        return new AccessTokenVerifyInterceptor();
+//
+//    }
+
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(tokenVerifyInterceptor()).addPathPatterns("/");
+//        super.addInterceptors(registry);
+//    }
 
     /**
      * 优化restful
@@ -87,83 +94,14 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
         LOGGER.info("======RequestMappingHandlerMapping======");
         return new RestfulRequestMappingHandlerMapping();
-    }
-
-    /**
-     * freemarker配置
-     *
-     * @param templateLoaderPath
-     * @return
-     */
-    @Bean
-    public FreeMarkerConfigurer freeMarkerConfigurer(@Value("${spring.freemarker.template-loader-path}") String[] templateLoaderPath) {
-        LOGGER.info("======FreeMarkerConfigurer======");
-        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
-        configurer.setTemplateLoaderPaths(templateLoaderPath);
-        Properties properties = new Properties();
-        properties.setProperty("defaultEncoding", "UTF-8");
-        configurer.setFreemarkerSettings(properties);
-        return configurer;
-    }
-
-    /**
-     * freemarker视图
-     *
-     * @return
-     */
-    @Bean(name = "viewResolver")
-    public FreeMarkerViewResolver viewResolver() {
-        LOGGER.info("======ViewResolver======");
-        FreeMarkerViewResolver viewResolver = new FreeMarkerViewResolver();
-        viewResolver.setCache(true);
-        viewResolver.setPrefix("");
-        viewResolver.setSuffix(".ftl");
-        viewResolver.setContentType("text/html;charset=UTF-8");
-        viewResolver.setRequestContextAttribute("req");
-        viewResolver.setExposeSpringMacroHelpers(true);
-        viewResolver.setExposeRequestAttributes(true);
-        viewResolver.setExposeSessionAttributes(true);
-        return viewResolver;
+//        return  new RequestMappingHandlerMapping();
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/index1").setViewName("index1");
-//        registry.addViewController("/").setViewName("index");
-//        registry.addViewController("/hello").setViewName("hello");
-//        registry.addViewController("/login").setViewName("login");
+        LOGGER.info("======addViewControllers======");
+        super.addViewControllers(registry);
     }
-
-    @Bean(name = "messageSource")
-    public MessageSource messageSource() {
-        LOGGER.info("======MessageSource======");
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename(BASE_NAME);
-        messageSource.setCacheSeconds(CACHE_SECONDS);
-        return messageSource;
-    }
-
-    @Bean(name = "multipartResolver")
-    public CommonsMultipartResolver commonsMultipartResolver() {
-        LOGGER.info("======CommonsMultipartResolver======");
-        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        resolver.setMaxUploadSize(5000000);
-        resolver.setMaxInMemorySize(8192);
-        resolver.setDefaultEncoding("UTF-8");
-        return resolver;
-    }
-
-//    @Bean
-//    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-//        LOGGER.info("======MappingJackson2HttpMessageConverter======");
-//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-//        List<MediaType> list = new ArrayList<MediaType>();
-//        list.add(new MediaType("text", "html", UTF_8));
-//        list.add(new MediaType("text", "json"));
-//        list.add(MediaType.APPLICATION_JSON);
-//        converter.setSupportedMediaTypes(list);
-//        return converter;
-//    }
 
     /**
      * 增加resourceHandlerMapping
@@ -173,11 +111,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         LOGGER.info("======addResourceHandlers======");
-        registry.addResourceHandler("/js/**").addResourceLocations(new String[]{"classpath:/static/js/"});
-        registry.addResourceHandler("/images/**").addResourceLocations(new String[]{"classpath:/static/images/"});
-        registry.addResourceHandler("/css/**").addResourceLocations(new String[]{"classpath:/static/css/"});
-        registry.addResourceHandler("/fonts/**").addResourceLocations(new String[]{"classpath:/static/fonts/"});
-        registry.addResourceHandler("/**").addResourceLocations(new String[]{"classpath:/static/"});
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/",
+                "classpath:/public/",
+                "classpath:/resources/",
+                "classpath:/META-INF/resources/").setCachePeriod(31556926);
+        super.addResourceHandlers(registry);
     }
 
     /**
@@ -187,7 +125,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      */
     @Override
     protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-
+        LOGGER.info("======addArgumentResolvers======");
+        super.addArgumentResolvers(argumentResolvers);
     }
 
     /**
@@ -197,7 +136,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      */
     @Override
     protected void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
-
+        LOGGER.info("======addReturnValueHandlers======");
+        super.addReturnValueHandlers(returnValueHandlers);
     }
 
     /**
@@ -246,5 +186,100 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
 
     }
+
+
+    /**
+     * freemarker配置
+     *
+     * @param templateLoaderPath
+     * @return
+     */
+    @Bean
+    public FreeMarkerConfigurer freeMarkerConfigurer(@Value("${spring.freemarker.template-loader-path}") String[] templateLoaderPath) {
+        LOGGER.info("======FreeMarkerConfigurer======");
+        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+        configurer.setTemplateLoaderPaths(templateLoaderPath);
+        Properties properties = new Properties();
+        properties.setProperty("defaultEncoding", "UTF-8");
+        configurer.setFreemarkerSettings(properties);
+        return configurer;
+    }
+
+    /**
+     * freemarker视图
+     *
+     * @return
+     */
+    @Bean(name = "viewResolver")
+    public FreeMarkerViewResolver viewResolver() {
+        LOGGER.info("======ViewResolver======");
+        FreeMarkerViewResolver viewResolver = new FreeMarkerViewResolver();
+        viewResolver.setCache(true);
+        viewResolver.setPrefix("");
+        viewResolver.setSuffix(".ftl");
+        viewResolver.setContentType("text/html;charset=UTF-8");
+        viewResolver.setRequestContextAttribute("req");
+        viewResolver.setExposeSpringMacroHelpers(true);
+        viewResolver.setExposeRequestAttributes(true);
+        viewResolver.setExposeSessionAttributes(true);
+        return viewResolver;
+    }
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver commonsMultipartResolver() {
+        LOGGER.info("======CommonsMultipartResolver======");
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setMaxUploadSize(5000000);
+        resolver.setMaxInMemorySize(8192);
+        resolver.setDefaultEncoding("UTF-8");
+        return resolver;
+    }
+
+
+    @Bean
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+        LOGGER.info("======MappingJackson2HttpMessageConverter======");
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        List<MediaType> list = new ArrayList<MediaType>();
+        list.add(new MediaType("text", "html", UTF_8));
+        list.add(new MediaType("text", "json"));
+        list.add(MediaType.APPLICATION_JSON);
+        converter.setSupportedMediaTypes(list);
+        return converter;
+    }
+
+//    @Bean
+//    public SimpleUrlHandlerMapping simpleUrlHandlerMapping() {
+//        SimpleUrlHandlerMapping simpleUrlHandlerMapping = new SimpleUrlHandlerMapping();
+//        Map<String, Object> map = new LinkedHashMap<>();
+//        ResourceHttpRequestHandler resourceHttpRequestHandler = new ResourceHttpRequestHandler();
+//        List<Resource> locations = new ArrayList<>();
+////        locations.add(new ServletContextResource(getServletContext(), "/"));
+//        locations.add(new ClassPathResource("META-INF/resources"));
+//        locations.add(new ClassPathResource("resources/"));
+//        locations.add(new ClassPathResource("static/"));
+//        locations.add(new ClassPathResource("public/"));
+//        resourceHttpRequestHandler.setLocations(locations);
+////        resourceHttpRequestHandler.setServletContext(getServletContext());
+//        resourceHttpRequestHandler.setApplicationContext(getApplicationContext());
+//
+//        List<ResourceResolver> resourceResolvers = new ArrayList<>();
+//        PathResourceResolver resourceResolver = new PathResourceResolver();
+//        resourceResolver.setAllowedLocations(
+////                new ServletContextResource(getServletContext(), "/"),
+//                new ClassPathResource("META-INF/resources"), new ClassPathResource("resources/"), new ClassPathResource("static/"), new ClassPathResource("public/"));
+//        resourceResolvers.add(resourceResolver);
+//
+//        resourceHttpRequestHandler.setResourceResolvers(resourceResolvers);
+//        map.put("/**", resourceHttpRequestHandler);
+//        simpleUrlHandlerMapping.setUrlMap(map);
+//        ResourceUrlProvider resourceUrlProvider = new ResourceUrlProvider();
+//        Map<String, ResourceHttpRequestHandler> handlerMap = new LinkedHashMap<>();
+//        handlerMap.put("/**", resourceHttpRequestHandler);
+//        resourceUrlProvider.setHandlerMap(handlerMap);
+//        ResourceUrlProviderExposingInterceptor interceptor = new ResourceUrlProviderExposingInterceptor(resourceUrlProvider);
+//        simpleUrlHandlerMapping.setInterceptors(new Object[]{interceptor});
+//        return simpleUrlHandlerMapping;
+//    }
 
 }

@@ -1,5 +1,7 @@
-package com.github.rogerli.security.spring;
+package com.github.rogerli.config.security;
 
+//import com.github.rogerli.config.restful.ValidationToken;
+//import com.github.rogerli.config.restful.ValidationTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.ConfigAttribute;
@@ -23,6 +25,9 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
     private final Logger LOGGER = LoggerFactory
             .getLogger(CustomFilterSecurityMetadataSource.class);
 
+//    @Autowired
+//    private ValidationTokenService validationTokenService;
+
     /**
      * 资源所需要的权限
      */
@@ -40,10 +45,9 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
 
         SecurityConfig securityConfig = new SecurityConfig("USER");
 
-        Collection<ConfigAttribute> securityConfigList = new ArrayList<ConfigAttribute>();
-        securityConfigList.add(securityConfig);
+        configAttributes.add(securityConfig);
 
-        return securityConfigList;
+        return configAttributes;
 
 //        FilterInvocation filterInvocation = (FilterInvocation) object;
 //        String url = filterInvocation.getRequestUrl();

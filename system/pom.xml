@@ -11,29 +11,6 @@
     <name>system Maven Webapp</name>
     <url>http://maven.apache.org</url>
     <dependencies>
-        <!-- junit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.skyscreamer</groupId>
-            <artifactId>jsonassert</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- CGLIB -->
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -45,39 +22,6 @@
             <groupId>com.github.rogerli</groupId>
             <artifactId>config</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <!-- Mybatis -->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mybatis.caches</groupId>
-            <artifactId>mybatis-redis</artifactId>
-        </dependency>
-
-        <!-- Apache commons -->
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-        </dependency>
-
-        <!-- joda time -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
         </dependency>
 
         <!-- Guava -->
@@ -102,6 +46,7 @@
                     <include>**/*.jpg</include>
                     <include>**/*.gif</include>
                     <include>**/*.png</include>
+                    <include>**/*.ico</include>
                     <include>**/*.properties</include>
                 </includes>
                 <filtering>false</filtering>
@@ -117,6 +62,7 @@
                     <include>**/*.jpg</include>
                     <include>**/*.gif</include>
                     <include>**/*.png</include>
+                    <include>**/*.ico</include>
                     <include>**/*.properties</include>
                 </includes>
                 <filtering>false</filtering>
@@ -133,6 +79,7 @@
                     <include>**/*.jpg</include>
                     <include>**/*.gif</include>
                     <include>**/*.png</include>
+                    <include>**/*.ico</include>
                     <include>**/*.properties</include>
                 </includes>
                 <filtering>false</filtering>
@@ -149,6 +96,7 @@
                     <include>**/*.jpg</include>
                     <include>**/*.gif</include>
                     <include>**/*.png</include>
+                    <include>**/*.ico</include>
                     <include>**/*.properties</include>
                 </includes>
                 <filtering>false</filtering>

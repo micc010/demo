@@ -22,5 +22,4 @@ public class IndexController extends AbstractController{
     public String login() {
         return "login";
     }
-
 }

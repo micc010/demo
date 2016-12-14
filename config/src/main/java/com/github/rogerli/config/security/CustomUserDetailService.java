@@ -6,7 +6,7 @@
  * @完成日期: 2016/12/8
  * @作者 ： Roger
  */
-package com.github.rogerli.security.spring;
+package com.github.rogerli.config.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

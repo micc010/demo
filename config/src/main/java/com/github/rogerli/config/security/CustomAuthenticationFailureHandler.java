@@ -6,7 +6,7 @@
  * @完成日期: 2016/12/12
  * @作者 ： Roger
  */
-package com.github.rogerli.security.spring;
+package com.github.rogerli.config.security;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;

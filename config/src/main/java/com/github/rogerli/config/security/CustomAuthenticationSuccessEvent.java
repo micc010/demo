@@ -1,4 +1,4 @@
-package com.github.rogerli.security.spring;
+package com.github.rogerli.config.security;
 
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
