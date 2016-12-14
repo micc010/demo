@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -50,7 +51,8 @@ public class CustomUserDetailService implements UserDetailsService {
         Set<GrantedAuthority> grantedAuthoritySet = new HashSet<GrantedAuthority>();
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("USER");
         grantedAuthoritySet.add(grantedAuthority);
-        CustomUserDetails userDetails = new CustomUserDetails(username, "password", grantedAuthoritySet);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        CustomUserDetails userDetails = new CustomUserDetails(username, encoder.encode("password"), grantedAuthoritySet);
         return userDetails;
     }
 }

@@ -8,7 +8,6 @@
  */
 package com.github.rogerli.config.mvc;
 
-import com.github.rogerli.config.restful.RestfulRequestMappingHandlerMapping;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
@@ -72,30 +70,17 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         return localValidatorFactoryBean;
     }
 
-//    @Bean
-//    public AccessTokenVerifyInterceptor tokenVerifyInterceptor() {
-//        LOGGER.info("======AccessTokenVerifyInterceptor======");
-//        return new AccessTokenVerifyInterceptor();
-//
-//    }
-
+//    /**
+//     * 优化restful
+//     *
+//     * @return
+//     */
 //    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(tokenVerifyInterceptor()).addPathPatterns("/");
-//        super.addInterceptors(registry);
+//    protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
+//        LOGGER.info("======RequestMappingHandlerMapping======");
+//        return new RestfulRequestMappingHandlerMapping();
+////        return  new RequestMappingHandlerMapping();
 //    }
-
-    /**
-     * 优化restful
-     *
-     * @return
-     */
-    @Override
-    protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
-        LOGGER.info("======RequestMappingHandlerMapping======");
-        return new RestfulRequestMappingHandlerMapping();
-//        return  new RequestMappingHandlerMapping();
-    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
