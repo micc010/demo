@@ -54,7 +54,9 @@ public class DruidDataSourceConfiguration {
                                       @Value("${spring.datasource.initialSize}") int initialSize,
                                       @Value("${spring.datasource.maxActive}") int maxActive,
                                       @Value("${spring.datasource.minIdle}") int minIdle,
-                                      @Value("${spring.datasource.validationQuery}") String validationQuery) {
+                                      @Value("${spring.datasource.validationQuery}") String validationQuery,
+                                      @Value("${druid.poolPreparedStatements}") boolean poolPreparedStatements,
+                                      @Value("${druid.maxOpenPreparedStatements}") int maxOpenPreparedStatements) {
         DruidDataSource druidDataSource = new DruidDataSource();
         druidDataSource.setUrl(url);
         druidDataSource.setUsername(username);
@@ -64,6 +66,11 @@ public class DruidDataSourceConfiguration {
         druidDataSource.setMaxActive(minIdle);
         druidDataSource.setValidationQuery(validationQuery);
         druidDataSource.setDriverClassName(driver);
+        druidDataSource.setTestWhileIdle(true);
+
+        // 开启PSCache，需要数据库支持
+        druidDataSource.setPoolPreparedStatements(poolPreparedStatements);
+        druidDataSource.setMaxOpenPreparedStatements(maxOpenPreparedStatements);
         try {
             LOGGER.debug("======Setting 'application.properties' into druid======");
             druidDataSource.setFilters("stat, wall");

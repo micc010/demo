@@ -21,6 +21,11 @@ import java.util.Set;
  */
 public class CustomUserDetails implements UserDetails {
 
+    // 默认的初始化方法
+    public CustomUserDetails(){
+
+    }
+
     private String password;
     private String username;
     private Set<GrantedAuthority> authorities;

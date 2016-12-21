@@ -23,6 +23,15 @@ import java.io.IOException;
  */
 public class RestfulLogoutSuccessHandler implements LogoutSuccessHandler {
 
+    /**
+     * TODO
+     *
+     * @param request
+     * @param response
+     * @param authentication
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 

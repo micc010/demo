@@ -1,5 +1,6 @@
 package com.github.rogerli.config.security;
 
+import com.github.rogerli.config.restful.RestfulUsernamePasswordAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 import javax.annotation.Resource;
@@ -72,18 +74,50 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         LOGGER.debug("======HttpSecurity configure======");
 
-        http.authorizeRequests()
-                .mvcMatchers("/", "/index", "/login").permitAll();
+        http.csrf().disable(); // 关闭csrf
 
-        http.csrf().disable() // 关闭csrf
-                .authorizeRequests().anyRequest().authenticated()
+        http.authorizeRequests()
+                .mvcMatchers("/", "/index", "/login?invalid").permitAll();// 一般请求
+
+        http.authorizeRequests()
+                .antMatchers(RestfulUsernamePasswordAuthenticationFilter.SPRING_SECURITY_RESTFUL_LOGIN_URL).permitAll();// restful请求
+
+//        // restful 请求
+//        http.addFilterAfter(createRestfulUsernamePassswordAuthenticationFilter(authenticationManager()),
+//                UsernamePasswordAuthenticationFilter.class)
+//                .authorizeRequests().regexMatchers("^/api.*$").authenticated()
+//                .and()
+//                .formLogin().loginPage(RestfulUsernamePasswordAuthenticationFilter.SPRING_SECURITY_RESTFUL_LOGIN_URL)
+//                .and()
+//                .logout()
+//                .logoutSuccessHandler(new RestfulLogoutSuccessHandler()).permitAll()
+//                .invalidateHttpSession(true)
+//                .and()
+//                .exceptionHandling().authenticationEntryPoint(new RestfulAuthenticationEntryPoint())
+//                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+//                    public <O extends FilterSecurityInterceptor> O postProcess(
+//                            O fsi) {
+//                        fsi.setSecurityMetadataSource(securityMetadataSource);
+//                        fsi.setAccessDecisionManager(accessDecisionManager());
+//                        fsi.setAuthenticationManager(authenticationManagerBean());
+//                        return fsi;
+//                    }
+//                })
+//                .and()
+//                .authorizeRequests().expressionHandler(webSecurityExpressionHandler())
+//                .and()
+//                .sessionManagement().maximumSessions(1); // session管理
+
+        // 一般请求
+        http.authorizeRequests().regexMatchers("^(?!/api).*$").authenticated()
+//        http.authorizeRequests().anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/home").failureHandler(simpleUrlAuthenticationFailureHandler())
+                .formLogin().loginPage("/login").defaultSuccessUrl("/home").failureUrl("/login?error").permitAll()
                 .and()
-                .logout().permitAll()
-                .invalidateHttpSession(true).deleteCookies("JSESSIONID")
+                .logout().logoutSuccessUrl("/login?logout").permitAll()
+                .invalidateHttpSession(true)
                 .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+                .exceptionHandling().accessDeniedPage("/access-denie.html")
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     public <O extends FilterSecurityInterceptor> O postProcess(
                             O fsi) {
@@ -96,8 +130,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().expressionHandler(webSecurityExpressionHandler())
                 .and()
-                .sessionManagement().maximumSessions(1).expiredUrl("/login"); // session管理
+                .sessionManagement().invalidSessionUrl("/login?invalid").maximumSessions(1); // session管理
+
     }
+
+//    public Filter createRestfulUsernamePassswordAuthenticationFilter(AuthenticationManager manager) {
+//        RestfulUsernamePasswordAuthenticationFilter filter = new RestfulUsernamePasswordAuthenticationFilter();
+//        filter.setAuthenticationManager(manager);
+//        filter.setAuthenticationFailureHandler(new RestfulAuthenticationFailureHandler());
+//        filter.setAuthenticationSuccessHandler(new RestfulAuthenticationSuccessHandler());
+//        filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(
+//                RestfulUsernamePasswordAuthenticationFilter.SPRING_SECURITY_RESTFUL_LOGIN_URL, "POST"));
+//        return filter;
+//    }
 
     /**
      * 身份验证配置，用于注入自定义身份验证Bean和密码校验规则
@@ -109,7 +154,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         LOGGER.debug("======AuthenticationManagerBuilder configure======");
         // 注入bean
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
         auth.eraseCredentials(true).userDetailsService(userDetailService).passwordEncoder(passwordEncoder);
     }
 
@@ -121,8 +166,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     AccessDeniedHandler accessDeniedHandler() {
         LOGGER.debug("======accessDeniedHandler======");
-        CustomAccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
-        accessDeniedHandler.setAccessDeniedUrl("/access-denie.html");
+        AccessDeniedHandlerImpl accessDeniedHandler = new AccessDeniedHandlerImpl();
+        accessDeniedHandler.setErrorPage("/access-denie.html");
         return accessDeniedHandler;
     }
 
@@ -164,6 +209,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return accessDecisionManager;
     }
 
+
     /**
      * 认证管理器
      *
@@ -183,15 +229,27 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 失败处理器
+     * TODO 失败处理器
      *
      * @return
      */
     @Bean(name = "failureHandler")
-    public SimpleUrlAuthenticationFailureHandler simpleUrlAuthenticationFailureHandler() {
+    public AuthenticationFailureHandler simpleUrlAuthenticationFailureHandler() {
         LOGGER.debug("======simpleUrlAuthenticationFailureHandler======");
         return new SimpleUrlAuthenticationFailureHandler("/login?error");
     }
+
+//    /**
+//     * 超期处理器
+//     *
+//     * @param invalidSessionUrl
+//     * @return
+//     */
+//    public InvalidSessionStrategy invalidSessionStrategy(String invalidSessionUrl) {
+//        SmartInvalidSessionStrategy smartInvalidSessionStrategy = new SmartInvalidSessionStrategy();
+//        smartInvalidSessionStrategy.setInvalidSessionUrl(invalidSessionUrl);
+//        return smartInvalidSessionStrategy;
+//    }
 
     /**
      * 表达式控制器
