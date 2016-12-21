@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.rogerli.system.login.dao.LoginMapper">
+    <cache eviction="FIFO" type="org.mybatis.caches.redis.RedisCache" size="1000" readOnly="true"/>
+    <resultMap id="BaseResultMap" type="com.github.rogerli.system.login.entity.Login">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
+        <result column="SALT" property="salt" jdbcType="VARCHAR"/>
+        <result column="LOCKED" property="locked" jdbcType="INTEGER"/>
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, USER_NAME, PASSWORD, SALT, LOCKED, USER_ID
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_login
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from r_sys_login
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.github.rogerli.system.login.entity.Login">
+    insert into r_sys_login (ID, USER_NAME, PASSWORD, 
+      SALT, LOCKED, USER_ID
+      )
+    values (#{id,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{salt,jdbcType=VARCHAR}, #{locked,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.github.rogerli.system.login.entity.Login">
+        insert into r_sys_login
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="userName != null">
+                USER_NAME,
+            </if>
+            <if test="password != null">
+                PASSWORD,
+            </if>
+            <if test="salt != null">
+                SALT,
+            </if>
+            <if test="locked != null">
+                LOCKED,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null">
+                #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="locked != null">
+                #{locked,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.github.rogerli.system.login.entity.Login">
+        update r_sys_login
+        <set>
+            <if test="userName != null">
+                USER_NAME = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                PASSWORD = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null">
+                SALT = #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="locked != null">
+                LOCKED = #{locked,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.github.rogerli.system.login.entity.Login">
+        update r_sys_login
+        set USER_NAME = #{userName,jdbcType=VARCHAR},
+          PASSWORD = #{password,jdbcType=VARCHAR},
+          SALT = #{salt,jdbcType=VARCHAR},
+          LOCKED = #{locked,jdbcType=INTEGER},
+          USER_ID = #{userId,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.login.entity.Login">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_login
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="userName != null">
+                and USER_NAME = #{userName,jdbcType=VARCHAR}
+            </if>
+            <if test="locked != null">
+                and LOCKED = #{locked,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </select>
+</mapper>

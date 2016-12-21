@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.rogerli.system.log.dao.LogMapper">
+    <resultMap id="BaseResultMap" type="com.github.rogerli.system.log.entity.Log">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="LOG_TIME" property="logTime" jdbcType="TIMESTAMP"/>
+        <result column="LOG_IP" property="logIp" jdbcType="VARCHAR"/>
+        <result column="LOGIN_ID" property="loginId" jdbcType="VARCHAR"/>
+        <result column="LOG_OPERATE" property="logOperate" jdbcType="VARCHAR"/>
+        <result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, LOG_TIME, LOG_IP, LOGIN_ID, LOG_OPERATE, LOGIN_NAME
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_log
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from r_sys_log
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.github.rogerli.system.log.entity.Log">
+    insert into r_sys_log (ID, LOG_TIME, LOG_IP, 
+      LOGIN_ID, LOG_OPERATE, LOGIN_NAME
+      )
+    values (#{id,jdbcType=VARCHAR}, #{logTime,jdbcType=TIMESTAMP}, #{logIp,jdbcType=VARCHAR}, 
+      #{loginId,jdbcType=VARCHAR}, #{logOperate,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.github.rogerli.system.log.entity.Log">
+        insert into r_sys_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="logTime != null">
+                LOG_TIME,
+            </if>
+            <if test="logIp != null">
+                LOG_IP,
+            </if>
+            <if test="loginId != null">
+                LOGIN_ID,
+            </if>
+            <if test="logOperate != null">
+                LOG_OPERATE,
+            </if>
+            <if test="loginName != null">
+                LOGIN_NAME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="logTime != null">
+                #{logTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="logIp != null">
+                #{logIp,jdbcType=VARCHAR},
+            </if>
+            <if test="loginId != null">
+                #{loginId,jdbcType=VARCHAR},
+            </if>
+            <if test="logOperate != null">
+                #{logOperate,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.github.rogerli.system.log.entity.Log">
+        update r_sys_log
+        <set>
+            <if test="logTime != null">
+                LOG_TIME = #{logTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="logIp != null">
+                LOG_IP = #{logIp,jdbcType=VARCHAR},
+            </if>
+            <if test="loginId != null">
+                LOGIN_ID = #{loginId,jdbcType=VARCHAR},
+            </if>
+            <if test="logOperate != null">
+                LOG_OPERATE = #{logOperate,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.github.rogerli.system.log.entity.Log">
+    update r_sys_log
+    set LOG_TIME = #{logTime,jdbcType=TIMESTAMP},
+      LOG_IP = #{logIp,jdbcType=VARCHAR},
+      LOGIN_ID = #{loginId,jdbcType=VARCHAR},
+      LOG_OPERATE = #{logOperate,jdbcType=VARCHAR},
+      LOGIN_NAME = #{loginName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.log.entity.Log">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_log
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="logTime != null">
+                and LOG_TIME = #{logTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="logIp != null">
+                and LOG_IP = #{logIp,jdbcType=VARCHAR}
+            </if>
+            <if test="loginId != null">
+                and LOGIN_ID = #{loginId,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </select>
+</mapper>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.rogerli.system.role.dao.RoleMapper">
+    <cache eviction="FIFO" type="org.mybatis.caches.redis.RedisCache" size="1000" readOnly="true"/>
+    <resultMap id="BaseResultMap" type="com.github.rogerli.system.role.entity.Role">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="ROLE" property="role" jdbcType="VARCHAR"/>
+        <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR"/>
+        <result column="DESCRIPTIONS" property="descriptions" jdbcType="VARCHAR"/>
+        <result column="AVAILABLE" property="available" jdbcType="INTEGER"/>
+        <result column="SORT" property="sort" jdbcType="INTEGER"/>
+        <result column="ORGAN_ID" property="organId" jdbcType="VARCHAR"/>
+        <result column="IS_ADMIN" property="isAdmin" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="PurResultMap" extends="BaseResultMap" type="com.github.rogerli.system.role.model.RolePurview">
+        <collection property="purviewList" ofType="com.github.rogerli.system.purview.entity.Purview">
+            <id column="PID" property="id" jdbcType="VARCHAR"/>
+            <result column="PNAME" property="name" jdbcType="VARCHAR"/>
+            <result column="PTYPE" property="type" jdbcType="VARCHAR"/>
+            <result column="PURL" property="url" jdbcType="VARCHAR"/>
+            <result column="PAVAILABLE" property="available" jdbcType="INTEGER"/>
+            <result column="PSORT" property="sort" jdbcType="INTEGER"/>
+            <result column="PPARENT_ID" property="parentId" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, ROLE, ROLE_NAME, DESCRIPTIONS, AVAILABLE, SORT, ORGAN_ID, IS_ADMIN
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_role
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from r_sys_role
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.github.rogerli.system.role.entity.Role">
+    insert into r_sys_role (ID, ROLE, ROLE_NAME, 
+      DESCRIPTIONS, AVAILABLE, SORT, 
+      ORGAN_ID, IS_ADMIN)
+    values (#{id,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
+      #{descriptions,jdbcType=VARCHAR}, #{available,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER}, 
+      #{organId,jdbcType=VARCHAR}, #{isAdmin,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.github.rogerli.system.role.entity.Role">
+        insert into r_sys_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="role != null">
+                ROLE,
+            </if>
+            <if test="roleName != null">
+                ROLE_NAME,
+            </if>
+            <if test="descriptions != null">
+                DESCRIPTIONS,
+            </if>
+            <if test="available != null">
+                AVAILABLE,
+            </if>
+            <if test="sort != null">
+                SORT,
+            </if>
+            <if test="organId != null">
+                ORGAN_ID,
+            </if>
+            <if test="isAdmin != null">
+                IS_ADMIN,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null">
+                #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="roleName != null">
+                #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="descriptions != null">
+                #{descriptions,jdbcType=VARCHAR},
+            </if>
+            <if test="available != null">
+                #{available,jdbcType=INTEGER},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="organId != null">
+                #{organId,jdbcType=VARCHAR},
+            </if>
+            <if test="isAdmin != null">
+                #{isAdmin,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.github.rogerli.system.role.entity.Role">
+        update r_sys_role
+        <set>
+            <if test="role != null">
+                ROLE = #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="roleName != null">
+                ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="descriptions != null">
+                DESCRIPTIONS = #{descriptions,jdbcType=VARCHAR},
+            </if>
+            <if test="available != null">
+                AVAILABLE = #{available,jdbcType=INTEGER},
+            </if>
+            <if test="sort != null">
+                SORT = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="organId != null">
+                ORGAN_ID = #{organId,jdbcType=VARCHAR},
+            </if>
+            <if test="isAdmin != null">
+                IS_ADMIN = #{isAdmin,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.github.rogerli.system.role.entity.Role">
+    update r_sys_role
+    set ROLE = #{role,jdbcType=VARCHAR},
+      ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+      DESCRIPTIONS = #{descriptions,jdbcType=VARCHAR},
+      AVAILABLE = #{available,jdbcType=INTEGER},
+      SORT = #{sort,jdbcType=INTEGER},
+      ORGAN_ID = #{organId,jdbcType=VARCHAR},
+      IS_ADMIN = #{isAdmin,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.role.entity.Role">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_role
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="role != null">
+                and ROLE = #{role,jdbcType=VARCHAR}
+            </if>
+            <if test="roleName != null">
+                and ROLE_NAME = #{roleName,jdbcType=VARCHAR}
+            </if>
+            <if test="available != null">
+                and AVAILABLE = #{available,jdbcType=INTEGER}
+            </if>
+            <if test="organId != null">
+                and ORGAN_ID = #{organId,jdbcType=VARCHAR}
+            </if>
+            <if test="isAdmin != null">
+                and IS_ADMIN = #{isAdmin,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </select>
+    <select id="selectPurviewList" resultMap="com.github.rogerli.system.purview.dao.PurviewMapper.BaseResultMap"
+            parameterType="com.github.rogerli.system.role.entity.Role">
+        select
+        <include refid="com.github.rogerli.system.purview.dao.PurviewMapper.Base_Column_List"/>
+        from r_sys_purview
+        <trim prefix="where" prefixOverrides="and|or">
+            ID in (select rp.PURVIEW_ID from r_sys_role_purview rp where rp.ROLE_ID = #{id,jdbcType=VARCHAR})
+        </trim>
+    </select>
+    <select id="selectRolePurview" resultMap="PurResultMap"
+            parameterType="com.github.rogerli.system.role.entity.Role">
+        select sr.ID, sr.ROLE, sr.ROLE_NAME, sr.DESCRIPTIONS, sr.AVAILABLE, sr.SORT, sr.ORGAN_ID, sr.IS_ADMIN,
+                sp.ID PID, sp.NAME PNAME, sp.TYPE PTYPE, sp.URL PURL, sp.AVAILABLE PAVAILABLE, sp.SORT PSORT, sp.PARENT_ID PPARENT_ID
+        from r_sys_role sr
+        left join r_sys_role_purview rs
+        on sr.ID = rs.ROLE_ID
+        left join r_sys_purview sp
+        on rs.PURVIEW_ID = sp.ID
+        where sr.ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

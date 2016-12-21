@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.rogerli.system.purview.dao.PurviewMapper">
+    <resultMap id="BaseResultMap" type="com.github.rogerli.system.purview.entity.Purview">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+        <result column="URL" property="url" jdbcType="VARCHAR"/>
+        <result column="AVAILABLE" property="available" jdbcType="INTEGER"/>
+        <result column="SORT" property="sort" jdbcType="INTEGER"/>
+        <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, NAME, TYPE, URL, AVAILABLE, SORT, PARENT_ID
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_purview
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from r_sys_purview
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.github.rogerli.system.purview.entity.Purview">
+    insert into r_sys_purview (ID, NAME, TYPE, 
+      URL, AVAILABLE, SORT, 
+      PARENT_ID)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR}, #{available,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER}, 
+      #{parentId,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.github.rogerli.system.purview.entity.Purview">
+        insert into r_sys_purview
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="name != null">
+                NAME,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="url != null">
+                URL,
+            </if>
+            <if test="available != null">
+                AVAILABLE,
+            </if>
+            <if test="sort != null">
+                SORT,
+            </if>
+            <if test="parentId != null">
+                PARENT_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="available != null">
+                #{available,jdbcType=INTEGER},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.github.rogerli.system.purview.entity.Purview">
+        update r_sys_purview
+        <set>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                URL = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="available != null">
+                AVAILABLE = #{available,jdbcType=INTEGER},
+            </if>
+            <if test="sort != null">
+                SORT = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="parentId != null">
+                PARENT_ID = #{parentId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.github.rogerli.system.purview.entity.Purview">
+    update r_sys_purview
+    set NAME = #{name,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      AVAILABLE = #{available,jdbcType=INTEGER},
+      SORT = #{sort,jdbcType=INTEGER},
+      PARENT_ID = #{parentId,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.purview.entity.Purview">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_purview
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="name != null">
+                and NAME = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="type != null">
+                and TYPE = #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="available != null">
+                and AVAILABLE = #{available,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </select>
+</mapper>

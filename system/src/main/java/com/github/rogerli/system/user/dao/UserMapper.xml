@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.rogerli.system.user.dao.UserMapper">
+    <cache eviction="FIFO" type="org.mybatis.caches.redis.RedisCache" size="1000" readOnly="true"/>
+    <resultMap id="BaseResultMap" type="com.github.rogerli.system.user.entity.User">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="FULL_NAME" property="fullName" jdbcType="VARCHAR"/>
+        <result column="SEX" property="sex" jdbcType="CHAR"/>
+        <result column="AGE" property="age" jdbcType="INTEGER"/>
+        <result column="DUTY" property="duty" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="MOBILE" property="mobile" jdbcType="VARCHAR"/>
+        <result column="SORT" property="sort" jdbcType="INTEGER"/>
+        <result column="USER_CODE" property="userCode" jdbcType="VARCHAR"/>
+        <result column="AVAILABLE" property="available" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="RoleResultMap" extends="BaseResultMap" type="com.github.rogerli.system.user.model.UserRole">
+        <collection property="roleList" ofType="com.github.rogerli.system.role.entity.Role">
+            <id column="RID" property="id" jdbcType="VARCHAR"/>
+            <result column="RROLE" property="role" jdbcType="VARCHAR"/>
+            <result column="RROLE_NAME" property="roleName" jdbcType="VARCHAR"/>
+            <result column="RDESCRIPTIONS" property="descriptions" jdbcType="VARCHAR"/>
+            <result column="RAVAILABLE" property="available" jdbcType="INTEGER"/>
+            <result column="RSORT" property="sort" jdbcType="INTEGER"/>
+            <result column="RORGAN_ID" property="organId" jdbcType="VARCHAR"/>
+            <result column="RIS_ADMIN" property="isAdmin" jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, FULL_NAME, SEX, AGE, DUTY, EMAIL, PHONE, MOBILE, SORT, USER_CODE, AVAILABLE
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_user
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from r_sys_user
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.github.rogerli.system.user.entity.User">
+    insert into r_sys_user (ID, FULL_NAME, SEX, 
+      AGE, DUTY, EMAIL, PHONE, 
+      MOBILE, SORT, USER_CODE, 
+      AVAILABLE)
+    values (#{id,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, 
+      #{age,jdbcType=INTEGER}, #{duty,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, 
+      #{available,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.github.rogerli.system.user.entity.User">
+        insert into r_sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="fullName != null">
+                FULL_NAME,
+            </if>
+            <if test="sex != null">
+                SEX,
+            </if>
+            <if test="age != null">
+                AGE,
+            </if>
+            <if test="duty != null">
+                DUTY,
+            </if>
+            <if test="email != null">
+                EMAIL,
+            </if>
+            <if test="phone != null">
+                PHONE,
+            </if>
+            <if test="mobile != null">
+                MOBILE,
+            </if>
+            <if test="sort != null">
+                SORT,
+            </if>
+            <if test="userCode != null">
+                USER_CODE,
+            </if>
+            <if test="available != null">
+                AVAILABLE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="fullName != null">
+                #{fullName,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=CHAR},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=INTEGER},
+            </if>
+            <if test="duty != null">
+                #{duty,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="userCode != null">
+                #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="available != null">
+                #{available,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.github.rogerli.system.user.entity.User">
+        update r_sys_user
+        <set>
+            <if test="fullName != null">
+                FULL_NAME = #{fullName,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                SEX = #{sex,jdbcType=CHAR},
+            </if>
+            <if test="age != null">
+                AGE = #{age,jdbcType=INTEGER},
+            </if>
+            <if test="duty != null">
+                DUTY = #{duty,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                EMAIL = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                PHONE = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                MOBILE = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                SORT = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="userCode != null">
+                USER_CODE = #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="available != null">
+                AVAILABLE = #{available,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.github.rogerli.system.user.entity.User">
+    update r_sys_user
+    set FULL_NAME = #{fullName,jdbcType=VARCHAR},
+      SEX = #{sex,jdbcType=CHAR},
+      AGE = #{age,jdbcType=INTEGER},
+      DUTY = #{duty,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      SORT = #{sort,jdbcType=INTEGER},
+      USER_CODE = #{userCode,jdbcType=VARCHAR},
+      AVAILABLE = #{available,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.user.entity.User">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_user
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="fullName != null">
+                and FULL_NAME = #{fullName,jdbcType=VARCHAR}
+            </if>
+            <if test="sex != null">
+                and SEX = #{sex,jdbcType=CHAR}
+            </if>
+            <if test="age != null">
+                and AGE = #{age,jdbcType=INTEGER}
+            </if>
+            <if test="duty != null">
+                and DUTY = #{duty,jdbcType=VARCHAR}
+            </if>
+            <if test="email != null">
+                and EMAIL = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="phone != null">
+                and PHONE = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile != null">
+                and MOBILE = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="userCode != null">
+                and USER_CODE = #{userCode,jdbcType=VARCHAR}
+            </if>
+            <if test="available != null">
+                and AVAILABLE = #{available,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </select>
+    <select id="selectRoleList" resultMap="com.github.rogerli.system.role.dao.RoleMapper.BaseResultMap"
+            parameterType="com.github.rogerli.system.user.entity.User">
+        select
+        <include refid="com.github.rogerli.system.role.dao.RoleMapper.Base_Column_List"/>
+        from r_sys_role
+        <trim prefix="where" prefixOverrides="and|or">
+            ID in (select ur.ROLE_ID from r_sys_user_role ur where ur.USER_ID = #{id,jdbcType=VARCHAR})
+        </trim>
+    </select>
+    <select id="selectUserPurview" resultMap="com.github.rogerli.system.purview.dao.PurviewMapper.BaseResultMap"
+            parameterType="com.github.rogerli.system.user.entity.User">
+        select DISTINCT
+        <include refid="com.github.rogerli.system.purview.dao.PurviewMapper.Base_Column_List"/>
+        from r_sys_purview
+        <trim prefix="where" prefixOverrides="and|or">
+            ID in (select rp.PURVIEW_ID from r_sys_role_purview rp, r_sys_user_role ur where rp.ROLE_ID = ur.ROLE_ID and ur.USER_ID = #{id,jdbcType=VARCHAR})
+        </trim>
+    </select>
+    <select id="selectUserRole" resultMap="RoleResultMap"
+            parameterType="com.github.rogerli.system.user.entity.User">
+        select su.ID, su.FULL_NAME, su.SEX, su.AGE, su.DUTY, su.EMAIL, su.PHONE, su.MOBILE, su.SORT, su.USER_CODE, su.AVAILABLE,
+                sr.ID RID, sr.ROLE RROLE, sr.ROLE_NAME RROLE_NAME, sr.DESCRIPTIONS RDESCRIPTIONS, sr.AVAILABLE RAVAILABLE, sr.SORT RSORT, sr.ORGAN_ID RORGAN_ID, sr.IS_ADMIN RIS_ADMIN
+        from r_sys_user su
+        left join r_sys_user_role ur
+        on su.ID = ur.USER_ID
+        left join r_sys_role sr
+        on ur.ROLE_ID = sr.ID
+        where su.ID = #{id,jdbcType=VARCHAR}
+    </select>
+</mapper>
