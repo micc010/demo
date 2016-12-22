@@ -117,4 +117,10 @@
             </if>
         </trim>
     </select>
+    <select id="selectByUsername" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_login
+        where USER_NAME = #{userName,jdbcType=VARCHAR}
+    </select>
 </mapper>

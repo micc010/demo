@@ -123,6 +123,9 @@
             <if test="name != null">
                 and NAME = #{name,jdbcType=VARCHAR}
             </if>
+            <if test="url != null">
+                and URL = #{url,jdbcType=VARCHAR}
+            </if>
             <if test="type != null">
                 and TYPE = #{type,jdbcType=VARCHAR}
             </if>

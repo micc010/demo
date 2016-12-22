@@ -179,5 +179,38 @@
         on rs.PURVIEW_ID = sp.ID
         where sr.ID = #{id,jdbcType=VARCHAR}
     </select>
-
+    <select id="selectRoleListByPurview" resultMap="BaseResultMap"
+            parameterType="com.github.rogerli.system.purview.entity.Purview">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_role
+        <trim prefix="where" prefixOverrides="and|or">
+            ID in (
+            select rp.ROLE_ID
+                from r_sys_role_purview rp where
+                    exists(
+                        select 1 from r_sys_purview sp where sp.id = rp.PURVIEW_ID
+                        <trim prefix="where" prefixOverrides="and|or">
+                            <if test="id != null">
+                                and sp.ID = #{id,jdbcType=VARCHAR}
+                            </if>
+                            <if test="url != null">
+                                and rp.URL = #{url,jdbcType=VARCHAR}
+                            </if>
+                        </trim>
+                )
+            )
+        </trim>
+    </select>
+    <select id="selectRoleListByLogin" resultMap="BaseResultMap"
+            parameterType="com.github.rogerli.system.login.entity.Login">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_role
+        <trim prefix="where" prefixOverrides="and|or">
+            ID in (
+                select lr.ROLE_ID from r_sys_login_role lr where lr.LOGIN_ID = #{id,jdbcType=VARCHAR}
+            )
+        </trim>
+    </select>
 </mapper>

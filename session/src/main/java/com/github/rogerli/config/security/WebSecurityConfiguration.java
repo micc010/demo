@@ -108,8 +108,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .sessionManagement().maximumSessions(1); // session管理
 
         // 一般请求
-        http.authorizeRequests().regexMatchers("^(?!/api).*$").authenticated()
-//        http.authorizeRequests().anyRequest().authenticated()
+//        http.authorizeRequests().regexMatchers("^(?!/api).*$").authenticated()
+        http.authorizeRequests().anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").defaultSuccessUrl("/home").failureUrl("/login?error").permitAll()
                 .and()

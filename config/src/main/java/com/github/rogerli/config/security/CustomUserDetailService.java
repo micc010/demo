@@ -8,6 +8,10 @@
  */
 package com.github.rogerli.config.security;
 
+import com.github.rogerli.system.login.entity.Login;
+import com.github.rogerli.system.login.service.LoginService;
+import com.github.rogerli.system.role.service.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,31 +33,28 @@ import java.util.Set;
 @Component
 public class CustomUserDetailService implements UserDetailsService {
 
+    @Autowired
+    private LoginService loginService;
+
+    @Autowired
+    private RoleService roleService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-//        if (StringUtils.isEmpty(username)) {
-//            throw new UsernameNotFoundException("用户名为空");
-//        }
-//
-//        Login login = loginService.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("用户不存在"));
-//
-//        Set<GrantedAuthority> authorities = new HashSet<>();
-//        roleService.getRoles(login.getId()).forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getName())));
-//
-//        return new org.springframework.security.core.userdetails.User(
-//                username, login.getPassword(),
-//                true,//是否可用
-//                true,//是否过期
-//                true,//证书不过期为true
-//                true,//账户未锁定为true
-//                authorities);
+        if (StringUtils.isEmpty(username)) {
+            throw new UsernameNotFoundException("用户名为空");
+        }
 
-        Set<GrantedAuthority> grantedAuthoritySet = new HashSet<GrantedAuthority>();
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("USER");
-        grantedAuthoritySet.add(grantedAuthority);
+        Login login = loginService.selectByUsername(username);
+        if (login == null) {
+            throw new UsernameNotFoundException("用户不存在");
+        }
+
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        roleService.selectRoleListByLogin(login).forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getRole())));
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        CustomUserDetails userDetails = new CustomUserDetails(username, encoder.encode("password"), grantedAuthoritySet);
-        return userDetails;
+        return new CustomUserDetails(username, encoder.encode(login.getPassword()), authorities);
     }
 }

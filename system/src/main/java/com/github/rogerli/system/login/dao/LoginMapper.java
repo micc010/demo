@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LoginMapper extends Mapper<Login, String> {
 
+    Login selectByUsername(String userName);
+
 }

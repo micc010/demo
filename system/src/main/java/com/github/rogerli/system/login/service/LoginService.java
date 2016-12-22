@@ -34,4 +34,13 @@ public class LoginService extends AbstractService<Login, String, LoginMapper>{
         return loginMapper;
     }
 
+    /**
+     *
+     * @param userName
+     * @return
+     */
+    public Login selectByUsername(String userName) {
+       return getMapper().selectByUsername(userName);
+    }
+
 }

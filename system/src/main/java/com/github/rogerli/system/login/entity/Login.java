@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
-public class Login extends BaseModel implements Serializable{
+public class Login extends BaseModel implements Serializable {
 
     @NotBlank
     private String id;

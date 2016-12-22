@@ -22,7 +22,7 @@ import java.util.Set;
 public class CustomUserDetails implements UserDetails {
 
     // 默认的初始化方法
-    public CustomUserDetails(){
+    public CustomUserDetails() {
 
     }
 
@@ -39,6 +39,21 @@ public class CustomUserDetails implements UserDetails {
         this.username = userName;
         this.password = password;
         this.authorities = authorities;
+    }
+
+    public CustomUserDetails(String username, String password,
+                             Set<GrantedAuthority> authorities,
+                             boolean accountNonExpired,
+                             boolean accountNonLocked,
+                             boolean credentialsNonExpired,
+                             boolean enabled) {
+        this.password = password;
+        this.username = username;
+        this.authorities = authorities;
+        this.accountNonExpired = accountNonExpired;
+        this.accountNonLocked = accountNonLocked;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.enabled = enabled;
     }
 
     @Override

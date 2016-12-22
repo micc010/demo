@@ -37,7 +37,7 @@ public class CustomAccessDecisionManager extends AbstractAccessDecisionManager {
     public void decide(Authentication authentication, Object object,
                        Collection<ConfigAttribute> configAttributes)
             throws AccessDeniedException, InsufficientAuthenticationException {
-        LOGGER.debug("======decide======");
+        LOGGER.debug("======CustomAccessDecisionManager decide======");
 
         //如果资源要的权限为空，则可以访问
         if (configAttributes == null) {
