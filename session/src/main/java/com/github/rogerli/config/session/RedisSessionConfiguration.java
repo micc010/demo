@@ -7,9 +7,4 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @EnableRedisHttpSession
 public class RedisSessionConfiguration {
 
-//    @Bean
-//    public HttpSessionStrategy httpSessionStrategy() {
-//        return new CustomHeaderHttpSessionStrategy();
-//    }
-
 }

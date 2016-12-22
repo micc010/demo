@@ -6,7 +6,7 @@
  * @完成日期: 2016/12/5
  * @作者 ： Roger
  */
-package com.github.rogerli.config.restful;
+package com.github.rogerli.config.mvc;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;

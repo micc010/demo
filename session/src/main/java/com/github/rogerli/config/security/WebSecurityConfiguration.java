@@ -238,18 +238,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new SimpleUrlAuthenticationFailureHandler("/login?error");
     }
 
-//    /**
-//     * 超期处理器
-//     *
-//     * @param invalidSessionUrl
-//     * @return
-//     */
-//    public InvalidSessionStrategy invalidSessionStrategy(String invalidSessionUrl) {
-//        SmartInvalidSessionStrategy smartInvalidSessionStrategy = new SmartInvalidSessionStrategy();
-//        smartInvalidSessionStrategy.setInvalidSessionUrl(invalidSessionUrl);
-//        return smartInvalidSessionStrategy;
-//    }
-
     /**
      * 表达式控制器
      */
