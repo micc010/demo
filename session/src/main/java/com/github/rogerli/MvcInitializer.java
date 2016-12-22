@@ -6,10 +6,10 @@
  * @完成日期: 2016/12/19
  * @作者 ： Roger
  */
-package com.github.rogerli.config.mvc;
+package com.github.rogerli;
 
+import com.github.rogerli.config.mvc.WebMvcConfiguration;
 import com.github.rogerli.config.security.WebSecurityConfiguration;
-import com.github.rogerli.config.session.RedisSessionConfiguration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
@@ -20,16 +20,16 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] {WebSecurityConfiguration.class, RedisSessionConfiguration.class};
+        return new Class[]{Application.class, WebSecurityConfiguration.class};
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] { WebMvcConfiguration.class };
+        return new Class[]{WebMvcConfiguration.class};
     }
 
     @Override
     protected String[] getServletMappings() {
-        return new String[] { "/" };
+        return new String[]{"/"};
     }
 }

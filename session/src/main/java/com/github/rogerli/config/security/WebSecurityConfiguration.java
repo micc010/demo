@@ -1,6 +1,5 @@
 package com.github.rogerli.config.security;
 
-import com.github.rogerli.config.restful.RestfulUsernamePasswordAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +78,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("/", "/index", "/login?invalid").permitAll();// 一般请求
 
-        http.authorizeRequests()
-                .antMatchers(RestfulUsernamePasswordAuthenticationFilter.SPRING_SECURITY_RESTFUL_LOGIN_URL).permitAll();// restful请求
+//        http.authorizeRequests()
+//                .antMatchers(RestfulUsernamePasswordAuthenticationFilter.SPRING_SECURITY_RESTFUL_LOGIN_URL).permitAll();// restful请求
 
 //        // restful 请求
 //        http.addFilterAfter(createRestfulUsernamePassswordAuthenticationFilter(authenticationManager()),
