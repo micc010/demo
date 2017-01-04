@@ -1,6 +1,5 @@
 package com.github.rogerli.system.role;
 
-import com.github.rogerli.Application;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -9,7 +9,6 @@
 package com.github.rogerli.system.role;
 
 import com.github.pagehelper.PageHelper;
-import com.github.rogerli.Application;
 import com.github.rogerli.system.purview.entity.Purview;
 import com.github.rogerli.system.role.dao.RoleMapper;
 import com.github.rogerli.system.role.entity.Role;

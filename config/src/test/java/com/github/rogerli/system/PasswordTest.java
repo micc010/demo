@@ -8,7 +8,6 @@
  */
 package com.github.rogerli.system;
 
-import com.github.rogerli.Application;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;

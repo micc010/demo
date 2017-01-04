@@ -8,13 +8,8 @@
  */
 package com.github.rogerli.system.login;
 
-import com.github.pagehelper.PageHelper;
-import com.github.rogerli.Application;
 import com.github.rogerli.system.login.dao.LoginMapper;
 import com.github.rogerli.system.login.entity.Login;
-import com.github.rogerli.system.purview.entity.Purview;
-import com.github.rogerli.system.role.entity.Role;
-import com.github.rogerli.system.role.model.RolePurview;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -25,9 +20,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.util.Assert;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Roger
