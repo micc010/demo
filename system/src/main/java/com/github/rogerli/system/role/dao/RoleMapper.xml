@@ -26,6 +26,9 @@
     <sql id="Base_Column_List">
     ID, ROLE, ROLE_NAME, DESCRIPTIONS, AVAILABLE, SORT, ORGAN_ID, IS_ADMIN
   </sql>
+    <sql id="Role_Column_List">
+        sr.ID, sr.ROLE, sr.ROLE_NAME, sr.DESCRIPTIONS, sr.AVAILABLE, sr.SORT, sr.ORGAN_ID, sr.IS_ADMIN
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
@@ -189,13 +192,14 @@
             select rp.ROLE_ID
                 from r_sys_role_purview rp where
                     exists(
-                        select 1 from r_sys_purview sp where sp.id = rp.PURVIEW_ID
+                        select 1 from r_sys_purview sp
                         <trim prefix="where" prefixOverrides="and|or">
+                                and sp.id = rp.PURVIEW_ID
                             <if test="id != null">
                                 and sp.ID = #{id,jdbcType=VARCHAR}
                             </if>
                             <if test="url != null">
-                                and rp.URL = #{url,jdbcType=VARCHAR}
+                                and sp.URL = #{url,jdbcType=VARCHAR}
                             </if>
                         </trim>
                 )

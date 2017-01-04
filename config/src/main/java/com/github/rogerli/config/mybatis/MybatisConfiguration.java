@@ -50,7 +50,7 @@ public class MybatisConfiguration {
             factory.setConfigLocation(
                     resourceLoader.getResource(properties.getConfig()));
         } else {
-            LOGGER.debug("Setting 'application.properties' into Mybatis SqlSessionFactoryBean");
+            LOGGER.debug("Setting 'application.jwtProperties' into Mybatis SqlSessionFactoryBean");
             factory.setTypeAliasesPackage(properties.getTypeAliasesPackage());
             factory.setTypeHandlersPackage(properties.getTypeHandlersPackage());
             factory.setMapperLocations(properties.getMapperLocations());

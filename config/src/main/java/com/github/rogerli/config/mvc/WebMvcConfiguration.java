@@ -32,6 +32,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
@@ -70,27 +71,27 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         return localValidatorFactoryBean;
     }
 
-//    /**
-//     * 优化restful
-//     *
-//     * @return
-//     */
-//    @Override
-//    protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
-//        LOGGER.info("======RequestMappingHandlerMapping======");
-//        return new RestfulRequestMappingHandlerMapping();
-////        return  new RequestMappingHandlerMapping();
-//    }
+    /**
+     * 优化restful
+     *
+     * @return
+     */
+    @Override
+    protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
+        LOGGER.info("======RequestMappingHandlerMapping======");
+        return new RestfulRequestMappingHandlerMapping();
+//        return  new RequestMappingHandlerMapping();
+    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         LOGGER.info("======addViewControllers======");
 
-        registry.addViewController("").setViewName("index");
-        registry.addViewController("/").setViewName("index");
-        registry.addViewController("/index").setViewName("index");
-        registry.addViewController("/home").setViewName("home");
-        registry.addViewController("/login").setViewName("login");
+//        registry.addViewController("").setViewName("index");
+//        registry.addViewController("/").setViewName("index");
+//        registry.addViewController("/index").setViewName("index");
+//        registry.addViewController("/home").setViewName("home");
+//        registry.addViewController("/login").setViewName("login");
 
         super.addViewControllers(registry);
     }

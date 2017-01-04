@@ -12,8 +12,9 @@
         <module>config</module>
         <module>common</module>
         <module>system</module>
-        <module>session</module>
+        <module>form</module>
         <module>oauth</module>
+        <module>jwt</module>
     </modules>
 
     <properties>

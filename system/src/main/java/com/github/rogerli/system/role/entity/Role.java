@@ -22,6 +22,8 @@ public class Role extends BaseModel implements Serializable{
 
     private Integer isAdmin;
 
+    private Integer isClient;
+
     public String getId() {
         return id;
     }
@@ -84,5 +86,13 @@ public class Role extends BaseModel implements Serializable{
 
     public void setIsAdmin(Integer isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    public Integer getIsClient() {
+        return isClient;
+    }
+
+    public void setIsClient(Integer isClient) {
+        this.isClient = isClient;
     }
 }

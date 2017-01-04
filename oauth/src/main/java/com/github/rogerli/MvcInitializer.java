@@ -20,7 +20,7 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{Application.class, OAuth2Configuration.class};
+        return new Class[]{Application.class};
     }
 
     @Override

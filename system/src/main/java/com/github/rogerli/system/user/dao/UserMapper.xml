@@ -15,7 +15,7 @@
         <result column="USER_CODE" property="userCode" jdbcType="VARCHAR"/>
         <result column="AVAILABLE" property="available" jdbcType="INTEGER"/>
     </resultMap>
-    <resultMap id="RoleResultMap" extends="BaseResultMap" type="com.github.rogerli.system.user.model.UserRole">
+    <resultMap id="RoleResultMap" extends="BaseResultMap" type="com.github.rogerli.system.login.model.LoginRole">
         <collection property="roleList" ofType="com.github.rogerli.system.role.entity.Role">
             <id column="RID" property="id" jdbcType="VARCHAR"/>
             <result column="RROLE" property="role" jdbcType="VARCHAR"/>
@@ -206,34 +206,5 @@
                 and AVAILABLE = #{available,jdbcType=INTEGER}
             </if>
         </trim>
-    </select>
-    <select id="selectRoleList" resultMap="com.github.rogerli.system.role.dao.RoleMapper.BaseResultMap"
-            parameterType="com.github.rogerli.system.user.entity.User">
-        select
-        <include refid="com.github.rogerli.system.role.dao.RoleMapper.Base_Column_List"/>
-        from r_sys_role
-        <trim prefix="where" prefixOverrides="and|or">
-            ID in (select ur.ROLE_ID from r_sys_login_role ur where ur.USER_ID = #{id,jdbcType=VARCHAR})
-        </trim>
-    </select>
-    <select id="selectUserPurview" resultMap="com.github.rogerli.system.purview.dao.PurviewMapper.BaseResultMap"
-            parameterType="com.github.rogerli.system.user.entity.User">
-        select DISTINCT
-        <include refid="com.github.rogerli.system.purview.dao.PurviewMapper.Base_Column_List"/>
-        from r_sys_purview
-        <trim prefix="where" prefixOverrides="and|or">
-            ID in (select rp.PURVIEW_ID from r_sys_role_purview rp, r_sys_login_role ur where rp.ROLE_ID = ur.ROLE_ID and ur.USER_ID = #{id,jdbcType=VARCHAR})
-        </trim>
-    </select>
-    <select id="selectUserRole" resultMap="RoleResultMap"
-            parameterType="com.github.rogerli.system.user.entity.User">
-        select su.ID, su.FULL_NAME, su.SEX, su.AGE, su.DUTY, su.EMAIL, su.PHONE, su.MOBILE, su.SORT, su.USER_CODE, su.AVAILABLE,
-                sr.ID RID, sr.ROLE RROLE, sr.ROLE_NAME RROLE_NAME, sr.DESCRIPTIONS RDESCRIPTIONS, sr.AVAILABLE RAVAILABLE, sr.SORT RSORT, sr.ORGAN_ID RORGAN_ID, sr.IS_ADMIN RIS_ADMIN
-        from r_sys_user su
-        left join r_sys_login_role ur
-        on su.ID = ur.USER_ID
-        left join r_sys_role sr
-        on ur.ROLE_ID = sr.ID
-        where su.ID = #{id,jdbcType=VARCHAR}
     </select>
 </mapper>

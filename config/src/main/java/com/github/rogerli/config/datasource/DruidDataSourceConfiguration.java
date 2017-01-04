@@ -6,8 +6,8 @@ import com.alibaba.druid.support.http.WebStatFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -72,7 +72,7 @@ public class DruidDataSourceConfiguration {
         druidDataSource.setPoolPreparedStatements(poolPreparedStatements);
         druidDataSource.setMaxOpenPreparedStatements(maxOpenPreparedStatements);
         try {
-            LOGGER.debug("======Setting 'application.properties' into druid======");
+            LOGGER.debug("======Setting 'application.jwtProperties' into druid======");
             druidDataSource.setFilters("stat, wall");
         } catch (SQLException e) {
             throw new IllegalStateException("Could not initial Druid DataSource\n" + e);

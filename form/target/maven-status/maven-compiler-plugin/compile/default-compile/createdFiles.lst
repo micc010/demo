@@ -1,0 +1,10 @@
+com\github\rogerli\config\form\CustomUserDetailService.class
+com\github\rogerli\config\form\FormWebSecurityConfiguration.class
+com\github\rogerli\config\form\FormWebSecurityConfiguration$1.class
+com\github\rogerli\config\form\CustomUserDetails.class
+com\github\rogerli\config\form\RedisSessionConfiguration.class
+com\github\rogerli\config\form\HttpSessionInitializer.class
+com\github\rogerli\Application.class
+com\github\rogerli\config\form\CustomAccessDecisionManager.class
+com\github\rogerli\config\form\CustomFilterSecurityMetadataSource.class
+com\github\rogerli\MvcInitializer.class
