@@ -8,6 +8,7 @@
  */
 package com.github.rogerli.system;
 
+import com.github.rogerli.ApplicationTest;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -24,7 +25,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
  * @create 2017/1/4 13:31
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = ApplicationTest.class)
 @WebAppConfiguration
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PasswordTest {

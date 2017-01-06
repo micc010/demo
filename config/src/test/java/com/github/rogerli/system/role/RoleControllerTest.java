@@ -1,5 +1,6 @@
 package com.github.rogerli.system.role;
 
+import com.github.rogerli.ApplicationTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = ApplicationTest.class)
 @WebAppConfiguration
 public class RoleControllerTest {
 

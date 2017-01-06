@@ -6,7 +6,7 @@
  * @完成日期: 2016/12/22
  * @作者 ： Roger
  */
-package com.github.rogerli.mybatis;
+package com.github.rogerli.framework.cache;
 
 import org.apache.ibatis.cache.CacheException;
 import org.apache.ibatis.reflection.MetaObject;

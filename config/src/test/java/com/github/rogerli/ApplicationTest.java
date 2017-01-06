@@ -27,7 +27,8 @@ import org.springframework.web.filter.CharacterEncodingFilter;
         excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class, ControllerAdvice.class})
         })
 //@EnableAspectJAutoProxy(proxyTargetClass = true)
-public class Application {
+//@Order(1)
+public class ApplicationTest {
 
     /**
      * jar包
@@ -35,7 +36,7 @@ public class Application {
      * @param args
      */
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(ApplicationTest.class, args);
     }
 
 //    /**
@@ -45,7 +46,7 @@ public class Application {
 //     */
 //    @Override
 //    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-//        return builder.sources(Application.class);
+//        return builder.sources(ApplicationTest.class);
 //    }
 
     @Bean

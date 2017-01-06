@@ -12,7 +12,6 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -33,12 +32,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -51,8 +47,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @ComponentScan(
         basePackages = "com.github.rogerli",
         useDefaultFilters = false,
-        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class, ControllerAdvice.class})
-        })
+        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class, ControllerAdvice.class})}
+)
 @AutoConfigureAfter({LocalizationConfiguration.class})
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
@@ -83,6 +79,10 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 //        return  new RequestMappingHandlerMapping();
     }
 
+    /**
+     * 默认视图
+     * @param registry
+     */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         LOGGER.info("======addViewControllers======");
@@ -178,44 +178,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Override
     protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
 
-    }
-
-
-    /**
-     * freemarker配置
-     *
-     * @param templateLoaderPath
-     * @return
-     */
-    @Bean
-    public FreeMarkerConfigurer freeMarkerConfigurer(@Value("${spring.freemarker.template-loader-path}") String[] templateLoaderPath) {
-        LOGGER.info("======FreeMarkerConfigurer======");
-        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
-        configurer.setTemplateLoaderPaths(templateLoaderPath);
-        Properties properties = new Properties();
-        properties.setProperty("defaultEncoding", "UTF-8");
-        configurer.setFreemarkerSettings(properties);
-        return configurer;
-    }
-
-    /**
-     * freemarker视图
-     *
-     * @return
-     */
-    @Bean(name = "viewResolver")
-    public FreeMarkerViewResolver viewResolver() {
-        LOGGER.info("======ViewResolver======");
-        FreeMarkerViewResolver viewResolver = new FreeMarkerViewResolver();
-        viewResolver.setCache(true);
-        viewResolver.setPrefix("");
-        viewResolver.setSuffix(".ftl");
-        viewResolver.setContentType("text/html;charset=UTF-8");
-        viewResolver.setRequestContextAttribute("req");
-        viewResolver.setExposeSpringMacroHelpers(true);
-        viewResolver.setExposeRequestAttributes(true);
-        viewResolver.setExposeSessionAttributes(true);
-        return viewResolver;
     }
 
     @Bean(name = "multipartResolver")

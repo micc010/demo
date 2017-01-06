@@ -8,6 +8,7 @@
  */
 package com.github.rogerli.system.login;
 
+import com.github.rogerli.ApplicationTest;
 import com.github.rogerli.system.login.dao.LoginMapper;
 import com.github.rogerli.system.login.entity.Login;
 import org.junit.FixMethodOrder;
@@ -27,7 +28,7 @@ import org.springframework.util.Assert;
  * @create 2016/11/30 19:44
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = ApplicationTest.class)
 @WebAppConfiguration
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LoginMapperTest {

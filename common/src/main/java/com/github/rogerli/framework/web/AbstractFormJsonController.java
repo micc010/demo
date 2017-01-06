@@ -14,6 +14,7 @@ import com.github.rogerli.framework.service.Service;
 import com.github.rogerli.framework.web.exception.IllegalValidateException;
 import com.github.rogerli.framework.web.model.EntityList;
 import com.github.rogerli.framework.web.model.PKList;
+import com.github.rogerli.utils.RestfulUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -34,12 +35,17 @@ import java.util.Map;
  * @description
  * @create 2016/12/2 16:58
  */
-public abstract class AbstractJsonController<T extends Serializable, PK> extends AbstractController {
+public abstract class AbstractFormJsonController<T extends Serializable, PK> extends AbstractController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(AbstractJsonController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(AbstractFormJsonController.class);
 
     protected abstract Service<T, PK> getService();
 
+    /**
+     *
+     * @param pkList
+     * @return
+     */
     @RequestMapping(
             value = {"/delete-list"},
             method = {RequestMethod.POST},
@@ -52,10 +58,15 @@ public abstract class AbstractJsonController<T extends Serializable, PK> extends
         getService().deleteInBatch(pkList.getList());
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        RestHelper.fill(jsonMap, HttpStatus.OK);
+        RestfulUtils.fill(jsonMap, HttpStatus.OK);
         return jsonMap;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @RequestMapping(
             value = {"/delete-one"},
             method = {RequestMethod.POST},
@@ -67,10 +78,17 @@ public abstract class AbstractJsonController<T extends Serializable, PK> extends
         getService().deleteByPrimaryKey(id);
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        RestHelper.fill(jsonMap, HttpStatus.OK);
+        RestfulUtils.fill(jsonMap, HttpStatus.OK);
         return jsonMap;
     }
 
+    /**
+     *
+     * @param entity
+     * @param bindingResult
+     * @return
+     * @throws IllegalValidateException
+     */
     @RequestMapping(
             value = {"/add-one"},
             method = {RequestMethod.GET},
@@ -81,14 +99,21 @@ public abstract class AbstractJsonController<T extends Serializable, PK> extends
         LOGGER.debug("======addOne======");
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        RestHelper.bindErrors(jsonMap, bindingResult);
+        RestfulUtils.bindErrors(jsonMap, bindingResult);
 
         getService().insertSelective(entity);
 
-        RestHelper.fill(jsonMap, HttpStatus.OK);
+        RestfulUtils.fill(jsonMap, HttpStatus.OK);
         return jsonMap;
     }
 
+    /**
+     *
+     * @param entityList
+     * @param bindingResult
+     * @return
+     * @throws IllegalValidateException
+     */
     @RequestMapping(
             value = {"/add-list"},
             method = {RequestMethod.GET},
@@ -100,11 +125,11 @@ public abstract class AbstractJsonController<T extends Serializable, PK> extends
         LOGGER.debug("======addList======");
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        RestHelper.bindErrors(jsonMap, bindingResult);
+        RestfulUtils.bindErrors(jsonMap, bindingResult);
 
         getService().insertInBatch(entityList.getList());
 
-        RestHelper.fill(jsonMap, HttpStatus.OK);
+        RestfulUtils.fill(jsonMap, HttpStatus.OK);
         return jsonMap;
     }
 
@@ -118,11 +143,11 @@ public abstract class AbstractJsonController<T extends Serializable, PK> extends
         LOGGER.debug("======saveOne======");
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        RestHelper.bindErrors(jsonMap, bindingResult);
+        RestfulUtils.bindErrors(jsonMap, bindingResult);
 
         getService().updateByPrimaryKey(entity);
 
-        RestHelper.fill(jsonMap, HttpStatus.OK);
+        RestfulUtils.fill(jsonMap, HttpStatus.OK);
         return jsonMap;
     }
 
@@ -137,7 +162,7 @@ public abstract class AbstractJsonController<T extends Serializable, PK> extends
         Object t = getService().selectByPrimaryKey(id);
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        RestHelper.fill(jsonMap, HttpStatus.OK);
+        RestfulUtils.fill(jsonMap, HttpStatus.OK);
         jsonMap.put("data", t);
         return jsonMap;
     }
@@ -153,7 +178,7 @@ public abstract class AbstractJsonController<T extends Serializable, PK> extends
         List list = getService().selectList(query);
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        RestHelper.fill(jsonMap, HttpStatus.OK);
+        RestfulUtils.fill(jsonMap, HttpStatus.OK);
         jsonMap.put("data", list);
         return jsonMap;
     }
@@ -170,7 +195,7 @@ public abstract class AbstractJsonController<T extends Serializable, PK> extends
         List<T> list = getService().selectList(query);
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        RestHelper.fill(jsonMap, HttpStatus.OK);
+        RestfulUtils.fill(jsonMap, HttpStatus.OK);
         jsonMap.put("data", list);
         return jsonMap;
     }
@@ -187,7 +212,7 @@ public abstract class AbstractJsonController<T extends Serializable, PK> extends
         getService().updateInBatch(list.getList());
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        RestHelper.fill(jsonMap, HttpStatus.OK);
+        RestfulUtils.fill(jsonMap, HttpStatus.OK);
         return jsonMap;
     }
 }

@@ -9,6 +9,7 @@
 package com.github.rogerli.system.role;
 
 import com.github.pagehelper.PageHelper;
+import com.github.rogerli.ApplicationTest;
 import com.github.rogerli.system.purview.entity.Purview;
 import com.github.rogerli.system.role.dao.RoleMapper;
 import com.github.rogerli.system.role.entity.Role;
@@ -32,7 +33,7 @@ import java.util.List;
  * @create 2016/11/30 19:44
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = ApplicationTest.class)
 @WebAppConfiguration
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RoleMapperTest {

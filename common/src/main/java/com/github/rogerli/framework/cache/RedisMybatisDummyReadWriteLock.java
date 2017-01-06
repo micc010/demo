@@ -6,7 +6,7 @@
  * @完成日期: 2016/12/22
  * @作者 ： Roger
  */
-package com.github.rogerli.mybatis;
+package com.github.rogerli.framework.cache;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;

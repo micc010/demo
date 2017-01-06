@@ -1,15 +1,31 @@
-package com.github.rogerli.framework.web;
+package com.github.rogerli.utils;
 
 import com.github.rogerli.framework.web.exception.IllegalValidateException;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Random;
 
-public class RestHelper {
+/**
+ * 
+ * @author vladimir.stankovic
+ *
+ * Aug 3, 2016
+ */
+public class RestfulUtils {
+
+    public static final String ROLE_REFRESH_TOKEN = "ROLE_REFRESH_TOKEN";
+
+    private static final String XML_HTTP_REQUEST = "XMLHttpRequest";
+    private static final String X_REQUESTED_WITH = "X-Requested-With";
+
+    private static final String CONTENT_TYPE = "Content-type";
+    private static final String CONTENT_TYPE_JSON = "application/json";
 
     private static final Random RAND = new Random(System.currentTimeMillis());
     private static final String CODE = "code";
@@ -17,7 +33,7 @@ public class RestHelper {
     private static final String ERROR = "error";
     private static final String DATA = "data";
 
-    private RestHelper() {
+    private RestfulUtils() {
 
     }
 
@@ -106,4 +122,15 @@ public class RestHelper {
         return property;
     }
 
+    public static boolean isAjax(HttpServletRequest request) {
+        return XML_HTTP_REQUEST.equals(request.getHeader(X_REQUESTED_WITH));
+    }
+
+    public static boolean isAjax(SavedRequest request) {
+        return request.getHeaderValues(X_REQUESTED_WITH).contains(XML_HTTP_REQUEST);
+    }
+
+    public static boolean isContentTypeJson(SavedRequest request) {
+        return request.getHeaderValues(CONTENT_TYPE).contains(CONTENT_TYPE_JSON);
+    }
 }

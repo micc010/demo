@@ -9,7 +9,7 @@
 package com.github.rogerli.system.log.web;
 
 import com.github.rogerli.framework.service.Service;
-import com.github.rogerli.framework.web.AbstractJsonController;
+import com.github.rogerli.framework.web.AbstractFormJsonController;
 import com.github.rogerli.system.log.entity.Log;
 import com.github.rogerli.system.log.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/log")
-public class LogJsonController extends AbstractJsonController<Log, String> {
+public class LogJsonController extends AbstractFormJsonController<Log, String> {
 
     @Autowired
     private LogService logService;

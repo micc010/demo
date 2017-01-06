@@ -55,6 +55,6 @@ public class CustomUserDetailService implements UserDetailsService {
         roleService.selectRoleListByLogin(login).forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getRole())));
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        return new CustomUserDetails(username, encoder.encode(login.getPassword()), authorities);
+        return new CustomUserDetails(username, login.getPassword(), authorities);
     }
 }

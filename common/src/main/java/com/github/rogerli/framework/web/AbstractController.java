@@ -11,6 +11,7 @@ package com.github.rogerli.framework.web;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.rogerli.utils.RestfulUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -60,7 +61,7 @@ public abstract class AbstractController {
         ObjectMapper stringWriter = new ObjectMapper();
         try {
             Map<String, Object> jsonMap = new HashMap<String, Object>();
-            RestHelper.fill(jsonMap, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+            RestfulUtils.fill(jsonMap, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
             response.getWriter().write(stringWriter.writeValueAsString(jsonMap));
             response.flushBuffer();
             return null;

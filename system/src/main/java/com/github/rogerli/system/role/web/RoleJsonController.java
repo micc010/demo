@@ -9,7 +9,7 @@
 package com.github.rogerli.system.role.web;
 
 import com.github.rogerli.framework.service.Service;
-import com.github.rogerli.framework.web.AbstractJsonController;
+import com.github.rogerli.framework.web.AbstractFormJsonController;
 import com.github.rogerli.system.role.entity.Role;
 import com.github.rogerli.system.role.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/role")
-public class RoleJsonController extends AbstractJsonController<Role, String> {
+public class RoleJsonController extends AbstractFormJsonController<Role, String> {
 
     @Autowired
     private RoleService roleService;

@@ -1,19 +1,26 @@
 package com.github.rogerli.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.rogerli.config.jwt.auth.ajax.AjaxAuthenticationEntryPoint;
-import com.github.rogerli.config.jwt.auth.ajax.AjaxAuthenticationProvider;
-import com.github.rogerli.config.jwt.auth.ajax.AjaxLoginProcessingFilter;
 import com.github.rogerli.config.jwt.auth.JwtAuthenticationProvider;
 import com.github.rogerli.config.jwt.auth.JwtTokenAuthenticationProcessingFilter;
 import com.github.rogerli.config.jwt.auth.SkipPathRequestMatcher;
+import com.github.rogerli.config.jwt.auth.ajax.AjaxAuthenticationEntryPoint;
+import com.github.rogerli.config.jwt.auth.ajax.AjaxAuthenticationProvider;
+import com.github.rogerli.config.jwt.auth.ajax.AjaxLoginProcessingFilter;
 import com.github.rogerli.config.jwt.auth.extractor.TokenExtractor;
+import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -88,7 +95,7 @@ public class JwtWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-    
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(ajaxAuthenticationProvider);
@@ -101,11 +108,11 @@ public class JwtWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable(); // We don't need CSRF for JWT based authentication
 
         http.headers()
-                .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
-                .addHeaderWriter(new XContentTypeOptionsHeaderWriter())
-                .addHeaderWriter(new XXssProtectionHeaderWriter())
+                .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)) // 不允许跨域
+                .addHeaderWriter(new XContentTypeOptionsHeaderWriter()) // 严格的contentType
+                .addHeaderWriter(new XXssProtectionHeaderWriter()) // XSS
                 .addHeaderWriter(new CacheControlHeadersWriter())
-                .addHeaderWriter(new HstsHeaderWriter());
+                .addHeaderWriter(new HstsHeaderWriter()); // 如果使用一直使用HTTPS
 
         http.exceptionHandling()
             .authenticationEntryPoint(authenticationEntryPoint)
