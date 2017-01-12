@@ -15,7 +15,7 @@ public interface Service<T extends Serializable, PK> {
      * @return
      */
     @Transactional
-    int deleteByPrimaryKey(PK id);
+    int deleteByKey(PK id);
 
     /**
      * @param list
@@ -50,21 +50,21 @@ public interface Service<T extends Serializable, PK> {
      * @return
      */
     @Transactional(readOnly = true)
-    T selectByPrimaryKey(PK id);
+    T findByKey(PK id);
 
     /**
      * @param entity
      * @return
      */
     @Transactional
-    int updateByPrimaryKey(T entity);
+    int updateByKey(T entity);
 
     /**
      * @param entity
      * @return
      */
     @Transactional
-    int updateByPrimaryKeySelective(T entity);
+    int updateByKeySelective(T entity);
 
     /**
      * @param list
@@ -78,6 +78,6 @@ public interface Service<T extends Serializable, PK> {
      * @return
      */
     @Transactional(readOnly = true)
-    List<T> selectList(T query);
+    List<T> findList(T query);
 
 }

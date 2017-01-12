@@ -75,7 +75,7 @@ public abstract class AbstractFormJsonController<T extends Serializable, PK> ext
     @ResponseBody
     public Map<String, Object> deleteOne(PK id) {
         LOGGER.debug("======deleteOne:" + String.valueOf(id) + "======");
-        getService().deleteByPrimaryKey(id);
+        getService().deleteByKey(id);
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         RestfulUtils.fill(jsonMap, HttpStatus.OK);
@@ -145,7 +145,7 @@ public abstract class AbstractFormJsonController<T extends Serializable, PK> ext
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         RestfulUtils.bindErrors(jsonMap, bindingResult);
 
-        getService().updateByPrimaryKey(entity);
+        getService().updateByKey(entity);
 
         RestfulUtils.fill(jsonMap, HttpStatus.OK);
         return jsonMap;
@@ -159,7 +159,7 @@ public abstract class AbstractFormJsonController<T extends Serializable, PK> ext
     @ResponseBody
     public Map<String, Object> queryOne(PK id) {
         LOGGER.debug("======queryOne:" + String.valueOf(id) + "======");
-        Object t = getService().selectByPrimaryKey(id);
+        Object t = getService().findByKey(id);
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         RestfulUtils.fill(jsonMap, HttpStatus.OK);
@@ -175,7 +175,7 @@ public abstract class AbstractFormJsonController<T extends Serializable, PK> ext
     @ResponseBody
     public Map<String, Object> queryList(T query) {
         LOGGER.debug("======queryList======");
-        List list = getService().selectList(query);
+        List list = getService().findList(query);
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         RestfulUtils.fill(jsonMap, HttpStatus.OK);
@@ -192,7 +192,7 @@ public abstract class AbstractFormJsonController<T extends Serializable, PK> ext
     public Map<String, Object> queryPage(T query, Page<T> page) {
         LOGGER.debug("======queryPage======");
         PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-        List<T> list = getService().selectList(query);
+        List<T> list = getService().findList(query);
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         RestfulUtils.fill(jsonMap, HttpStatus.OK);

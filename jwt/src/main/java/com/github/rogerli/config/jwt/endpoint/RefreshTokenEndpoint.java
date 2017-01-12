@@ -52,6 +52,7 @@ public class RefreshTokenEndpoint {
     private LoginService loginService;
 
     @Autowired
+    @Qualifier("bloomFilterTokenVerifier")
     private TokenVerifier tokenVerifier;
 
     @Autowired

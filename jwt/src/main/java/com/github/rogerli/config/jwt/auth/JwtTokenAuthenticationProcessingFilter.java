@@ -26,6 +26,7 @@ import java.io.IOException;
  * Aug 5, 2016
  */
 public class JwtTokenAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
+
     private final AuthenticationFailureHandler failureHandler;
     private final TokenExtractor tokenExtractor;
     

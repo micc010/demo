@@ -15,7 +15,7 @@ public abstract class AbstractService<T extends Serializable, PK, E extends Mapp
     protected abstract E getMapper();
 
     @Override
-    public int deleteByPrimaryKey(PK id) {
+    public int deleteByKey(PK id) {
         return getMapper().deleteByPrimaryKey(id);
     }
 
@@ -25,7 +25,7 @@ public abstract class AbstractService<T extends Serializable, PK, E extends Mapp
         int size = 0;
         for (PK id :
                 list) {
-            deleteByPrimaryKey(id);
+            deleteByKey(id);
             size++;
         }
         return size;
@@ -56,18 +56,18 @@ public abstract class AbstractService<T extends Serializable, PK, E extends Mapp
     }
 
     @Override
-    public T selectByPrimaryKey(PK id) {
+    public T findByKey(PK id) {
         return ((T) getMapper().selectByPrimaryKey(id));
     }
 
     @Override
-    public int updateByPrimaryKey(T entity) {
+    public int updateByKey(T entity) {
         Assert.notNull(entity);
         return getMapper().updateByPrimaryKey(entity);
     }
 
     @Override
-    public int updateByPrimaryKeySelective(T entity) {
+    public int updateByKeySelective(T entity) {
         Assert.notNull(entity);
         return getMapper().updateByPrimaryKeySelective(entity);
     }
@@ -77,14 +77,14 @@ public abstract class AbstractService<T extends Serializable, PK, E extends Mapp
         int size = 0;
         for (T entity :
                 list) {
-            updateByPrimaryKeySelective(entity);
+            updateByKeySelective(entity);
             size++;
         }
         return size;
     }
 
     @Override
-    public List<T> selectList(T query) {
+    public List<T> findList(T query) {
         return getMapper().selectList(query);
     }
 

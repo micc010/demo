@@ -30,7 +30,7 @@ public class RedisMybatisCache implements Cache {
 
     private String id;
 
-    private static JedisPool pool;
+    private JedisPool pool;
 
     public RedisMybatisCache(final String id) {
         if (id == null) {

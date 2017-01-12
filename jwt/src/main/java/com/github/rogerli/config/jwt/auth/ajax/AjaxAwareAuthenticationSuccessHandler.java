@@ -44,7 +44,8 @@ public class AjaxAwareAuthenticationSuccessHandler implements AuthenticationSucc
                                         Authentication authentication) throws IOException, ServletException {
 
         UserContext userContext = (UserContext) authentication.getPrincipal();
-        
+
+        // 认证成功同时生成token和refreshToken
         JwtToken accessToken = tokenFactory.createAccessJwtToken(userContext);
         JwtToken refreshToken = tokenFactory.createRefreshToken(userContext);
         
