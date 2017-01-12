@@ -277,7 +277,6 @@ public class MybatisTool {
     }
 
     private void renderRestful(String className) {
-        // TODO
         String packageName = toolConfiguration.getRestfulPackage(className);
         String typeName = toolConfiguration.getEntityPackageName(className);
         String controllerName = toolConfiguration.getRestfulControllerName(className);

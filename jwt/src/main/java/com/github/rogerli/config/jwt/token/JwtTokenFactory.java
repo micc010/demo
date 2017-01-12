@@ -86,7 +86,7 @@ public class JwtTokenFactory {
         Claims claims = Jwts.claims().setSubject(userContext.getUsername());
         claims.put("scopes", Arrays.asList(RestfulUtils.ROLE_REFRESH_TOKEN));
 
-        // TODO 生成jti
+        // 生成jti
         String jti = jtiGenerator.generateId(currentTime.toDate(),
                 currentTime.plusMinutes(jwtProperties.getRefreshTokenExpTime()).toDate());
 
