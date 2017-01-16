@@ -17,17 +17,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/${entityName?lower_case}")
-public class ${formClassName} extends AbstractTmplController<${entityName}, String> {
+@RequestMapping("/${moduleName}/${entityName?lower_case}")
+public class ${className} extends AbstractTmplController<${entityName}, String> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(${formClassName}.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(${className}.class);
 
     @Autowired
-    private ${entityName}Service ${entityName?lower_case}Service;
+    private ${entityName}Service ${entityName?uncap_first}Service;
 
     @Override
     protected Service getService() {
-        return ${entityName?lower_case}Service;
+        return ${entityName?uncap_first}Service;
     }
 
 }

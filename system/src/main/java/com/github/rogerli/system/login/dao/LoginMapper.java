@@ -13,14 +13,14 @@ import java.util.Optional;
 @Repository
 public interface LoginMapper extends Mapper<Login, String> {
 
-    Login selectByUsername(String userName);
+    Login findByUsername(String userName);
 
-    LoginRole selectRoleByUsername(String userName);
+    LoginRole findRoleByUsername(String userName);
 
-    List<Role> selectRoleList(Login query);
+    List<Role> findRoleList(Login query);
 
-    List<Purview> selectUserPurview(Login query);
+    List<Purview> findUserPurview(Login query);
 
-    LoginRole selectUserRole(Login query);
+    LoginRole findUserRole(Login query);
 
 }

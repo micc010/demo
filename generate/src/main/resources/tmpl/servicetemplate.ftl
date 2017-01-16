@@ -1,6 +1,5 @@
 package ${packageName};
 
-import com.etu.framework.web.dao.IBaseDao;
 import com.github.rogerli.framework.service.AbstractService;
 import ${daoName};
 import ${typeName};
@@ -15,11 +14,11 @@ public class ${className} extends AbstractService<${entityName}, String, ${entit
 	private static final Logger LOGGER = LoggerFactory.getLogger(${className}.class);
 
 	@Autowired
-	private ${entityName}Mapper ${entityName?lower_case}Mapper;
+	private ${entityName}Mapper ${entityName?uncap_first}Mapper;
 
 	@Override
 	protected ${entityName}Mapper getMapper() {
-		return ${entityName?lower_case}Mapper;
+		return ${entityName?uncap_first}Mapper;
 	}
 
 }

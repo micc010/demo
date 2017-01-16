@@ -39,7 +39,7 @@ public class LoginMapperTest {
     @Ignore
     @Test
     public void test3() {
-        Login login = loginMapper.selectByUsername("lala");
+        Login login = loginMapper.findByUsername("lala");
         Assert.notNull(login);
     }
 

@@ -28,10 +28,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.header.writers.CacheControlHeadersWriter;
-import org.springframework.security.web.header.writers.HstsHeaderWriter;
-import org.springframework.security.web.header.writers.XContentTypeOptionsHeaderWriter;
-import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
+import org.springframework.security.web.header.writers.*;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 
 import java.util.Arrays;
@@ -39,7 +36,7 @@ import java.util.List;
 
 /**
  * WebSecurityConfig
- * 
+ *
  * @author vladimir.stankovic
  *
  * Aug 3, 2016
@@ -52,7 +49,7 @@ public class JwtWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static final String FORM_BASED_LOGIN_ENTRY_POINT = "/api/auth/login";
     public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/api/**";
     public static final String TOKEN_REFRESH_ENTRY_POINT = "/api/auth/token";
-    
+
     @Autowired
     private AjaxAuthenticationEntryPoint authenticationEntryPoint;
     @Autowired
@@ -63,28 +60,28 @@ public class JwtWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private AjaxAuthenticationProvider ajaxAuthenticationProvider;
     @Autowired
     private JwtAuthenticationProvider jwtAuthenticationProvider;
-    
+
     @Autowired
     @Qualifier("jwtHeaderTokenExtractor")
     private TokenExtractor tokenExtractor;
-    
+
     @Autowired
     private AuthenticationManager authenticationManager;
-    
+
     @Autowired
     private ObjectMapper objectMapper;
-        
+
     protected AjaxLoginProcessingFilter buildAjaxLoginProcessingFilter() throws Exception {
         AjaxLoginProcessingFilter filter = new AjaxLoginProcessingFilter(FORM_BASED_LOGIN_ENTRY_POINT,
                 successHandler, failureHandler, objectMapper);
         filter.setAuthenticationManager(authenticationManager);
         return filter;
     }
-    
+
     protected JwtTokenAuthenticationProcessingFilter buildJwtTokenAuthenticationProcessingFilter() throws Exception {
         List<String> pathsToSkip = Arrays.asList(TOKEN_REFRESH_ENTRY_POINT, FORM_BASED_LOGIN_ENTRY_POINT);
         SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip, TOKEN_BASED_AUTH_ENTRY_POINT);
-        JwtTokenAuthenticationProcessingFilter filter 
+        JwtTokenAuthenticationProcessingFilter filter
             = new JwtTokenAuthenticationProcessingFilter(failureHandler, tokenExtractor, matcher);
         filter.setAuthenticationManager(authenticationManager);
         return filter;
@@ -108,6 +105,7 @@ public class JwtWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable(); // We don't need CSRF for JWT based authentication
 
         http.headers()
+                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "*"))
                 .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)) // 不允许跨域
                 .addHeaderWriter(new XContentTypeOptionsHeaderWriter()) // 严格的contentType
                 .addHeaderWriter(new XXssProtectionHeaderWriter()) // XSS

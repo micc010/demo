@@ -74,7 +74,7 @@ public class RefreshTokenEndpoint {
 
         String subject = refreshToken.getSubject();
 
-        Optional<LoginRole> optional = loginService.selectRoleByUsername(subject);
+        Optional<LoginRole> optional = loginService.findRoleByUsername(subject);
 
         LoginRole login = optional.orElseThrow(() -> new UsernameNotFoundException("User not found: " + subject));
 

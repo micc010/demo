@@ -6,8 +6,10 @@
  * @完成日期: 2016/12/5
  * @作者 ： Roger
  */
-package com.github.rogerli.config.mvc;
+package com.github.rogerli.config.jwt.mvc;
 
+import com.github.rogerli.config.mvc.LocalizationConfiguration;
+import com.github.rogerli.config.mvc.RestfulRequestMappingHandlerMapping;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +23,10 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -47,12 +49,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @ComponentScan(
         basePackages = "com.github.rogerli",
         useDefaultFilters = false,
-        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class, ControllerAdvice.class})}
+        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {RestController.class, RestControllerAdvice.class})}
 )
 @AutoConfigureAfter({LocalizationConfiguration.class})
-public class WebMvcConfiguration extends WebMvcConfigurationSupport {
+public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtWebMvcConfiguration.class);
 
     @Autowired
     private MessageSource messageSource;
@@ -155,7 +157,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         List<MediaType> list = new ArrayList<MediaType>();
         list.add(new MediaType("text", "html", UTF_8));
         list.add(new MediaType("text", "json"));
-        list.add(MediaType.APPLICATION_JSON_UTF8);
+        list.add(MediaType.APPLICATION_JSON);
         converter.setSupportedMediaTypes(list);
         converters.add(converter);
     }
@@ -198,7 +200,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         List<MediaType> list = new ArrayList<MediaType>();
         list.add(new MediaType("text", "html", UTF_8));
         list.add(new MediaType("text", "json"));
-        list.add(MediaType.APPLICATION_JSON);
+        list.add(MediaType.APPLICATION_JSON_UTF8);
         converter.setSupportedMediaTypes(list);
         return converter;
     }

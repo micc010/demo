@@ -44,7 +44,7 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
         String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
 
-        Optional<LoginRole> optional = loginService.selectRoleByUsername(username);
+        Optional<LoginRole> optional = loginService.findRoleByUsername(username);
 
         LoginRole login = optional.orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         

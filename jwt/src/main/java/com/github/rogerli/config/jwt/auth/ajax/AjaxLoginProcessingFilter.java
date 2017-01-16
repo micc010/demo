@@ -6,6 +6,7 @@ import com.github.rogerli.utils.exception.AuthMethodNotSupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,6 +49,15 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
+
+        if (HttpMethod.OPTIONS.name().equals(request.getMethod())){
+            response.setHeader("Access-Control-Allow-Method", "POST");
+            response.setHeader("Access-Control-Allow-Headers", "Cache-Control, X-Requested-With, Content-Type");
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+            response.flushBuffer();
+            return null;
+        }
+
         if (!HttpMethod.POST.name().equals(request.getMethod()) || !RestfulUtils.isAjax(request)) {
             if(logger.isDebugEnabled()) {
                 logger.debug("Authentication method not supported. Request method: " + request.getMethod());

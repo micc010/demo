@@ -135,6 +135,14 @@ public class ToolConfiguration {
         return getFileLocation() + getPackageName(className).replaceAll("\\.", "/");
     }
 
+    public String getModuleName() {
+        return moduleName;
+    }
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
     public String getDaoPackage(String className) {
         return getPackageName(className) + "." + daoNameSpace;
     }
@@ -187,10 +195,6 @@ public class ToolConfiguration {
         return className + "TmplController";
     }
 
-    public String getJsonControllerName(String className) {
-        return className + "JsonController";
-    }
-
     public String getFormPackage(String className) {
         return getPackageName(className) + "." + webNameSpace;
     }
@@ -204,7 +208,7 @@ public class ToolConfiguration {
     }
 
     public String getRestfulControllerName(String className) {
-        return className + "RestfulController";
+        return className + "Endpoint";
     }
 
     public String getRestfulPath(String className) {

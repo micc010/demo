@@ -46,13 +46,13 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("用户名为空");
         }
 
-        Login login = loginService.selectByUsername(username);
+        Login login = loginService.findByUsername(username);
         if (login == null) {
             throw new UsernameNotFoundException("用户不存在");
         }
 
         Set<GrantedAuthority> authorities = new HashSet<>();
-        roleService.selectRoleListByLogin(login).forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getRole())));
+        roleService.findRoleListByLogin(login).forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getRole())));
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return new CustomUserDetails(username, login.getPassword(), authorities);

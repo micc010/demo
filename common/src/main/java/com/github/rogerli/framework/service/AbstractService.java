@@ -1,6 +1,7 @@
 package com.github.rogerli.framework.service;
 
 import com.github.rogerli.framework.dao.Mapper;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -10,13 +11,14 @@ import java.util.List;
  * @author roger.li
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
+@Transactional
 public abstract class AbstractService<T extends Serializable, PK, E extends Mapper> implements Service<T, PK> {
 
     protected abstract E getMapper();
 
     @Override
     public int deleteByKey(PK id) {
-        return getMapper().deleteByPrimaryKey(id);
+        return getMapper().deleteByKey(id);
     }
 
     @Override
@@ -57,19 +59,19 @@ public abstract class AbstractService<T extends Serializable, PK, E extends Mapp
 
     @Override
     public T findByKey(PK id) {
-        return ((T) getMapper().selectByPrimaryKey(id));
+        return ((T) getMapper().findByKey(id));
     }
 
     @Override
     public int updateByKey(T entity) {
         Assert.notNull(entity);
-        return getMapper().updateByPrimaryKey(entity);
+        return getMapper().updateByKey(entity);
     }
 
     @Override
     public int updateByKeySelective(T entity) {
         Assert.notNull(entity);
-        return getMapper().updateByPrimaryKeySelective(entity);
+        return getMapper().updateByKeySelective(entity);
     }
 
     public int updateInBatch(List<T> list) {
@@ -85,7 +87,7 @@ public abstract class AbstractService<T extends Serializable, PK, E extends Mapp
 
     @Override
     public List<T> findList(T query) {
-        return getMapper().selectList(query);
+        return getMapper().findList(query);
     }
 
 }

@@ -23,7 +23,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @ComponentScan(basePackages = "com.github.rogerli",
         useDefaultFilters = false,
-        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Aspect.class, Service.class, Repository.class, Component.class})},
+        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Aspect.class, Repository.class, Service.class, Component.class})},
         excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class, ControllerAdvice.class})
         })
 //@EnableAspectJAutoProxy(proxyTargetClass = true)

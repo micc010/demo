@@ -29,13 +29,13 @@
     <sql id="Role_Column_List">
         sr.ID, sr.ROLE, sr.ROLE_NAME, sr.DESCRIPTIONS, sr.AVAILABLE, sr.SORT, sr.ORGAN_ID, sr.IS_ADMIN
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="findByKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
         from r_sys_role
         where ID = #{id,jdbcType=VARCHAR}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="deleteByKey" parameterType="java.lang.String">
     delete from r_sys_role
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
@@ -102,7 +102,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.github.rogerli.system.role.entity.Role">
+    <update id="updateByKeySelective" parameterType="com.github.rogerli.system.role.entity.Role">
         update r_sys_role
         <set>
             <if test="role != null">
@@ -129,7 +129,7 @@
         </set>
         where ID = #{id,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.github.rogerli.system.role.entity.Role">
+    <update id="updateByKey" parameterType="com.github.rogerli.system.role.entity.Role">
     update r_sys_role
     set ROLE = #{role,jdbcType=VARCHAR},
       ROLE_NAME = #{roleName,jdbcType=VARCHAR},
@@ -140,7 +140,7 @@
       IS_ADMIN = #{isAdmin,jdbcType=INTEGER}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
-    <select id="selectList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.role.entity.Role">
+    <select id="findList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.role.entity.Role">
         select
         <include refid="Base_Column_List"/>
         from r_sys_role
@@ -162,7 +162,7 @@
             </if>
         </trim>
     </select>
-    <select id="selectPurviewList" resultMap="com.github.rogerli.system.purview.dao.PurviewMapper.BaseResultMap"
+    <select id="findPurviewList" resultMap="com.github.rogerli.system.purview.dao.PurviewMapper.BaseResultMap"
             parameterType="com.github.rogerli.system.role.entity.Role">
         select
         <include refid="com.github.rogerli.system.purview.dao.PurviewMapper.Base_Column_List"/>
@@ -171,7 +171,7 @@
             ID in (select rp.PURVIEW_ID from r_sys_role_purview rp where rp.ROLE_ID = #{id,jdbcType=VARCHAR})
         </trim>
     </select>
-    <select id="selectRolePurview" resultMap="PurResultMap"
+    <select id="findRolePurview" resultMap="PurResultMap"
             parameterType="com.github.rogerli.system.role.entity.Role">
         select sr.ID, sr.ROLE, sr.ROLE_NAME, sr.DESCRIPTIONS, sr.AVAILABLE, sr.SORT, sr.ORGAN_ID, sr.IS_ADMIN,
                 sp.ID PID, sp.NAME PNAME, sp.TYPE PTYPE, sp.URL PURL, sp.AVAILABLE PAVAILABLE, sp.SORT PSORT, sp.PARENT_ID PPARENT_ID
@@ -182,7 +182,7 @@
         on rs.PURVIEW_ID = sp.ID
         where sr.ID = #{id,jdbcType=VARCHAR}
     </select>
-    <select id="selectRoleListByPurview" resultMap="BaseResultMap"
+    <select id="findRoleListByPurview" resultMap="BaseResultMap"
             parameterType="com.github.rogerli.system.purview.entity.Purview">
         select
         <include refid="Base_Column_List"/>
@@ -206,7 +206,7 @@
             )
         </trim>
     </select>
-    <select id="selectRoleListByLogin" resultMap="BaseResultMap"
+    <select id="findRoleListByLogin" resultMap="BaseResultMap"
             parameterType="com.github.rogerli.system.login.entity.Login">
         select
         <include refid="Base_Column_List"/>

@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,11 +32,22 @@ public abstract class AbstractController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(AbstractController.class);
 
+    private String contentPath;
+
+    public String getContentPath(HttpServletRequest request) {
+        contentPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        return contentPath;
+    }
+
+    public String path(String module) {
+        return contentPath + module;
+    }
+
     /**
      * 统一错误处理
      *
-     * @param request http请求
-     * @param response http响应
+     * @param request   http请求
+     * @param response  http响应
      * @param exception 异常
      * @return 异常页面
      */
@@ -51,8 +63,7 @@ public abstract class AbstractController {
     }
 
     /**
-     *
-     * @param response 响应
+     * @param response  响应
      * @param exception 异常
      * @return 页面
      */
@@ -81,8 +92,7 @@ public abstract class AbstractController {
     }
 
     /**
-     *
-     * @param request 请求
+     * @param request   请求
      * @param exception 异常
      * @return 页面
      */

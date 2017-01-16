@@ -46,7 +46,7 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
         //在Resource表找到该资源对应的角色
         Purview query = new Purview();
         query.setUrl(fi.getRequestUrl());
-        List<Role> roleList = roleService.selectRoleListByPurview(query);
+        List<Role> roleList = roleService.findRoleListByPurview(query);
         for (Role role :
                 roleList) {
             //以角色名称来存放

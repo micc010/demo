@@ -1,19 +1,17 @@
 package com.github.rogerli;
 
+import com.github.rogerli.config.mvc.WebMvcConfiguration;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 /**
@@ -21,14 +19,14 @@ import org.springframework.web.filter.CharacterEncodingFilter;
  */
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class}) // same as @Configuration @EnableAutoConfiguration @ComponentScan
 @Configuration
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, WebMvcConfiguration.class})
 @ComponentScan(basePackages = "com.github.rogerli",
         useDefaultFilters = false,
-        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Aspect.class, Service.class, Repository.class, Component.class})}
+        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Aspect.class, Repository.class, Service.class, Component.class})}
 )
 //@EnableAspectJAutoProxy(proxyTargetClass = true)
 //@Order(1)
-public class Application {
+public class ApplicationTest {
 
     /**
      * jar包
@@ -36,7 +34,7 @@ public class Application {
      * @param args
      */
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(ApplicationTest.class, args);
     }
 
 //    /**
@@ -46,7 +44,7 @@ public class Application {
 //     */
 //    @Override
 //    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-//        return builder.sources(Application.class);
+//        return builder.sources(ApplicationTest.class);
 //    }
 
     @Bean

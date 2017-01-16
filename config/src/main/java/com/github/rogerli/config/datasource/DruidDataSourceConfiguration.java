@@ -56,7 +56,9 @@ public class DruidDataSourceConfiguration {
                                       @Value("${spring.datasource.minIdle}") int minIdle,
                                       @Value("${spring.datasource.validationQuery}") String validationQuery,
                                       @Value("${druid.poolPreparedStatements}") boolean poolPreparedStatements,
-                                      @Value("${druid.maxOpenPreparedStatements}") int maxOpenPreparedStatements) {
+                                      @Value("${druid.maxOpenPreparedStatements}") int maxOpenPreparedStatements,
+                                      @Value("${spring.datasource.removeAbandonedTimeout}") int removeAbandonedTimeout,
+                                      @Value("${spring.datasource.removeAbandoned}") boolean removeAbandoned) {
         DruidDataSource druidDataSource = new DruidDataSource();
         druidDataSource.setUrl(url);
         druidDataSource.setUsername(username);
@@ -67,6 +69,8 @@ public class DruidDataSourceConfiguration {
         druidDataSource.setValidationQuery(validationQuery);
         druidDataSource.setDriverClassName(driver);
         druidDataSource.setTestWhileIdle(true);
+        druidDataSource.setRemoveAbandoned(removeAbandoned);
+        druidDataSource.setRemoveAbandonedTimeout(removeAbandonedTimeout);
 
         // 开启PSCache，需要数据库支持
         druidDataSource.setPoolPreparedStatements(poolPreparedStatements);

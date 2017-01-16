@@ -99,8 +99,9 @@ public class MybatisTool {
                 renderXmlMapper(tableName, className, columnInfoList);
                 renderService(className);
                 if (toolConfiguration.isRestful()) {
-                    renderRestful(className);
+                    renderRestful(className, "restfultemplate.ftl");
                 } else {
+                    renderRestful(className, "jsonwebtemplate.ftl");
                     renderWeb(className);
                 }
             }
@@ -239,12 +240,10 @@ public class MybatisTool {
         }
     }
 
-
     private void renderWeb(String className) {
         String packageName = toolConfiguration.getFormPackage(className);
         String typeName = toolConfiguration.getEntityPackageName(className);
-        String formControllerName = toolConfiguration.getFormControllerName(className);
-        String jsonControllerName = toolConfiguration.getJsonControllerName(className);
+        String controllerName = toolConfiguration.getFormControllerName(className);
         String entityName = toolConfiguration.getEntityName(className);
         String serviceName = toolConfiguration.getServicePackageName(className);
 
@@ -252,22 +251,18 @@ public class MybatisTool {
 
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("packageName", packageName);
-        data.put("formClassName", formControllerName);
-        data.put("jsonClassName", jsonControllerName);
+        data.put("className", controllerName);
         data.put("entityName", entityName);
         data.put("serviceName", serviceName);
         data.put("typeName", typeName);
+        data.put("moduleName", toolConfiguration.getModuleName());
 
         Template template;
         try {
             File subFile = new File(formPath);
             subFile.mkdirs();
             template = configuration.getTemplate("formwebtemplate.ftl");
-            FileOutputStream fos = new FileOutputStream(new File(formPath + formControllerName + ".java"));
-            template.process(data, new OutputStreamWriter(fos));
-
-            template = configuration.getTemplate("jsonwebtemplate.ftl");
-            fos = new FileOutputStream(new File(formPath + jsonControllerName + ".java"));
+            FileOutputStream fos = new FileOutputStream(new File(formPath + controllerName + ".java"));
             template.process(data, new OutputStreamWriter(fos));
         } catch (IOException e) {
             e.printStackTrace();
@@ -276,7 +271,7 @@ public class MybatisTool {
         }
     }
 
-    private void renderRestful(String className) {
+    private void renderRestful(String className, String templateName) {
         String packageName = toolConfiguration.getRestfulPackage(className);
         String typeName = toolConfiguration.getEntityPackageName(className);
         String controllerName = toolConfiguration.getRestfulControllerName(className);
@@ -291,12 +286,13 @@ public class MybatisTool {
         data.put("entityName", entityName);
         data.put("serviceName", serviceName);
         data.put("typeName", typeName);
+        data.put("moduleName", toolConfiguration.getModuleName());
 
         Template template;
         try {
             File subFile = new File(restfulPath);
             subFile.mkdirs();
-            template = configuration.getTemplate("restfultemplate.ftl");
+            template = configuration.getTemplate(templateName);
             FileOutputStream fos = new FileOutputStream(new File(restfulPath + controllerName + ".java"));
             template.process(data, new OutputStreamWriter(fos));
         } catch (IOException e) {

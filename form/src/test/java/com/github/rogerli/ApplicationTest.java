@@ -21,11 +21,11 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @ComponentScan(basePackages = "com.github.rogerli",
         useDefaultFilters = false,
-        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Aspect.class, Service.class, Repository.class, Component.class})}
+        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Aspect.class, Repository.class, Service.class, Component.class})}
 )
 //@EnableAspectJAutoProxy(proxyTargetClass = true)
 //@Order(1)
-public class Application {
+public class ApplicationTest {
 
     /**
      * jar包
@@ -33,7 +33,7 @@ public class Application {
      * @param args
      */
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(ApplicationTest.class, args);
     }
 
 //    /**
@@ -43,7 +43,7 @@ public class Application {
 //     */
 //    @Override
 //    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-//        return builder.sources(Application.class);
+//        return builder.sources(ApplicationTest.class);
 //    }
 
     @Bean

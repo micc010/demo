@@ -1,7 +1,5 @@
 package com.github.rogerli.framework.dao;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,7 +7,6 @@ import java.util.List;
  * @author roger.li
  * @date 2015/8/24
  */
-@Transactional
 public interface Mapper<T extends Serializable, PK> {
 
     /**
@@ -18,7 +15,7 @@ public interface Mapper<T extends Serializable, PK> {
      * @return
      */
 
-    int deleteByPrimaryKey(PK id);
+    int deleteByKey(PK id);
 
     /**
      *
@@ -39,27 +36,27 @@ public interface Mapper<T extends Serializable, PK> {
      * @param id
      * @return
      */
-    T selectByPrimaryKey(PK id);
+    T findByKey(PK id);
 
     /**
      *
      * @param record
      * @return
      */
-    int updateByPrimaryKey(T record);
+    int updateByKey(T record);
 
     /**
      *
      * @param entity
      * @return
      */
-    int updateByPrimaryKeySelective(T entity);
+    int updateByKeySelective(T entity);
 
     /**
      *
      * @param query
      * @return
      */
-    List<T> selectList(T query);
+    List<T> findList(T query);
 
 }

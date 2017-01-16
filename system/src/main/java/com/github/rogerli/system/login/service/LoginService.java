@@ -44,21 +44,12 @@ public class LoginService extends AbstractService<Login, String, LoginMapper> {
      * @param userName
      * @return
      */
-    public Login selectByUsername(String userName) {
-        return getMapper().selectByUsername(userName);
+    public Login findByUsername(String userName) {
+        return getMapper().findByUsername(userName);
     }
 
-    public Optional<LoginRole> selectRoleByUsername(String userName) {
-        return Optional.of(getMapper().selectRoleByUsername(userName));
-    }
-
-    /**
-     *
-     * @param query
-     * @return
-     */
-    public List<Role> selectRoleList(Login query) {
-        return getMapper().selectRoleList(query);
+    public Optional<LoginRole> findRoleByUsername(String userName) {
+        return Optional.of(getMapper().findRoleByUsername(userName));
     }
 
     /**
@@ -66,8 +57,8 @@ public class LoginService extends AbstractService<Login, String, LoginMapper> {
      * @param query
      * @return
      */
-    public List<Purview> selectUserPurview(Login query){
-        return getMapper().selectUserPurview(query);
+    public List<Role> findRoleList(Login query) {
+        return getMapper().findRoleList(query);
     }
 
     /**
@@ -75,8 +66,17 @@ public class LoginService extends AbstractService<Login, String, LoginMapper> {
      * @param query
      * @return
      */
-    public LoginRole selectUserRole(Login query){
-        return getMapper().selectUserRole(query);
+    public List<Purview> findUserPurview(Login query){
+        return getMapper().findUserPurview(query);
+    }
+
+    /**
+     *
+     * @param query
+     * @return
+     */
+    public LoginRole findUserRole(Login query){
+        return getMapper().findUserRole(query);
     }
 
 }

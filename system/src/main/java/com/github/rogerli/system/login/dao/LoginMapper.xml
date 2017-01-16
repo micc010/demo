@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.github.rogerli.system.login.dao.LoginMapper">
-    <cache eviction="FIFO" type="com.github.rogerli.framework.cache.RedisMybatisCache" size="1000" readOnly="true"/>
     <resultMap id="BaseResultMap" type="com.github.rogerli.system.login.entity.Login">
         <id column="ID" property="id" jdbcType="VARCHAR"/>
         <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
@@ -28,13 +27,13 @@
     <sql id="Login_Column_List">
         lg.ID, lg.USER_NAME, lg.PASSWORD, lg.SALT, lg.LOCKED, lg.USER_ID
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="findByKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
         from r_sys_login
         where ID = #{id,jdbcType=VARCHAR}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="deleteByKey" parameterType="java.lang.String">
     delete from r_sys_login
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
@@ -89,7 +88,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.github.rogerli.system.login.entity.Login">
+    <update id="updateByKeySelective" parameterType="com.github.rogerli.system.login.entity.Login">
         update r_sys_login
         <set>
             <if test="userName != null">
@@ -110,7 +109,7 @@
         </set>
         where ID = #{id,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.github.rogerli.system.login.entity.Login">
+    <update id="updateByKey" parameterType="com.github.rogerli.system.login.entity.Login">
         update r_sys_login
         set USER_NAME = #{userName,jdbcType=VARCHAR},
           PASSWORD = #{password,jdbcType=VARCHAR},
@@ -119,7 +118,7 @@
           USER_ID = #{userId,jdbcType=VARCHAR}
         where ID = #{id,jdbcType=VARCHAR}
   </update>
-    <select id="selectList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.login.entity.Login">
+    <select id="findList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.login.entity.Login">
         select
         <include refid="Base_Column_List"/>
         from r_sys_login
@@ -132,13 +131,13 @@
             </if>
         </trim>
     </select>
-    <select id="selectByUsername" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="findByUsername" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
         from r_sys_login
         where USER_NAME = #{userName,jdbcType=VARCHAR}
     </select>
-    <select id="selectRoleByUsername" resultMap="RoleResultMap" parameterType="java.lang.String">
+    <select id="findRoleByUsername" resultMap="RoleResultMap" parameterType="java.lang.String">
         select
         <include refid="Login_Column_List"/>,
         sr.ID RID, sr.ROLE RROLE, sr.ROLE_NAME RROLE_NAME, sr.DESCRIPTIONS RDESCRIPTIONS,
@@ -151,7 +150,7 @@
         on lr.ROLE_ID = sr.ID
         where lg.USER_NAME = #{userName,jdbcType=VARCHAR}
     </select>
-    <select id="selectRoleList" resultMap="com.github.rogerli.system.role.dao.RoleMapper.BaseResultMap"
+    <select id="findRoleList" resultMap="com.github.rogerli.system.role.dao.RoleMapper.BaseResultMap"
             parameterType="com.github.rogerli.system.login.entity.Login">
         select
         <include refid="com.github.rogerli.system.role.dao.RoleMapper.Base_Column_List"/>
@@ -160,7 +159,7 @@
             ID in (select ur.ROLE_ID from r_sys_login_role ur where ur.LOGIN_ID = #{id,jdbcType=VARCHAR})
         </trim>
     </select>
-    <select id="selectUserPurview" resultMap="com.github.rogerli.system.purview.dao.PurviewMapper.BaseResultMap"
+    <select id="findUserPurview" resultMap="com.github.rogerli.system.purview.dao.PurviewMapper.BaseResultMap"
             parameterType="com.github.rogerli.system.login.entity.Login">
         select DISTINCT
         <include refid="com.github.rogerli.system.purview.dao.PurviewMapper.Base_Column_List"/>
@@ -169,7 +168,7 @@
             ID in (select rp.PURVIEW_ID from r_sys_role_purview rp, r_sys_login_role ur where rp.ROLE_ID = ur.ROLE_ID and ur.USER_ID = #{id,jdbcType=VARCHAR})
         </trim>
     </select>
-    <select id="selectUserRole" resultMap="RoleResultMap"
+    <select id="findUserRole" resultMap="RoleResultMap"
             parameterType="com.github.rogerli.system.user.entity.User">
         select su.ID, su.FULL_NAME, su.SEX, su.AGE, su.DUTY, su.EMAIL, su.PHONE, su.MOBILE, su.SORT, su.USER_CODE, su.AVAILABLE,
         sr.ID RID, sr.ROLE RROLE, sr.ROLE_NAME RROLE_NAME, sr.DESCRIPTIONS RDESCRIPTIONS, sr.AVAILABLE RAVAILABLE, sr.SORT RSORT, sr.ORGAN_ID RORGAN_ID, sr.IS_ADMIN RIS_ADMIN

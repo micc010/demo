@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.github.rogerli.system.log.dao.LogMapper">
-    <cache eviction="FIFO" type="com.github.rogerli.framework.cache.RedisMybatisCache" size="1000" readOnly="true"/>
     <resultMap id="BaseResultMap" type="com.github.rogerli.system.log.entity.Log">
         <id column="ID" property="id" jdbcType="VARCHAR"/>
         <result column="LOG_TIME" property="logTime" jdbcType="TIMESTAMP"/>
@@ -13,13 +12,13 @@
     <sql id="Base_Column_List">
     ID, LOG_TIME, LOG_IP, LOGIN_ID, LOG_OPERATE, LOGIN_NAME
   </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="findByKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
         from r_sys_log
         where ID = #{id,jdbcType=VARCHAR}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="deleteByKey" parameterType="java.lang.String">
     delete from r_sys_log
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
@@ -74,7 +73,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.github.rogerli.system.log.entity.Log">
+    <update id="updateByKeySelective" parameterType="com.github.rogerli.system.log.entity.Log">
         update r_sys_log
         <set>
             <if test="logTime != null">
@@ -95,7 +94,7 @@
         </set>
         where ID = #{id,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.github.rogerli.system.log.entity.Log">
+    <update id="updateByKey" parameterType="com.github.rogerli.system.log.entity.Log">
     update r_sys_log
     set LOG_TIME = #{logTime,jdbcType=TIMESTAMP},
       LOG_IP = #{logIp,jdbcType=VARCHAR},
@@ -104,7 +103,7 @@
       LOGIN_NAME = #{loginName,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
-    <select id="selectList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.log.entity.Log">
+    <select id="findList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.log.entity.Log">
         select
         <include refid="Base_Column_List"/>
         from r_sys_log

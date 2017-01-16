@@ -12,12 +12,12 @@ import java.util.List;
 @Repository
 public interface RoleMapper extends Mapper<Role, String> {
 
-    List<Purview> selectPurviewList(Role query);
+    List<Purview> findPurviewList(Role query);
 
-    RolePurview selectRolePurview(Role query);
+    RolePurview findRolePurview(Role query);
 
-    List<Role> selectRoleListByPurview(Purview query);
+    List<Role> findRoleListByPurview(Purview query);
 
-    List<Role> selectRoleListByLogin(Login query);
+    List<Role> findRoleListByLogin(Login query);
 
 }

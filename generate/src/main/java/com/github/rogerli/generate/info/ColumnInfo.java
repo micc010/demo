@@ -46,6 +46,9 @@ public class ColumnInfo {
         if (jdbcType.equals("CHAR")) {
             jdbcType = "VARCHAR";
         }
+        if (jdbcType.equals("DATETIME")) {
+            jdbcType = "TIMESTAMP";
+        }
         this.jdbcType = jdbcType;
     }
 

@@ -58,16 +58,16 @@ public class RoleMapperTest {
 //    @Ignore
     @Test
     public void test2() {
-        Role role = roleMapper.selectByPrimaryKey("1");
+        Role role = roleMapper.findByKey("1");
         Assert.isTrue(role.getId().equals("1"));
     }
 
     @Ignore
     @Test
     public void test3() {
-        Role role = roleMapper.selectByPrimaryKey("1");
+        Role role = roleMapper.findByKey("1");
         PageHelper.startPage(1, 1);
-        List<Purview> list = roleMapper.selectPurviewList(role);
+        List<Purview> list = roleMapper.findPurviewList(role);
         System.out.println(list);
     }
 
@@ -77,7 +77,7 @@ public class RoleMapperTest {
         Role role = new Role();
         role.setId("1");
         PageHelper.startPage(1, 1);
-        RolePurview rolePurview = roleMapper.selectRolePurview(role);
+        RolePurview rolePurview = roleMapper.findRolePurview(role);
         System.out.println(rolePurview);
     }
 

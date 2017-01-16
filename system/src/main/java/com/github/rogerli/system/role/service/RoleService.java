@@ -45,8 +45,8 @@ public class RoleService extends AbstractService<Role, String, RoleMapper>{
      * @param query
      * @return
      */
-    public List<Purview> selectPurviewList(Role query){
-        return getMapper().selectPurviewList(query);
+    public List<Purview> findPurviewList(Role query){
+        return getMapper().findPurviewList(query);
     }
 
     /**
@@ -54,8 +54,8 @@ public class RoleService extends AbstractService<Role, String, RoleMapper>{
      * @param query
      * @return
      */
-    public RolePurview selectRolePurview(Role query){
-        return getMapper().selectRolePurview(query);
+    public RolePurview findRolePurview(Role query){
+        return getMapper().findRolePurview(query);
     }
 
     /**
@@ -63,8 +63,8 @@ public class RoleService extends AbstractService<Role, String, RoleMapper>{
      * @param query
      * @return
      */
-    public List<Role> selectRoleListByPurview(Purview query){
-        return getMapper().selectRoleListByPurview(query);
+    public List<Role> findRoleListByPurview(Purview query){
+        return getMapper().findRoleListByPurview(query);
     }
 
     /**
@@ -72,8 +72,8 @@ public class RoleService extends AbstractService<Role, String, RoleMapper>{
      * @param query
      * @return
      */
-    public List<Role> selectRoleListByLogin(Login query){
-        return getMapper().selectRoleListByLogin(query);
+    public List<Role> findRoleListByLogin(Login query){
+        return getMapper().findRoleListByLogin(query);
     }
 
 }
