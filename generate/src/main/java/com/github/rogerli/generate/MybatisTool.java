@@ -3,6 +3,7 @@ package com.github.rogerli.generate;
 import com.github.rogerli.generate.config.ToolConfiguration;
 import com.github.rogerli.generate.info.Banner;
 import com.github.rogerli.generate.info.ColumnInfo;
+import com.github.rogerli.generate.info.TableInfo;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -73,12 +74,12 @@ public class MybatisTool {
 
         try {
 
-            for (String tableName :
+            for (TableInfo info :
                     toolConfiguration.getTableList()) {
 
-                String className = toolConfiguration.tableNameToEntityName(tableName);
+                String className = toolConfiguration.tableNameToEntityName(info.getTableName());
 
-                st = connection.prepareStatement("select * from " + tableName);
+                st = connection.prepareStatement("select * from " + info.getTableName());
                 st.execute();
                 ResultSetMetaData rsmd = st.getMetaData();
 
@@ -96,7 +97,7 @@ public class MybatisTool {
 
                 renderModel(className, columnInfoList);
                 renderDao(className);
-                renderXmlMapper(tableName, className, columnInfoList);
+                renderXmlMapper(info, className, columnInfoList);
                 renderService(className);
                 if (toolConfiguration.isRestful()) {
                     renderRestful(className, "restfultemplate.ftl");
@@ -164,7 +165,7 @@ public class MybatisTool {
         }
     }
 
-    private void renderXmlMapper(String tableName, String className, List<ColumnInfo> columnInfoList) {
+    private void renderXmlMapper(TableInfo info, String className, List<ColumnInfo> columnInfoList) {
 
         Map<String, Object> data = new HashMap<String, Object>();
         String typeName = toolConfiguration.getEntityPackageName(className);
@@ -185,7 +186,7 @@ public class MybatisTool {
         data.put("typeName", typeName);
         data.put("nameSpace", nameSpace);
         data.put("colStr", colStr);
-        data.put("tableName", tableName);
+        data.put("info", info);
         Template template;
         try {
 

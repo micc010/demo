@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class UserContext {
 
+    private int status;
     private final String username;
     private final List<GrantedAuthority> authorities;
 
@@ -24,6 +25,14 @@ public class UserContext {
     public static UserContext create(String username, List<GrantedAuthority> authorities) {
         if (StringUtils.isEmpty(username)) throw new IllegalArgumentException("Username is blank: " + username);
         return new UserContext(username, authorities);
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getUsername() {

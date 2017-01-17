@@ -1,5 +1,7 @@
 package com.github.rogerli.generate.config;
 
+import com.github.rogerli.generate.info.TableInfo;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,7 +17,7 @@ public class ToolConfiguration {
     private String username;
     private String password;
     private String driverName;
-    private List<String> tableList = new ArrayList<String>();
+    private List<TableInfo> tableList = new ArrayList<TableInfo>();
     private String tablePrefix;
     private String packageName;
     private String moduleName;
@@ -55,7 +57,9 @@ public class ToolConfiguration {
         fileLocation = properties.getProperty("fileLocation");
         String[] tbList = tableNameList.split(",");
         for (int i = 0; i < tbList.length; i++) {
-            tableList.add(tbList[i]);
+            String[] arr = tbList[i].split("@");
+            TableInfo tableInfo = new TableInfo(arr[0], arr[1]);
+            tableList.add(tableInfo);
         }
     }
 
@@ -107,11 +111,11 @@ public class ToolConfiguration {
         this.driverName = driverName;
     }
 
-    public List<String> getTableList() {
+    public List<TableInfo> getTableList() {
         return tableList;
     }
 
-    public void setTableList(List<String> tableList) {
+    public void setTableList(List<TableInfo> tableList) {
         this.tableList = tableList;
     }
 

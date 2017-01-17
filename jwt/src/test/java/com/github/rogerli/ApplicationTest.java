@@ -1,6 +1,5 @@
 package com.github.rogerli;
 
-import com.github.rogerli.config.mvc.WebMvcConfiguration;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -19,7 +18,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
  */
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class}) // same as @Configuration @EnableAutoConfiguration @ComponentScan
 @Configuration
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, WebMvcConfiguration.class})
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @ComponentScan(basePackages = "com.github.rogerli",
         useDefaultFilters = false,
         includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Aspect.class, Repository.class, Service.class, Component.class})}

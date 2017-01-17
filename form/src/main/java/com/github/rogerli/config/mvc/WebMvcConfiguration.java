@@ -25,6 +25,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -47,7 +49,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @ComponentScan(
         basePackages = "com.github.rogerli",
         useDefaultFilters = false,
-        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class, ControllerAdvice.class})}
+        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class,
+                RestController.class, ControllerAdvice.class, RestControllerAdvice.class})}
 )
 @AutoConfigureAfter({LocalizationConfiguration.class})
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
@@ -81,6 +84,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 默认视图
+     *
      * @param registry
      */
     @Override

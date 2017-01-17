@@ -28,7 +28,7 @@ public class RestfulUtils {
     private static final String CONTENT_TYPE_JSON = "application/json";
 
     private static final Random RAND = new Random(System.currentTimeMillis());
-    private static final String CODE = "code";
+    private static final String STATUS = "status";
     private static final String MESSAGE = "message";
     private static final String ERROR = "error";
     private static final String DATA = "data";
@@ -56,7 +56,7 @@ public class RestfulUtils {
      * @param message
      */
     public static void fill(Map<String, Object> jsonMap, HttpStatus status, Object message) {
-        jsonMap.put(CODE, status.value());
+        jsonMap.put(STATUS, status.value());
         if (message != null) {
             jsonMap.put(MESSAGE, message);
         }

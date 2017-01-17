@@ -13,15 +13,15 @@
     <select id="findByKey" parameterType="String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from ${tableName}
-        where ID = ${'#'}{id,jdbcType=VARCHAR}
+        from ${info.tableName}
+        where ${info.keyName} = ${'#'}{${info.keyName},jdbcType=VARCHAR}
     </select>
     <delete id="deleteByKey" parameterType="String">
-        delete from ${tableName}
-        where ID = ${'#'}{id,jdbcType=VARCHAR}
+        delete from ${info.tableName}
+        where ${info.keyName} = ${'#'}{${info.keyName},jdbcType=VARCHAR}
     </delete>
     <insert id="insert" parameterType="${typeName}">
-        insert into ${tableName}(${colStr})
+        insert into ${info.tableName}(${colStr})
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <#list columnList as col>
@@ -30,7 +30,7 @@
         </trim>
     </insert>
     <insert id="insertSelective" parameterType="${typeName}">
-        insert into ${tableName}
+        insert into ${info.tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <#list columnList as col>
             <if test="${col.propertyName} != null">
@@ -47,7 +47,7 @@
         </trim>
     </insert>
     <update id="updateByKeySelective" parameterType="${typeName}">
-        update ${tableName}
+        update ${info.tableName}
         <trim prefix="set" prefixOverrides=",">
         <#list columnList as col>
             <#if "${col.propertyName}" != "id">
@@ -57,10 +57,10 @@
             </#if>
         </#list>
         </trim>
-        where ID = ${'#'}{id,jdbcType=VARCHAR}
+        where ${info.keyName} = ${'#'}{${info.keyName},jdbcType=VARCHAR}
     </update>
     <update id="updateByKey" parameterType="${typeName}">
-        update ${tableName}
+        update ${info.tableName}
         <trim prefix="set" prefixOverrides=",">
         <#list columnList as col>
             <#if "${col.propertyName}" != "id">
@@ -68,12 +68,12 @@
             </#if>
         </#list>
         </trim>
-        where ID = ${'#'}{id,jdbcType=VARCHAR}
+        where ${info.keyName} = ${'#'}{${info.keyName},jdbcType=VARCHAR}
     </update>
     <select id="findList" parameterType="${typeName}" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from ${tableName}
+        from ${info.tableName}
         <trim prefix="where" prefixOverrides="and|or">
         <#list columnList as col>
             <if test="${col.propertyName} != null">

@@ -11,9 +11,11 @@ import com.github.rogerli.config.jwt.token.RawAccessJwtToken;
 import com.github.rogerli.config.jwt.token.RefreshToken;
 import com.github.rogerli.system.login.model.LoginRole;
 import com.github.rogerli.system.login.service.LoginService;
+import com.github.rogerli.utils.RestfulUtils;
 import com.github.rogerli.utils.exception.InvalidJwtTokenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +30,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -61,7 +65,7 @@ public class RefreshTokenEndpoint {
 
     @RequestMapping(value = "/api/auth/token", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public JwtToken refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         String tokenPayload = tokenExtractor.extract(request.getHeader(JwtWebSecurityConfiguration.JWT_TOKEN_HEADER_PARAM));
         RawAccessJwtToken rawToken = new RawAccessJwtToken(tokenPayload);
@@ -88,7 +92,13 @@ public class RefreshTokenEndpoint {
 
         UserContext userContext = UserContext.create(login.getUserName(), authorities);
 
-        return tokenFactory.createAccessJwtToken(userContext);
+        JwtToken jwtToken = tokenFactory.createAccessJwtToken(userContext);
+
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+        RestfulUtils.fill(jsonMap, HttpStatus.OK);
+        jsonMap.put("token", jwtToken.getToken());
+
+        return jsonMap;
     }
 
 }
