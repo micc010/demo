@@ -25,14 +25,20 @@
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
     <insert id="insert" parameterType="com.github.rogerli.system.purview.entity.Purview">
-    insert into r_sys_purview (ID, NAME, TYPE, 
-      URL, AVAILABLE, SORT, 
-      PARENT_ID)
-    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR}, #{available,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER}, 
-      #{parentId,jdbcType=VARCHAR})
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        insert into r_sys_purview (ID, NAME, TYPE,
+          URL, AVAILABLE, SORT,
+          PARENT_ID)
+        values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+          #{url,jdbcType=VARCHAR}, #{available,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER},
+          #{parentId,jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" parameterType="com.github.rogerli.system.purview.entity.Purview">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
         insert into r_sys_purview
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

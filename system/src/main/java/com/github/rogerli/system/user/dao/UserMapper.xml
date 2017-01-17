@@ -41,16 +41,22 @@
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
     <insert id="insert" parameterType="com.github.rogerli.system.user.entity.User">
-    insert into r_sys_user (ID, FULL_NAME, SEX, 
-      AGE, DUTY, EMAIL, PHONE, 
-      MOBILE, SORT, USER_CODE, 
-      AVAILABLE)
-    values (#{id,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, 
-      #{age,jdbcType=INTEGER}, #{duty,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{mobile,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, 
-      #{available,jdbcType=INTEGER})
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        insert into r_sys_user (ID, FULL_NAME, SEX,
+          AGE, DUTY, EMAIL, PHONE,
+          MOBILE, SORT, USER_CODE,
+          AVAILABLE)
+        values (#{id,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR},
+          #{age,jdbcType=INTEGER}, #{duty,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+          #{mobile,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR},
+          #{available,jdbcType=INTEGER})
   </insert>
     <insert id="insertSelective" parameterType="com.github.rogerli.system.user.entity.User">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
         insert into r_sys_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

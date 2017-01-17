@@ -23,14 +23,20 @@
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
     <insert id="insert" parameterType="com.github.rogerli.system.log.entity.Log">
-    insert into r_sys_log (ID, LOG_TIME, LOG_IP, 
-      LOGIN_ID, LOG_OPERATE, LOGIN_NAME
-      )
-    values (#{id,jdbcType=VARCHAR}, #{logTime,jdbcType=TIMESTAMP}, #{logIp,jdbcType=VARCHAR}, 
-      #{loginId,jdbcType=VARCHAR}, #{logOperate,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}
-      )
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        insert into r_sys_log (ID, LOG_TIME, LOG_IP,
+          LOGIN_ID, LOG_OPERATE, LOGIN_NAME
+          )
+        values (#{id,jdbcType=VARCHAR}, #{logTime,jdbcType=TIMESTAMP}, #{logIp,jdbcType=VARCHAR},
+          #{loginId,jdbcType=VARCHAR}, #{logOperate,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}
+          )
   </insert>
     <insert id="insertSelective" parameterType="com.github.rogerli.system.log.entity.Log">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
         insert into r_sys_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

@@ -13,7 +13,7 @@ public enum ErrorCode {
 
     GLOBAL(2),
 
-    AUTHENTICATION(10), JWT_TOKEN_EXPIRED(11);
+    UN_AUTHENTICED(10), JWT_TOKEN_EXPIRED(11), INVALID_JWT_TOKEN(12);
     
     private int errorCode;
 

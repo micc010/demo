@@ -21,6 +21,11 @@
         where ${info.keyName} = ${'#'}{${info.keyName},jdbcType=VARCHAR}
     </delete>
     <insert id="insert" parameterType="${typeName}">
+        <#if "${info.keyName}" == "id">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        </#if>
         insert into ${info.tableName}(${colStr})
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -30,6 +35,11 @@
         </trim>
     </insert>
     <insert id="insertSelective" parameterType="${typeName}">
+        <#if "${info.keyName}" == "id">
+            <selectKey keyProperty="id" resultType="String" order="BEFORE">
+                select replace(uuid(),'-','') from dual
+            </selectKey>
+        </#if>
         insert into ${info.tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <#list columnList as col>

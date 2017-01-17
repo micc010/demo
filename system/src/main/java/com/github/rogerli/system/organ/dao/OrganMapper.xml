@@ -26,16 +26,22 @@
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
     <insert id="insert" parameterType="com.github.rogerli.system.organ.entity.Organ">
-    insert into r_sys_organ (ID, NAME, CODE, 
-      SHORT_NAME, TYPE, PARENT_ID, 
-      AVAILABLE, SORT, CHECKABLE
-      )
-    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
-      #{shortName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
-      #{available,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER}, #{checkable,jdbcType=INTEGER}
-      )
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        insert into r_sys_organ (ID, NAME, CODE,
+          SHORT_NAME, TYPE, PARENT_ID,
+          AVAILABLE, SORT, CHECKABLE
+          )
+        values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR},
+          #{shortName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR},
+          #{available,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER}, #{checkable,jdbcType=INTEGER}
+          )
   </insert>
     <insert id="insertSelective" parameterType="com.github.rogerli.system.organ.entity.Organ">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
         insert into r_sys_organ
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

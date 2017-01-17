@@ -40,14 +40,20 @@
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
     <insert id="insert" parameterType="com.github.rogerli.system.role.entity.Role">
-    insert into r_sys_role (ID, ROLE, ROLE_NAME, 
-      DESCRIPTIONS, AVAILABLE, SORT, 
-      ORGAN_ID, IS_ADMIN)
-    values (#{id,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
-      #{descriptions,jdbcType=VARCHAR}, #{available,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER}, 
-      #{organId,jdbcType=VARCHAR}, #{isAdmin,jdbcType=INTEGER})
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        insert into r_sys_role (ID, ROLE, ROLE_NAME,
+          DESCRIPTIONS, AVAILABLE, SORT,
+          ORGAN_ID, IS_ADMIN)
+        values (#{id,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR},
+          #{descriptions,jdbcType=VARCHAR}, #{available,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER},
+          #{organId,jdbcType=VARCHAR}, #{isAdmin,jdbcType=INTEGER})
   </insert>
     <insert id="insertSelective" parameterType="com.github.rogerli.system.role.entity.Role">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
         insert into r_sys_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

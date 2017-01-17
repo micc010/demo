@@ -42,13 +42,13 @@ public class AjaxAwareAuthenticationFailureHandler implements AuthenticationFail
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         if (e instanceof BadCredentialsException) {
-            mapper.writeValue(response.getWriter(), ErrorResponse.of("Invalid username or password", ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
+            mapper.writeValue(response.getWriter(), ErrorResponse.of("Invalid username or password", ErrorCode.UN_AUTHENTICED, HttpStatus.UNAUTHORIZED));
         } else if (e instanceof JwtExpiredTokenException) {
             mapper.writeValue(response.getWriter(), ErrorResponse.of("Token has expired", ErrorCode.JWT_TOKEN_EXPIRED, HttpStatus.UNAUTHORIZED));
         } else if (e instanceof AuthMethodNotSupportedException) {
-            mapper.writeValue(response.getWriter(), ErrorResponse.of(e.getMessage(), ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
+            mapper.writeValue(response.getWriter(), ErrorResponse.of(e.getMessage(), ErrorCode.UN_AUTHENTICED, HttpStatus.UNAUTHORIZED));
         }
 
-        mapper.writeValue(response.getWriter(), ErrorResponse.of("Authentication failed", ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
+        mapper.writeValue(response.getWriter(), ErrorResponse.of("Authentication failed", ErrorCode.UN_AUTHENTICED, HttpStatus.UNAUTHORIZED));
     }
 }

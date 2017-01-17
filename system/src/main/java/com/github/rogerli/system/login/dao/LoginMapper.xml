@@ -38,14 +38,20 @@
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
     <insert id="insert" parameterType="com.github.rogerli.system.login.entity.Login">
-    insert into r_sys_login (ID, USER_NAME, PASSWORD, 
-      SALT, LOCKED, USER_ID
-      )
-    values (#{id,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{salt,jdbcType=VARCHAR}, #{locked,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
-      )
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        insert into r_sys_login (ID, USER_NAME, PASSWORD,
+          SALT, LOCKED, USER_ID
+          )
+        values (#{id,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+          #{salt,jdbcType=VARCHAR}, #{locked,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
+          )
   </insert>
     <insert id="insertSelective" parameterType="com.github.rogerli.system.login.entity.Login">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
         insert into r_sys_login
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

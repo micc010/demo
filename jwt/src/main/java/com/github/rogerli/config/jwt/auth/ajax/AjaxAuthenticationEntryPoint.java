@@ -27,7 +27,7 @@ public class AjaxAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         ObjectMapper mapper = new ObjectMapper();
         response.setStatus(HttpStatus.OK.value());
-        mapper.writeValue(response.getWriter(), ErrorResponse.of("Unauthorized", ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
+        mapper.writeValue(response.getWriter(), ErrorResponse.of("Unauthorized", ErrorCode.UN_AUTHENTICED, HttpStatus.UNAUTHORIZED));
 
 //		response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
     }
