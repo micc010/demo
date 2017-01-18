@@ -49,14 +49,8 @@ public abstract class AbstractRestfulController<T extends Serializable, PK> exte
     public Map<String, Object> delete(@PathVariable PK id) {
         LOGGER.debug("======delete:" + String.valueOf(id) + "======");
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        try {
-            getService().deleteByKey(id);
-            RestfulUtils.fillOk(jsonMap, HttpStatus.OK);
-        } catch (Exception e) {
-            LOGGER.error("delete error:" + e.getMessage());
-            RestfulUtils.fillError(jsonMap, HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorCode.SERVER_ERROR, "error");
-        }
+        getService().deleteByKey(id);
+        RestfulUtils.fillOk(jsonMap, HttpStatus.OK);
         return jsonMap;
     }
 
@@ -77,14 +71,8 @@ public abstract class AbstractRestfulController<T extends Serializable, PK> exte
         LOGGER.debug("======add======");
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         RestfulUtils.bindErrors(jsonMap, bindingResult);
-        try {
-            getService().insertSelective(entity);
-            RestfulUtils.fillOk(jsonMap, HttpStatus.OK);
-        } catch (Exception e) {
-            LOGGER.error("add error:" + e.getMessage());
-            RestfulUtils.fillError(jsonMap, HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorCode.SERVER_ERROR, "error");
-        }
+        getService().insertSelective(entity);
+        RestfulUtils.fillOk(jsonMap, HttpStatus.OK);
         return jsonMap;
     }
 
@@ -105,14 +93,8 @@ public abstract class AbstractRestfulController<T extends Serializable, PK> exte
         LOGGER.debug("======save======");
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         RestfulUtils.bindErrors(jsonMap, bindingResult);
-        try {
-            getService().updateByKeySelective(entity);
-            RestfulUtils.fillOk(jsonMap, HttpStatus.OK, "success");
-        } catch (Exception e) {
-            LOGGER.error("save error:" + e.getMessage());
-            RestfulUtils.fillError(jsonMap, HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorCode.SERVER_ERROR, "error");
-        }
+        getService().updateByKeySelective(entity);
+        RestfulUtils.fillOk(jsonMap, HttpStatus.OK, "success");
         return jsonMap;
     }
 
@@ -126,14 +108,8 @@ public abstract class AbstractRestfulController<T extends Serializable, PK> exte
     public Map<String, Object> find(@PathVariable PK id) {
         LOGGER.debug("======find:" + String.valueOf(id) + "======");
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        try {
-            Object t = getService().findByKey(id);
-            RestfulUtils.fillOk(jsonMap, HttpStatus.OK, t);
-        } catch (Exception e) {
-            LOGGER.error("find error:" + e.getMessage());
-            RestfulUtils.fillError(jsonMap, HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorCode.SERVER_ERROR, "error");
-        }
+        Object t = getService().findByKey(id);
+        RestfulUtils.fillOk(jsonMap, HttpStatus.OK, t);
         return jsonMap;
     }
 
@@ -148,29 +124,22 @@ public abstract class AbstractRestfulController<T extends Serializable, PK> exte
                                     @RequestParam(required = false) Integer pageSize) {
         LOGGER.debug("======page======");
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        try {
-            if (pageNum != null && pageSize != null) {
-                PageHelper.startPage(pageNum, pageSize, true);
-            }
-            List<T> list = getService().findList(query);
-            if (pageNum != null && pageSize != null) {
-                PageInfo info = new PageInfo(list);
-                jsonMap.put("pageNum", pageNum);
-                jsonMap.put("pageSize", pageSize);
-                jsonMap.put("total", info.getTotal());
-                jsonMap.put("pages", info.getPages());
-                jsonMap.put("isFirstPage", info.isIsFirstPage());
-                jsonMap.put("isLastPage", info.isIsLastPage());
-                jsonMap.put("hasPreviousPage", info.isHasPreviousPage());
-                jsonMap.put("hasNextPage", info.isHasNextPage());
-            }
-            RestfulUtils.fillOk(jsonMap, HttpStatus.OK, list);
-        } catch (Exception e) {
-            LOGGER.error("page error:" + e.getMessage());
-            RestfulUtils.fillError(jsonMap, HttpStatus.INTERNAL_SERVER_ERROR,
-                    ErrorCode.SERVER_ERROR, "error");
+        if (pageNum != null && pageSize != null) {
+            PageHelper.startPage(pageNum, pageSize, true);
         }
+        List<T> list = getService().findList(query);
+        if (pageNum != null && pageSize != null) {
+            PageInfo info = new PageInfo(list);
+            jsonMap.put("pageNum", pageNum);
+            jsonMap.put("pageSize", pageSize);
+            jsonMap.put("total", info.getTotal());
+            jsonMap.put("pages", info.getPages());
+            jsonMap.put("isFirstPage", info.isIsFirstPage());
+            jsonMap.put("isLastPage", info.isIsLastPage());
+            jsonMap.put("hasPreviousPage", info.isHasPreviousPage());
+            jsonMap.put("hasNextPage", info.isHasNextPage());
+        }
+        RestfulUtils.fillOk(jsonMap, HttpStatus.OK, list);
         return jsonMap;
     }
-
 }

@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.web.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 @EnableConfigurationProperties({ServerProperties.class})
-public class JwtBasicErrorController implements ErrorController {
+public class BasicErrorController implements ErrorController {
 
     private ErrorAttributes errorAttributes;
 
@@ -38,7 +37,7 @@ public class JwtBasicErrorController implements ErrorController {
      * 初始化ExceptionController
      * @param errorAttributes
      */
-    public JwtBasicErrorController(ErrorAttributes errorAttributes) {
+    public BasicErrorController(ErrorAttributes errorAttributes) {
         this(errorAttributes, null);
     }
 
@@ -48,8 +47,8 @@ public class JwtBasicErrorController implements ErrorController {
      * @param errorAttributes
      */
     @Autowired
-    public JwtBasicErrorController(ErrorAttributes errorAttributes,
-                                   List<ErrorViewResolver> errorViewResolvers) {
+    public BasicErrorController(ErrorAttributes errorAttributes,
+                                List<ErrorViewResolver> errorViewResolvers) {
         Assert.notNull(errorAttributes, "ErrorAttributes must not be null");
         this.errorAttributes = errorAttributes;
         this.errorViewResolvers = errorViewResolvers;
