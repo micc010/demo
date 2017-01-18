@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -65,7 +66,6 @@ public class BasicErrorController implements ErrorController {
         HttpStatus status = getStatus(request);
         Map<String, Object> model = Collections.unmodifiableMap(getErrorAttributes(
                 request, isIncludeStackTrace(request, MediaType.TEXT_HTML)));
-        model.put("code", ErrorCode.NOT_FOUND.getCode());
         response.setStatus(status.value());
         ModelAndView modelAndView = resolveErrorView(request, response, status, model);
         return (modelAndView == null ? new ModelAndView("error", model) : modelAndView);
@@ -77,7 +77,6 @@ public class BasicErrorController implements ErrorController {
                                                      HttpServletResponse response) {
         Map<String, Object> body = getErrorAttributes(request,
                 isIncludeStackTrace(request, MediaType.ALL));
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         response.setStatus(HttpStatus.OK.value());
         RestfulUtils.fillOk(body, getStatus(request));
         body.put("code", ErrorCode.NOT_FOUND.getCode());

@@ -12,7 +12,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.rogerli.framework.service.Service;
 import com.github.rogerli.framework.web.exception.IllegalValidateException;
-import com.github.rogerli.utils.error.ErrorCode;
 import com.github.rogerli.utils.RestfulUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

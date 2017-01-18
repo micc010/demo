@@ -170,9 +170,10 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
         LOGGER.info("======MappingJackson2HttpMessageConverter======");
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         List<MediaType> list = new ArrayList<MediaType>();
+        list.add(MediaType.APPLICATION_JSON_UTF8);
+        list.add(MediaType.APPLICATION_JSON);
         list.add(new MediaType("text", "html", UTF_8));
         list.add(new MediaType("text", "json"));
-        list.add(MediaType.APPLICATION_JSON);
         converter.setSupportedMediaTypes(list);
         converters.add(converter);
     }

@@ -49,15 +49,18 @@ public class ErrorConfiguration {
                 if (status == null) {
                     errorAttributes.put("status", 999);
                     errorAttributes.put("message", "None");
+                    errorAttributes.put("error", "None");
                     return;
                 }
                 errorAttributes.put("status", status);
                 try {
                     errorAttributes.put("message", HttpStatus.valueOf(status).getReasonPhrase());
+                    errorAttributes.put("error", HttpStatus.valueOf(status).getReasonPhrase());
                 }
                 catch (Exception ex) {
                     // Unable to obtain a reason
                     errorAttributes.put("message", "Http Status " + status);
+                    errorAttributes.put("error", "Http Status " + status);
                 }
             }
 

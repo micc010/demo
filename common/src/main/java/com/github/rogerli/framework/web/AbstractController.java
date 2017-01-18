@@ -100,8 +100,9 @@ public abstract class AbstractController {
      */
     private String htmlExceptionHandler(HttpServletRequest request,
                                         Exception exception) {
-        request.setAttribute("status", getStatus(request).value());
-        request.setAttribute("message", exception.getMessage());
+        HttpStatus status = getStatus(request);
+        request.setAttribute("status", status.value());
+        request.setAttribute("message", exception.getCause());
         request.setAttribute("code", ErrorCode.SERVER_ERROR.getCode());
         request.setAttribute("timestamp", new Date());
         return "error";
