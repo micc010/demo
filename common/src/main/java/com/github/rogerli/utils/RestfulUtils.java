@@ -1,6 +1,7 @@
 package com.github.rogerli.utils;
 
 import com.github.rogerli.framework.web.exception.IllegalValidateException;
+import com.github.rogerli.utils.error.ErrorCode;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -8,14 +9,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
-import java.util.Random;
 
 /**
- * 
  * @author vladimir.stankovic
- *
- * Aug 3, 2016
+ *         <p>
+ *         Aug 3, 2016
  */
 public class RestfulUtils {
 
@@ -27,10 +27,10 @@ public class RestfulUtils {
     private static final String CONTENT_TYPE = "Content-type";
     private static final String CONTENT_TYPE_JSON = "application/json";
 
-    private static final Random RAND = new Random(System.currentTimeMillis());
+    private static final String TIMESTAMP = "timestamp";
+    private static final String CODE = "code";
     private static final String STATUS = "status";
     private static final String MESSAGE = "message";
-    private static final String ERROR = "error";
     private static final String DATA = "data";
 
     private RestfulUtils() {
@@ -41,11 +41,35 @@ public class RestfulUtils {
      * 将HTTP状态码写入到Map中
      *
      * @param jsonMap 用于绑定的Map集合
-     * @param status  HTTP状态
+     * @param status HTTP状态
      * @see HttpStatus
      */
-    public static void fill(Map<String, Object> jsonMap, HttpStatus status) {
-        fill(jsonMap, status, null);
+    public static void fillOk(Map<String, Object> jsonMap, HttpStatus status) {
+        fillError(jsonMap, status, null, null);
+    }
+
+    /**
+     * 将HTTP状态码写入到Map中
+     *
+     * @param jsonMap 用于绑定的Map集合
+     * @param status HTTP状态
+     * @see HttpStatus
+     */
+    public static void fillOk(Map<String, Object> jsonMap, HttpStatus status, Object data) {
+        fill(jsonMap, status, data, null, null);
+    }
+
+    /**
+     * 绑定至Map中
+     *
+     * @param jsonMap
+     * @param code
+     * @param status
+     * @param message
+     */
+    public static void fillError(Map<String, Object> jsonMap, HttpStatus status, ErrorCode code,
+                                 String message) {
+        fill(jsonMap, status, null, code, message);
     }
 
     /**
@@ -55,10 +79,18 @@ public class RestfulUtils {
      * @param status
      * @param message
      */
-    public static void fill(Map<String, Object> jsonMap, HttpStatus status, Object message) {
+    private static void fill(Map<String, Object> jsonMap, HttpStatus status, Object data,
+                            ErrorCode code, String message) {
+        jsonMap.put(TIMESTAMP, new Date());
         jsonMap.put(STATUS, status.value());
-        if (message != null) {
+        if (code != null) {
+            jsonMap.put(CODE, code.getCode());
+        }
+        if (message != null && !message.trim().equals("")) {
             jsonMap.put(MESSAGE, message);
+        }
+        if (data != null) {
+            jsonMap.put(DATA, data);
         }
     }
 
@@ -78,7 +110,7 @@ public class RestfulUtils {
             for (FieldError fieldError : result.getFieldErrors()) {
                 errorBuilder.put(fieldError.getField(), fieldError.getDefaultMessage());
             }
-            jsonMap.put(ERROR, errorBuilder.build());
+            jsonMap.put(MESSAGE, errorBuilder.build());
         }
         if (!flag) {
             throw new IllegalValidateException("\u7528\u6237\u8F93\u5165\u4E0D\u7B26\u5408\u7CFB\u7EDF\u8BBE\u5B9A\uFF01");

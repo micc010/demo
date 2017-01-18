@@ -6,10 +6,10 @@ import java.util.Date;
 
 /**
  * Error model for interacting with client.
- * 
- * @author vladimir.stankovic
  *
- * Aug 3, 2016
+ * @author vladimir.stankovic
+ *         <p>
+ *         Aug 3, 2016
  */
 public class ErrorResponse {
 
@@ -19,20 +19,19 @@ public class ErrorResponse {
     // General Error message
     private final String message;
 
-    // Error code
-    private final ErrorCode errorCode;
+    private final ErrorCode code;
 
     private final Date timestamp;
 
-    protected ErrorResponse(final String message, final ErrorCode errorCode, HttpStatus status) {
+    protected ErrorResponse(final String message, ErrorCode code, HttpStatus status) {
         this.message = message;
-        this.errorCode = errorCode;
         this.status = status;
+        this.code = code;
         this.timestamp = new Date();
     }
 
-    public static ErrorResponse of(final String message, final ErrorCode errorCode, HttpStatus status) {
-        return new ErrorResponse(message, errorCode, status);
+    public static ErrorResponse of(final String message, ErrorCode code, HttpStatus status) {
+        return new ErrorResponse(message, code, status);
     }
 
     public Integer getStatus() {
@@ -43,11 +42,11 @@ public class ErrorResponse {
         return message;
     }
 
-    public ErrorCode getErrorCode() {
-        return errorCode;
-    }
-
     public Date getTimestamp() {
         return timestamp;
+    }
+
+    public Integer getCode() {
+        return code.getCode();
     }
 }

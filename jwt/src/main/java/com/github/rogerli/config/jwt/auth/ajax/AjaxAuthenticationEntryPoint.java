@@ -22,13 +22,11 @@ import java.io.IOException;
 public class AjaxAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex)
-            throws IOException, ServletException {
-
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+                         AuthenticationException ex) throws IOException, ServletException {
         ObjectMapper mapper = new ObjectMapper();
         response.setStatus(HttpStatus.OK.value());
-        mapper.writeValue(response.getWriter(), ErrorResponse.of("Unauthorized", ErrorCode.UN_AUTHENTICED, HttpStatus.UNAUTHORIZED));
-
-//		response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
+        mapper.writeValue(response.getWriter(), ErrorResponse.of("Unauthorized",
+                ErrorCode.UN_AUTHENTICED, HttpStatus.UNAUTHORIZED));
     }
 }

@@ -12,17 +12,18 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.rogerli.utils.RestfulUtils;
+import com.github.rogerli.utils.error.ErrorCode;
+import com.github.rogerli.utils.error.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date;
 
 /**
  * @author Roger
@@ -31,17 +32,6 @@ import java.util.Map;
 public abstract class AbstractController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(AbstractController.class);
-
-    private String contentPath;
-
-    public String getContentPath(HttpServletRequest request) {
-        contentPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-        return contentPath;
-    }
-
-    public String path(String module) {
-        return contentPath + module;
-    }
 
     /**
      * 统一错误处理
@@ -52,11 +42,11 @@ public abstract class AbstractController {
      * @return 异常页面
      */
     @ExceptionHandler
-    public String exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception exception) {
+    public String exceptionHandler(HttpServletRequest request, HttpServletResponse response,
+                                   Exception exception) {
         LOGGER.error("exceptionHandler", exception);
-        String xRequestWith = request.getHeader("X-Requested-With");
-        if (xRequestWith != null && !xRequestWith.isEmpty()) {
-            return jsonExceptionHandler(response, exception);
+        if (RestfulUtils.isAjax(request)) {
+            return jsonExceptionHandler(request, response, exception);
         } else {
             return htmlExceptionHandler(request, exception);
         }
@@ -67,14 +57,13 @@ public abstract class AbstractController {
      * @param exception 异常
      * @return 页面
      */
-    private String jsonExceptionHandler(HttpServletResponse response,
+    private String jsonExceptionHandler(HttpServletRequest request, HttpServletResponse response,
                                         Exception exception) {
-        ObjectMapper stringWriter = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            Map<String, Object> jsonMap = new HashMap<String, Object>();
-            RestfulUtils.fill(jsonMap, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
-            response.getWriter().write(stringWriter.writeValueAsString(jsonMap));
-            response.flushBuffer();
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            objectMapper.writeValue(response.getWriter(), ErrorResponse.of(exception.getMessage(),
+                    ErrorCode.SERVER_ERROR, getStatus(request)));
             return null;
         } catch (JsonGenerationException var9) {
             LOGGER.error("JsonGenerationException", var9);
@@ -91,6 +80,19 @@ public abstract class AbstractController {
         }
     }
 
+    protected HttpStatus getStatus(HttpServletRequest request) {
+        Integer statusCode = (Integer) request
+                .getAttribute("javax.servlet.error.status_code");
+        if (statusCode == null) {
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        try {
+            return HttpStatus.valueOf(statusCode);
+        } catch (Exception ex) {
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+    }
+
     /**
      * @param request   请求
      * @param exception 异常
@@ -98,8 +100,10 @@ public abstract class AbstractController {
      */
     private String htmlExceptionHandler(HttpServletRequest request,
                                         Exception exception) {
-        request.setAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        request.setAttribute("status", getStatus(request).value());
         request.setAttribute("message", exception.getMessage());
+        request.setAttribute("code", ErrorCode.SERVER_ERROR.getCode());
+        request.setAttribute("timestamp", new Date());
         return "error";
     }
 

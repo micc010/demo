@@ -63,7 +63,7 @@ public class RefreshTokenEndpoint {
     @Qualifier("jwtHeaderTokenExtractor")
     private TokenExtractor tokenExtractor;
 
-    @RequestMapping(value = "/api/auth/token", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/api/auth/token", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @ResponseBody
     public Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
@@ -95,7 +95,7 @@ public class RefreshTokenEndpoint {
         JwtToken jwtToken = tokenFactory.createAccessJwtToken(userContext);
 
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        RestfulUtils.fill(jsonMap, HttpStatus.OK);
+        RestfulUtils.fillOk(jsonMap, HttpStatus.OK);
         jsonMap.put("token", jwtToken.getToken());
 
         return jsonMap;

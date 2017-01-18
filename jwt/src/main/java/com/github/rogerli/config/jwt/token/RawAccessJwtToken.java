@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 
 public class RawAccessJwtToken implements JwtToken {
-    private static Logger logger = LoggerFactory.getLogger(RawAccessJwtToken.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(RawAccessJwtToken.class);
             
     private String token;
     
@@ -27,10 +27,10 @@ public class RawAccessJwtToken implements JwtToken {
             return Jwts.parser().setSigningKey(signingKey).parseClaimsJws(this.token);
         } catch (UnsupportedJwtException | MalformedJwtException
                 | IllegalArgumentException | SignatureException ex) {
-            logger.error("Invalid JWT Token", ex);
+            LOGGER.error("Invalid JWT Token", ex);
             throw new BadCredentialsException("Invalid JWT token: ", ex);
         } catch (ExpiredJwtException expiredEx) {
-            logger.info("JWT Token is expired", expiredEx);
+            LOGGER.info("JWT Token is expired", expiredEx);
             throw new JwtExpiredTokenException(this, "JWT Token expired", expiredEx);
         }
     }

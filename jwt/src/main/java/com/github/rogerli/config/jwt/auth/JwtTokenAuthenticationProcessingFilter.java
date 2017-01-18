@@ -43,10 +43,9 @@ public class JwtTokenAuthenticationProcessingFilter extends AbstractAuthenticati
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
-
         if (HttpMethod.OPTIONS.name().equals(request.getMethod())){
             response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
-            response.setHeader("Access-Control-Allow-Headers", "Cache-Control, Content-Type, X-Auth-Token");
+            response.setHeader("Access-Control-Allow-Headers", "Cache-Control, Content-Type, X-Auth-Token, X-Requested-With");
             response.setStatus(HttpStatus.NO_CONTENT.value());
             response.flushBuffer();
             return null;
