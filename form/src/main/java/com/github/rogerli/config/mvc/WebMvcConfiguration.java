@@ -91,11 +91,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     public void addViewControllers(ViewControllerRegistry registry) {
         LOGGER.info("======addViewControllers======");
 
-//        registry.addViewController("").setViewName("index");
-//        registry.addViewController("/").setViewName("index");
-//        registry.addViewController("/index").setViewName("index");
-//        registry.addViewController("/home").setViewName("home");
-//        registry.addViewController("/login").setViewName("login");
+        registry.addViewController("").setViewName("index");
+        registry.addViewController("/").setViewName("index");
+        registry.addViewController("/index").setViewName("index");
+        registry.addViewController("/home").setViewName("home");
+        registry.addViewController("/login").setViewName("login");
 
         super.addViewControllers(registry);
     }
@@ -195,50 +195,16 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     }
 
 
-    @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-        LOGGER.info("======MappingJackson2HttpMessageConverter======");
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        List<MediaType> list = new ArrayList<MediaType>();
-        list.add(new MediaType("text", "html", UTF_8));
-        list.add(new MediaType("text", "json"));
-        list.add(MediaType.APPLICATION_JSON);
-        converter.setSupportedMediaTypes(list);
-        return converter;
-    }
-
 //    @Bean
-//    public SimpleUrlHandlerMapping simpleUrlHandlerMapping() {
-//        SimpleUrlHandlerMapping simpleUrlHandlerMapping = new SimpleUrlHandlerMapping();
-//        Map<String, Object> map = new LinkedHashMap<>();
-//        ResourceHttpRequestHandler resourceHttpRequestHandler = new ResourceHttpRequestHandler();
-//        List<Resource> locations = new ArrayList<>();
-////        locations.add(new ServletContextResource(getServletContext(), "/"));
-//        locations.add(new ClassPathResource("META-INF/resources"));
-//        locations.add(new ClassPathResource("resources/"));
-//        locations.add(new ClassPathResource("static/"));
-//        locations.add(new ClassPathResource("public/"));
-//        resourceHttpRequestHandler.setLocations(locations);
-////        resourceHttpRequestHandler.setServletContext(getServletContext());
-//        resourceHttpRequestHandler.setApplicationContext(getApplicationContext());
-//
-//        List<ResourceResolver> resourceResolvers = new ArrayList<>();
-//        PathResourceResolver resourceResolver = new PathResourceResolver();
-//        resourceResolver.setAllowedLocations(
-////                new ServletContextResource(getServletContext(), "/"),
-//                new ClassPathResource("META-INF/resources"), new ClassPathResource("resources/"), new ClassPathResource("static/"), new ClassPathResource("public/"));
-//        resourceResolvers.add(resourceResolver);
-//
-//        resourceHttpRequestHandler.setResourceResolvers(resourceResolvers);
-//        map.put("/**", resourceHttpRequestHandler);
-//        simpleUrlHandlerMapping.setUrlMap(map);
-//        ResourceUrlProvider resourceUrlProvider = new ResourceUrlProvider();
-//        Map<String, ResourceHttpRequestHandler> handlerMap = new LinkedHashMap<>();
-//        handlerMap.put("/**", resourceHttpRequestHandler);
-//        resourceUrlProvider.setHandlerMap(handlerMap);
-//        ResourceUrlProviderExposingInterceptor interceptor = new ResourceUrlProviderExposingInterceptor(resourceUrlProvider);
-//        simpleUrlHandlerMapping.setInterceptors(new Object[]{interceptor});
-//        return simpleUrlHandlerMapping;
+//    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+//        LOGGER.info("======MappingJackson2HttpMessageConverter======");
+//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+//        List<MediaType> list = new ArrayList<MediaType>();
+//        list.add(new MediaType("text", "html", UTF_8));
+//        list.add(new MediaType("text", "json"));
+//        list.add(MediaType.APPLICATION_JSON);
+//        converter.setSupportedMediaTypes(list);
+//        return converter;
 //    }
 
 }

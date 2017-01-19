@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.rogerli.utils.error.ErrorCode;
 import com.github.rogerli.utils.error.ErrorResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class AjaxAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException ex) throws IOException, ServletException {
         ObjectMapper mapper = new ObjectMapper();
-        response.setStatus(HttpStatus.OK.value());
+        AjaxResponseHelper.addOrigins(response);
         mapper.writeValue(response.getWriter(), ErrorResponse.of("Unauthorized",
                 ErrorCode.UN_AUTHENTICED, HttpStatus.UNAUTHORIZED));
     }

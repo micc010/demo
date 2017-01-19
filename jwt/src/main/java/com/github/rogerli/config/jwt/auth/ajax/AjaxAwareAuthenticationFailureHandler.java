@@ -37,8 +37,7 @@ public class AjaxAwareAuthenticationFailureHandler implements AuthenticationFail
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException e) throws IOException, ServletException {
 
-        response.setStatus(HttpStatus.OK.value());
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        AjaxResponseHelper.addOrigins(response);
 
         if (e instanceof BadCredentialsException) {
             mapper.writeValue(response.getWriter(), ErrorResponse.of("Invalid username or password",

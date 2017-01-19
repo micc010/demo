@@ -18,10 +18,12 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -30,6 +32,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.*;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+import org.springframework.web.cors.CorsUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -100,20 +103,34 @@ public class JwtWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        super.configure(web);
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable(); // We don't need CSRF for JWT based authentication
 
-        http.headers()
-                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "*"))
-                .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)) // 不允许跨域
+        http.headers().frameOptions().disable()
+//                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "*"))
+//                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials", "true"))
+//                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE"))
+//                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Headers",
+//                        "Cache-Control, Content-Type, X-Auth-Token, X-Requested-With"))
+//                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Expose-Headers",
+//                        "Cache-Control, Content-Type, X-Auth-Token, X-Requested-With"))
+
+                // 如果配置XFrameOptionsHeaderWriter 则spring默认的CorsFilter会在DefaultCorsProcessor跳过跨域设置
+//                .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
                 .addHeaderWriter(new XContentTypeOptionsHeaderWriter()) // 严格的contentType
                 .addHeaderWriter(new XXssProtectionHeaderWriter()) // XSS
                 .addHeaderWriter(new CacheControlHeadersWriter())
                 .addHeaderWriter(new HstsHeaderWriter()); // 如果使用一直使用HTTPS
 
         http.exceptionHandling()
-            .authenticationEntryPoint(authenticationEntryPoint)
+                .authenticationEntryPoint(authenticationEntryPoint)
 
         .and()
             .sessionManagement()
@@ -122,6 +139,7 @@ public class JwtWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .authorizeRequests()
                 .antMatchers(FORM_BASED_LOGIN_ENTRY_POINT).permitAll() // Login end-point
+//                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(TOKEN_REFRESH_ENTRY_POINT).permitAll() // Token refresh end-point
 
 //        .and()

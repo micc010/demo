@@ -15,42 +15,42 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.web.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -61,11 +61,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @create 2016/12/5 2:58
  */
 @Configuration
-@ComponentScan(
-        basePackages = "com.github.rogerli",
-        useDefaultFilters = false,
-        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {RestController.class, RestControllerAdvice.class})}
-)
+//@ComponentScan(
+//        basePackages = "com.github.rogerli",
+//        useDefaultFilters = false,
+//        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {RestController.class, RestControllerAdvice.class})}
+//)
 @AutoConfigureAfter({LocalizationConfiguration.class})
 public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
 
@@ -98,19 +98,44 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 默认视图
+     *
      * @param registry
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         LOGGER.info("======addViewControllers======");
-
-//        registry.addViewController("").setViewName("index");
-//        registry.addViewController("/").setViewName("index");
-//        registry.addViewController("/index").setViewName("index");
-//        registry.addViewController("/home").setViewName("home");
-//        registry.addViewController("/login").setViewName("login");
-
         super.addViewControllers(registry);
+    }
+
+    /**
+     * Override this method to configure cross origin requests processing.
+     *
+     * @see CorsRegistry
+     * @since 4.2
+     */
+    @Override
+    protected void addCorsMappings(CorsRegistry registry) {
+        configCorsParams(registry.addMapping("/**"));
+    }
+
+//    @Bean
+//    public FilterRegistrationBean corsResponseFilter() {
+//        JwtCorsRegistration corsRegistration = new JwtCorsRegistration("/**");
+//        configCorsParams(corsRegistration);
+//
+//        UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
+//        configurationSource.registerCorsConfiguration("/**", corsRegistration.getCorsConfiguration());
+//        CorsFilter corsFilter = new CorsFilter(configurationSource);
+//        return new FilterRegistrationBean(corsFilter);
+//    }
+
+    private void configCorsParams(CorsRegistration corsRegistration) {
+        corsRegistration.allowedOrigins(CrossOrigin.DEFAULT_ORIGINS)
+                .allowedMethods(HttpMethod.GET.name(), HttpMethod.HEAD.name(),
+                        HttpMethod.POST.name(), HttpMethod.PUT.name(), HttpMethod.DELETE.name())
+                .allowedHeaders(CrossOrigin.DEFAULT_ALLOWED_HEADERS)
+                .allowCredentials(false)
+                .maxAge(CrossOrigin.DEFAULT_MAX_AGE * 2);
     }
 
     /**
@@ -209,54 +234,20 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
     }
 
 
-    @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-        LOGGER.info("======MappingJackson2HttpMessageConverter======");
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        List<MediaType> list = new ArrayList<MediaType>();
-        list.add(new MediaType("text", "html"));
-        list.add(new MediaType("text", "html", UTF_8));
-        list.add(new MediaType("text", "json"));
-        list.add(new MediaType("text", "json", UTF_8));
-        list.add(new MediaType("text", "plain"));
-        list.add(new MediaType("text", "plain", UTF_8));
-        list.add(MediaType.APPLICATION_JSON_UTF8);
-        converter.setSupportedMediaTypes(list);
-        return converter;
-    }
-
 //    @Bean
-//    public SimpleUrlHandlerMapping simpleUrlHandlerMapping() {
-//        SimpleUrlHandlerMapping simpleUrlHandlerMapping = new SimpleUrlHandlerMapping();
-//        Map<String, Object> map = new LinkedHashMap<>();
-//        ResourceHttpRequestHandler resourceHttpRequestHandler = new ResourceHttpRequestHandler();
-//        List<Resource> locations = new ArrayList<>();
-////        locations.add(new ServletContextResource(getServletContext(), "/"));
-//        locations.add(new ClassPathResource("META-INF/resources"));
-//        locations.add(new ClassPathResource("resources/"));
-//        locations.add(new ClassPathResource("static/"));
-//        locations.add(new ClassPathResource("public/"));
-//        resourceHttpRequestHandler.setLocations(locations);
-////        resourceHttpRequestHandler.setServletContext(getServletContext());
-//        resourceHttpRequestHandler.setApplicationContext(getApplicationContext());
-//
-//        List<ResourceResolver> resourceResolvers = new ArrayList<>();
-//        PathResourceResolver resourceResolver = new PathResourceResolver();
-//        resourceResolver.setAllowedLocations(
-////                new ServletContextResource(getServletContext(), "/"),
-//                new ClassPathResource("META-INF/resources"), new ClassPathResource("resources/"), new ClassPathResource("static/"), new ClassPathResource("public/"));
-//        resourceResolvers.add(resourceResolver);
-//
-//        resourceHttpRequestHandler.setResourceResolvers(resourceResolvers);
-//        map.put("/**", resourceHttpRequestHandler);
-//        simpleUrlHandlerMapping.setUrlMap(map);
-//        ResourceUrlProvider resourceUrlProvider = new ResourceUrlProvider();
-//        Map<String, ResourceHttpRequestHandler> handlerMap = new LinkedHashMap<>();
-//        handlerMap.put("/**", resourceHttpRequestHandler);
-//        resourceUrlProvider.setHandlerMap(handlerMap);
-//        ResourceUrlProviderExposingInterceptor interceptor = new ResourceUrlProviderExposingInterceptor(resourceUrlProvider);
-//        simpleUrlHandlerMapping.setInterceptors(new Object[]{interceptor});
-//        return simpleUrlHandlerMapping;
+//    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+//        LOGGER.info("======MappingJackson2HttpMessageConverter======");
+//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+//        List<MediaType> list = new ArrayList<MediaType>();
+//        list.add(new MediaType("text", "html"));
+//        list.add(new MediaType("text", "html", UTF_8));
+//        list.add(new MediaType("text", "json"));
+//        list.add(new MediaType("text", "json", UTF_8));
+//        list.add(new MediaType("text", "plain"));
+//        list.add(new MediaType("text", "plain", UTF_8));
+//        list.add(MediaType.APPLICATION_JSON_UTF8);
+//        converter.setSupportedMediaTypes(list);
+//        return converter;
 //    }
 
 }

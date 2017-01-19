@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class RestfulRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
-    public static final String SERVICE_NAME = "service";
+    public static final String SERVICE_NAME = "service-name";
     private final Map<HandlerMethod, RequestMappingInfo> mappingLookup = new LinkedHashMap<HandlerMethod, RequestMappingInfo>();
 
     /**

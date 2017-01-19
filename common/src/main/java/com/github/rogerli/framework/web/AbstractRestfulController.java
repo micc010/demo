@@ -93,7 +93,7 @@ public abstract class AbstractRestfulController<T extends Serializable, PK> exte
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         RestfulUtils.bindErrors(jsonMap, bindingResult);
         getService().updateByKeySelective(entity);
-        RestfulUtils.fillOk(jsonMap, HttpStatus.OK, "success");
+        RestfulUtils.fillOk(jsonMap, HttpStatus.OK);
         return jsonMap;
     }
 

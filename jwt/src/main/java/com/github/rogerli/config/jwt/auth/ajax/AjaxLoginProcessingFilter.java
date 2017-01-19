@@ -50,13 +50,14 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
 
-        if (HttpMethod.OPTIONS.name().equals(request.getMethod())){
-            response.setHeader("Access-Control-Allow-Method", "POST");
-            response.setHeader("Access-Control-Allow-Headers", "Cache-Control, X-Requested-With, Content-Type");
-            response.setStatus(HttpStatus.NO_CONTENT.value());
-            response.flushBuffer();
-            return null;
-        }
+//        if (HttpMethod.OPTIONS.name().equals(request.getMethod())){
+//            response.setHeader("Access-Control-Allow-Origin", "*");
+//            response.setHeader("Access-Control-Allow-Method", "POST");
+//            response.setHeader("Access-Control-Allow-Headers", "Cache-Control, X-Requested-With, Content-Type");
+//            response.setStatus(HttpStatus.NO_CONTENT.value());
+//            response.flushBuffer();
+//            return null;
+//        }
 
         if (!HttpMethod.POST.name().equals(request.getMethod()) || !RestfulUtils.isAjax(request)) {
             if(LOGGER.isDebugEnabled()) {
