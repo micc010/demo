@@ -54,6 +54,8 @@ public class AjaxAwareAuthenticationSuccessHandler implements AuthenticationSucc
         tokenMap.put("refreshToken", refreshToken.getToken());
         tokenMap.put("status", HttpStatus.OK.value());
 
+        response.setStatus(HttpStatus.OK.value());
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         AjaxResponseHelper.addOrigins(response);
         mapper.writeValue(response.getWriter(), tokenMap);
 

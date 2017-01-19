@@ -20,8 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 public class AjaxResponseHelper {
 
     public static void addOrigins(HttpServletResponse response) {
-        response.setStatus(HttpStatus.OK.value());
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, HEAD");
         response.setHeader("Access-Control-Max-Age", "3600");
