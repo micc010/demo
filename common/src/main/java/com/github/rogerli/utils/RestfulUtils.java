@@ -113,7 +113,7 @@ public class RestfulUtils {
             jsonMap.put(MESSAGE, errorBuilder.build());
         }
         if (!flag) {
-            throw new IllegalValidateException("\u7528\u6237\u8F93\u5165\u4E0D\u7B26\u5408\u7CFB\u7EDF\u8BBE\u5B9A\uFF01");
+            throw new IllegalValidateException("用户输入不符合系统设定！");
         }
     }
 
@@ -128,7 +128,7 @@ public class RestfulUtils {
         final boolean asc = "asc".equalsIgnoreCase(order.trim());
         final boolean flag = (!desc && !asc);
         if (flag) {
-            throw new IllegalArgumentException(order + "\u975E\u6CD5\u5165\u53C2\uFF01");
+            throw new IllegalArgumentException(order + "非法入参！");
         }
         return order;
     }
