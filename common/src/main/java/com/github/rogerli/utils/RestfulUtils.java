@@ -60,6 +60,17 @@ public class RestfulUtils {
     }
 
     /**
+     * 将HTTP状态码写入到Map中
+     *
+     * @param jsonMap 用于绑定的Map集合
+     * @param status HTTP状态
+     * @see HttpStatus
+     */
+    public static void fillOk(Map<String, Object> jsonMap, HttpStatus status, Object data, String message) {
+        fill(jsonMap, status, data, null, message);
+    }
+
+    /**
      * 绑定至Map中
      *
      * @param jsonMap
@@ -113,7 +124,7 @@ public class RestfulUtils {
             jsonMap.put(MESSAGE, errorBuilder.build());
         }
         if (!flag) {
-            throw new IllegalValidateException("用户输入不符合系统设定！");
+            throw new IllegalValidateException("Illegal entry");
         }
     }
 
@@ -128,7 +139,7 @@ public class RestfulUtils {
         final boolean asc = "asc".equalsIgnoreCase(order.trim());
         final boolean flag = (!desc && !asc);
         if (flag) {
-            throw new IllegalArgumentException(order + "非法入参！");
+            throw new IllegalArgumentException(order + " Illegal entry");
         }
         return order;
     }
@@ -149,7 +160,7 @@ public class RestfulUtils {
             }
         }
         if (!flag) {
-            throw new IllegalArgumentException(property + "非法入参！");
+            throw new IllegalArgumentException(property + " Illegal entry");
         }
         return property;
     }

@@ -5,6 +5,8 @@ import com.github.rogerli.utils.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -32,10 +34,14 @@ public class BasicErrorController implements ErrorController {
     @Autowired
     private ServerProperties serverProperties;
 
+    @Autowired
+    private MessageSource messageSource;
+
     private final List<ErrorViewResolver> errorViewResolvers;
 
     /**
      * 初始化ExceptionController
+     *
      * @param errorAttributes
      */
     public BasicErrorController(ErrorAttributes errorAttributes) {
@@ -45,12 +51,14 @@ public class BasicErrorController implements ErrorController {
 
     /**
      * 初始化ExceptionController
+     *
      * @param errorAttributes
      */
     @Autowired
     public BasicErrorController(ErrorAttributes errorAttributes,
                                 List<ErrorViewResolver> errorViewResolvers) {
-        Assert.notNull(errorAttributes, "ErrorAttributes must not be null");
+        Assert.notNull(errorAttributes,
+                messageSource.getMessage("error.attributes.not.null", null, LocaleContextHolder.getLocale()));
         this.errorAttributes = errorAttributes;
         this.errorViewResolvers = errorViewResolvers;
     }
@@ -74,18 +82,21 @@ public class BasicErrorController implements ErrorController {
     @RequestMapping
     @ResponseBody
     public Map<String, Object> error(HttpServletRequest request,
-                                                     HttpServletResponse response) {
+                                     HttpServletResponse response) {
         Map<String, Object> body = getErrorAttributes(request,
                 isIncludeStackTrace(request, MediaType.ALL));
         response.setStatus(HttpStatus.OK.value());
         RestfulUtils.fillOk(body, getStatus(request));
         body.put("code", ErrorCode.NOT_FOUND.getCode());
+        body.put("message",
+                messageSource.getMessage("error.http.not.found", null, LocaleContextHolder.getLocale()));
         return body;
     }
 
     /**
      * Determine if the stacktrace attribute should be included.
-     * @param request the source request
+     *
+     * @param request  the source request
      * @param produces the media type produced (or {@code MediaType.ALL})
      * @return if the stacktrace attribute should be included
      */
@@ -103,6 +114,7 @@ public class BasicErrorController implements ErrorController {
 
     /**
      * Provide access to the error properties.
+     *
      * @return the error properties
      */
     protected ErrorProperties getErrorProperties() {
@@ -124,8 +136,7 @@ public class BasicErrorController implements ErrorController {
         }
         try {
             return HttpStatus.valueOf(statusCode);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }

@@ -21,6 +21,9 @@ public class ColumnInfo {
         if (javaType.equals("TIMESTAMP")) {
             javaType = "Timestamp";
         }
+        if (javaType.equals("INT")) {
+            javaType = "INTEGER";
+        }
         this.javaType = javaType;
     }
 
@@ -48,6 +51,9 @@ public class ColumnInfo {
         }
         if (jdbcType.equals("DATETIME")) {
             jdbcType = "TIMESTAMP";
+        }
+        if (jdbcType.equals("INT")) {
+            jdbcType = "INTEGER";
         }
         this.jdbcType = jdbcType;
     }

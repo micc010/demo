@@ -5,37 +5,26 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 @Configuration
 public class LocalizationConfiguration {
 
     @Value("${spring.messages.basename}")
-    private String BASE_NAME;
+    private String baseName;
     @Value("${spring.messages.cache-seconds}")
-    private int CACHE_SECONDS;
+    private int cacheSeconds;
+    @Value("${spring.messages.encoding}")
+    private String encoding;
 
-    /**
-     * WebMvcConfigurationSupport 不能加载MessageSource
-     *
-     * @return
-     */
-    @Bean
+    @Bean(name = "messageSource")
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:beanValidation", "classpath:errors");
-        messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setBasename(BASE_NAME);
-        messageSource.setCacheSeconds(CACHE_SECONDS);
+//        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setDefaultEncoding(encoding);
+        messageSource.setBasename(baseName);
+        messageSource.setCacheSeconds(cacheSeconds);
         return messageSource;
     }
-
-    //    @Bean(name = "messageSource")
-//    public MessageSource messageSource() {
-//        LOGGER.info("======MessageSource======");
-//        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-//        messageSource.setBasename(BASE_NAME);
-//        messageSource.setCacheSeconds(CACHE_SECONDS);
-//        return messageSource;
-//    }
 
 }

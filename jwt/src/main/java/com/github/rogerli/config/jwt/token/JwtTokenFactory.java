@@ -10,6 +10,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
@@ -39,6 +41,9 @@ public class JwtTokenFactory {
     private JtiGenerator jtiGenerator;
 
     @Autowired
+    private MessageSource messageSource;
+
+    @Autowired
     public JwtTokenFactory(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;
     }
@@ -51,13 +56,16 @@ public class JwtTokenFactory {
      */
     public AccessJwtToken createAccessJwtToken(UserContext userContext) {
         if (StringUtils.isEmpty(userContext.getUsername()))
-            throw new IllegalArgumentException("Cannot create JWT Token without username");
+            throw new IllegalArgumentException(
+                    messageSource.getMessage("jwt.without.user", null, LocaleContextHolder.getLocale())
+            );
 
         if (userContext.getAuthorities() == null || userContext.getAuthorities().isEmpty())
             throw new IllegalArgumentException("User doesn't have any privileges");
 
         Claims claims = Jwts.claims().setSubject(userContext.getUsername());
-        claims.put("scopes", userContext.getAuthorities().stream().map(s -> s.toString()).collect(Collectors.toList()));
+        claims.put("scopes", userContext.getAuthorities().stream()
+                .map(s -> s.toString()).collect(Collectors.toList()));
 
         DateTime currentTime = new DateTime();
 
@@ -78,7 +86,9 @@ public class JwtTokenFactory {
      */
     public JwtToken createRefreshToken(UserContext userContext) {
         if (StringUtils.isEmpty(userContext.getUsername())) {
-            throw new IllegalArgumentException("Cannot create JWT Token without username");
+            throw new IllegalArgumentException(
+                    messageSource.getMessage("jwt.without.user", null, LocaleContextHolder.getLocale())
+            );
         }
 
         DateTime currentTime = new DateTime();
