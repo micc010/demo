@@ -57,8 +57,7 @@ public class BasicErrorController implements ErrorController {
     @Autowired
     public BasicErrorController(ErrorAttributes errorAttributes,
                                 List<ErrorViewResolver> errorViewResolvers) {
-        Assert.notNull(errorAttributes,
-                messageSource.getMessage("error.attributes.not.null", null, LocaleContextHolder.getLocale()));
+        Assert.notNull(errorAttributes, "ErrorAttributes must not be null");
         this.errorAttributes = errorAttributes;
         this.errorViewResolvers = errorViewResolvers;
     }
@@ -88,8 +87,7 @@ public class BasicErrorController implements ErrorController {
         response.setStatus(HttpStatus.OK.value());
         RestfulUtils.fillOk(body, getStatus(request));
         body.put("code", ErrorCode.NOT_FOUND.getCode());
-        body.put("message",
-                messageSource.getMessage("error.http.not.found", null, LocaleContextHolder.getLocale()));
+        body.put("message", "Not found");
         return body;
     }
 

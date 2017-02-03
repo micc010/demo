@@ -10,6 +10,7 @@ package com.github.rogerli.framework.web;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.rogerli.framework.annotation.LogAction;
 import com.github.rogerli.framework.service.Service;
 import com.github.rogerli.framework.web.exception.IllegalValidateException;
 import com.github.rogerli.utils.RestfulUtils;
@@ -71,7 +72,7 @@ public abstract class AbstractRestfulController<T extends Serializable, PK> exte
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         RestfulUtils.bindErrors(jsonMap, bindingResult);
         getService().insertSelective(entity);
-        RestfulUtils.fillOk(jsonMap, HttpStatus.OK);
+        RestfulUtils.fillOk(jsonMap, HttpStatus.OK, entity);
         return jsonMap;
     }
 
@@ -93,7 +94,7 @@ public abstract class AbstractRestfulController<T extends Serializable, PK> exte
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         RestfulUtils.bindErrors(jsonMap, bindingResult);
         getService().updateByKeySelective(entity);
-        RestfulUtils.fillOk(jsonMap, HttpStatus.OK);
+        RestfulUtils.fillOk(jsonMap, HttpStatus.OK, entity);
         return jsonMap;
     }
 

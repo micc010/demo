@@ -6,11 +6,14 @@
  * @完成日期: 2016/11/30
  * @作者 ： Roger
  */
-package com.github.rogerli.system.login;
+package com.github.rogerli.system.role;
 
+import com.github.pagehelper.PageHelper;
 import com.github.rogerli.ApplicationTest;
-import com.github.rogerli.system.login.dao.LoginMapper;
-import com.github.rogerli.system.login.entity.Login;
+import com.github.rogerli.system.purview.entity.Purview;
+import com.github.rogerli.system.role.entity.Role;
+import com.github.rogerli.system.role.model.RolePurview;
+import com.github.rogerli.system.role.service.RoleService;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -22,6 +25,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.util.Assert;
 
+import java.util.List;
+
 /**
  * @author Roger
  * @description
@@ -31,16 +36,25 @@ import org.springframework.util.Assert;
 @SpringBootTest(classes = ApplicationTest.class)
 @WebAppConfiguration
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class LoginMapperTest {
+public class RoleServiceTest {
 
     @Autowired
-    private LoginMapper loginMapper;
+    private RoleService roleService;
 
 //    @Ignore
     @Test
-    public void test3() {
-        Login login = loginMapper.findByUsername("lala");
-        Assert.notNull(login);
+    public void test1() {
+        Role role = new Role();
+        role.setId("2");
+        role.setRole("Admin");
+        role.setOrganId("1");
+        role.setRoleName("超级管理员");
+        role.setIsAdmin(1);
+        role.setAvailable(1);
+        role.setDescriptions("11");
+        roleService.insert(role);
+
+        roleService.deleteByKey(role.getId());
     }
 
 }

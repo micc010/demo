@@ -45,7 +45,7 @@ public class RestfulUtils {
      * @see HttpStatus
      */
     public static void fillOk(Map<String, Object> jsonMap, HttpStatus status) {
-        fillError(jsonMap, status, null, null);
+        fill(jsonMap, status, null, null, null);
     }
 
     /**

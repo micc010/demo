@@ -41,11 +41,11 @@ public class RoleMapperTest {
     @Autowired
     private RoleMapper roleMapper;
 
-    @Ignore
+//    @Ignore
     @Test
     public void test1() {
         Role role = new Role();
-        role.setId("1");
+        role.setId("2");
         role.setRole("Admin");
         role.setOrganId("1");
         role.setRoleName("超级管理员");
@@ -53,9 +53,11 @@ public class RoleMapperTest {
         role.setAvailable(1);
         role.setDescriptions("11");
         roleMapper.insert(role);
+
+//        roleMapper.deleteByKey(role.getId());
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void test2() {
         Role role = roleMapper.findByKey("1");

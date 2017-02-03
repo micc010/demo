@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,12 +32,13 @@ public class RoleControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
-//    @Ignore
+    //    @Ignore
     @Test
     public void getHello() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/log/hello"))
-                .andExpect(MockMvcResultMatchers.content().json("{'greeting':'hello world'}"))
-                .andDo(MockMvcResultHandlers.print())
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.request(HttpMethod.DELETE,
+                "/role/3390b3efe1ea11e699d53c970ea1ee80"))
+//                .andExpect(MockMvcResultMatchers.content().json("{'status':'200'}"))
+//                .andDo(MockMvcResultHandlers.print())
                 .andReturn();
     }
 }
