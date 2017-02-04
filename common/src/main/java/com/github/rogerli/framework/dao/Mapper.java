@@ -1,5 +1,7 @@
 package com.github.rogerli.framework.dao;
 
+import com.github.rogerli.framework.model.BaseModel;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,7 +9,7 @@ import java.util.List;
  * @author roger.li
  * @date 2015/8/24
  */
-public interface Mapper<T extends Serializable, PK> {
+public interface Mapper<T extends BaseModel, PK> {
 
     /**
      *

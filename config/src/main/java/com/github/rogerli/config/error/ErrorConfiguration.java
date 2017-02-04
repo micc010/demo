@@ -1,12 +1,15 @@
 package com.github.rogerli.config.error;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.BasicErrorController;
+import org.springframework.boot.autoconfigure.web.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -16,14 +19,43 @@ import org.springframework.web.servlet.DispatcherServlet;
 import javax.servlet.Servlet;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
 @ConditionalOnWebApplication
 @ConditionalOnClass({Servlet.class, DispatcherServlet.class})
-@AutoConfigureBefore(WebMvcAutoConfiguration.class)
+@AutoConfigureBefore({WebMvcAutoConfiguration.class, ErrorMvcAutoConfiguration.class})
 @EnableConfigurationProperties(ResourceProperties.class)
 public class ErrorConfiguration {
+
+//    private final ApplicationContext applicationContext;
+//
+//    private final ServerProperties serverProperties;
+//
+//    private final ResourceProperties resourceProperties;
+//
+//    @Autowired(required = false)
+//    private List<ErrorViewResolver> errorViewResolvers;
+//
+//    public ErrorConfiguration(ApplicationContext applicationContext,
+//                                     ServerProperties serverProperties, ResourceProperties resourceProperties) {
+//        this.applicationContext = applicationContext;
+//        this.serverProperties = serverProperties;
+//        this.resourceProperties = resourceProperties;
+//    }
+//
+//    @Bean
+//    public DefaultErrorViewResolver conventionErrorViewResolver() {
+//        return new DefaultErrorViewResolver(this.applicationContext,
+//                this.resourceProperties);
+//    }
+//
+//    @Bean
+//    public BasicErrorController basicErrorController(ErrorAttributes errorAttributes) {
+//        return new BasicErrorController(errorAttributes, this.serverProperties.getError(),
+//                this.errorViewResolvers);
+//    }
 
     @Bean
     public DefaultErrorAttributes errorAttributes() {

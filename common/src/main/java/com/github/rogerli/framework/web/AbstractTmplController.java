@@ -8,6 +8,7 @@
  */
 package com.github.rogerli.framework.web;
 
+import com.github.rogerli.framework.model.BaseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @description
  * @create 2016/12/2 16:58
  */
-public abstract class AbstractTmplController<PK, T> extends AbstractController {
+public abstract class AbstractTmplController<T extends BaseModel, PK> extends AbstractController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(AbstractTmplController.class);
 

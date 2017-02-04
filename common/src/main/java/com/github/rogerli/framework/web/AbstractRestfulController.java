@@ -11,25 +11,24 @@ package com.github.rogerli.framework.web;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.rogerli.framework.annotation.LogAction;
+import com.github.rogerli.framework.model.BaseModel;
 import com.github.rogerli.framework.service.Service;
 import com.github.rogerli.framework.web.exception.IllegalValidateException;
 import com.github.rogerli.utils.RestfulUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Roger
  * @create 2017/1/5 14:55
  */
-public abstract class AbstractRestfulController<T extends Serializable, PK> extends AbstractController {
+public abstract class AbstractRestfulController<T extends BaseModel, PK> extends AbstractController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(AbstractRestfulController.class);
 
@@ -46,6 +45,7 @@ public abstract class AbstractRestfulController<T extends Serializable, PK> exte
             produces = {"application/json"}
     )
     @ResponseBody
+    @LogAction
     public Map<String, Object> delete(@PathVariable PK id) {
         LOGGER.debug("======delete:" + String.valueOf(id) + "======");
         Map<String, Object> jsonMap = new HashMap<String, Object>();
@@ -126,6 +126,13 @@ public abstract class AbstractRestfulController<T extends Serializable, PK> exte
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         if (pageNum != null && pageSize != null) {
             PageHelper.startPage(pageNum, pageSize, true);
+        }
+        if(StringUtils.hasText(query.getSortBy())){
+            RestfulUtils.checkOrder(query.getSorted());
+            String sortBy = query.getSortBy();
+            sortBy.replaceAll(",", " " + query.getSorted() + ",");
+            sortBy += " " + query.getSortBy();
+            PageHelper.orderBy(sortBy);
         }
         List<T> list = getService().findList(query);
         if (pageNum != null && pageSize != null) {

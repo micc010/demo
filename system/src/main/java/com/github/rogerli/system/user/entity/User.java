@@ -1,8 +1,10 @@
 package com.github.rogerli.system.user.entity;
 
+import com.github.rogerli.framework.model.BaseModel;
+
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User extends BaseModel implements Serializable {
     private String id;
 
     private String fullName;

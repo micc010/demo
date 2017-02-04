@@ -1,8 +1,10 @@
 package com.github.rogerli.system.organ.entity;
 
+import com.github.rogerli.framework.model.BaseModel;
+
 import java.io.Serializable;
 
-public class Organ implements Serializable{
+public class Organ extends BaseModel implements Serializable{
 
     private String id;
 

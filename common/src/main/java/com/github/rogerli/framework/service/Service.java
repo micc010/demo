@@ -1,5 +1,6 @@
 package com.github.rogerli.framework.service;
 
+import com.github.rogerli.framework.model.BaseModel;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.util.List;
 /**
  * @author roger.li
  */
-public interface Service<T extends Serializable, PK> {
+public interface Service<T extends BaseModel, PK> {
 
     /**
      * @param id

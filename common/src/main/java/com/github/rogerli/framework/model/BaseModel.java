@@ -14,7 +14,11 @@ package com.github.rogerli.framework.model;
 public class BaseModel implements Model {
 
 	private long token;
-	
+
+	private String sortBy;
+
+	private String sorted;
+
 	/**
 	 * @see Model#getToken()
 	 */
@@ -29,6 +33,22 @@ public class BaseModel implements Model {
 	@Override
 	public void setToken(long token) {
 		this.token = token;
+	}
+
+	public String getSortBy() {
+		return sortBy;
+	}
+
+	public void setSortBy(String sortBy) {
+		this.sortBy = sortBy;
+	}
+
+	public String getSorted() {
+		return sorted;
+	}
+
+	public void setSorted(String sorted) {
+		this.sorted = sorted;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.github.rogerli.framework.service;
 
 import com.github.rogerli.framework.dao.Mapper;
+import com.github.rogerli.framework.model.BaseModel;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Transactional
-public abstract class AbstractService<T extends Serializable, PK, E extends Mapper> implements Service<T, PK> {
+public abstract class AbstractService<T extends BaseModel, PK, E extends Mapper> implements Service<T, PK> {
 
     protected abstract E getMapper();
 
