@@ -119,26 +119,16 @@ public abstract class AbstractRestfulController<T extends BaseModel, PK> extends
             produces = {"application/json"}
     )
     @ResponseBody
-    public Map<String, Object> page(T query,
-                                    @RequestParam(required = false) Integer pageNum,
-                                    @RequestParam(required = false) Integer pageSize) {
+    public Map<String, Object> page(T query) {
         LOGGER.debug("======page======");
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        if (pageNum != null && pageSize != null) {
-            PageHelper.startPage(pageNum, pageSize, true);
-        }
-        if(StringUtils.hasText(query.getSortBy())){
-            RestfulUtils.checkOrder(query.getSorted());
-            String sortBy = query.getSortBy();
-            sortBy.replaceAll(",", " " + query.getSorted() + ",");
-            sortBy += " " + query.getSortBy();
-            PageHelper.orderBy(sortBy);
-        }
+
         List<T> list = getService().findList(query);
-        if (pageNum != null && pageSize != null) {
+        if (query.getPageNum() != null && query.getPageNum() > 0
+                && query.getPageSize() != null && query.getPageSize() > 0) {
             PageInfo info = new PageInfo(list);
-            jsonMap.put("pageNum", pageNum);
-            jsonMap.put("pageSize", pageSize);
+            jsonMap.put("pageNum", query.getPageNum());
+            jsonMap.put("pageSize", query.getPageSize());
             jsonMap.put("total", info.getTotal());
             jsonMap.put("pages", info.getPages());
             jsonMap.put("isFirstPage", info.isIsFirstPage());

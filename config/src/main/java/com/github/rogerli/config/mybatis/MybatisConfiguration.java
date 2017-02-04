@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableConfigurationProperties(MybatisProperties.class)
+@EnableAutoConfiguration
 @AutoConfigureAfter({DruidDataSourceConfiguration.class, MybatisAutoConfiguration.class})
 public class MybatisConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(MybatisConfiguration.class);
@@ -40,7 +42,7 @@ public class MybatisConfiguration {
     private ResourceLoader resourceLoader = new DefaultResourceLoader();
 
     @Bean(name = "sqlSessionFactory")
-    @ConditionalOnBean(SqlSessionFactoryBean.class)
+//    @ConditionalOnBean(SqlSessionFactoryBean.class)
     public SqlSessionFactory sqlSessionFactory(@Value("${mybatis.pagination-enable:false}") boolean isPaginationEnable) throws Exception {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         LOGGER.debug("======Mybatis SqlSessionFactoryBean set datasource======");

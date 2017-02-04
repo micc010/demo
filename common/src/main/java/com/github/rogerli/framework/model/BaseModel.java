@@ -19,6 +19,10 @@ public class BaseModel implements Model {
 
 	private String sorted;
 
+	private Integer pageNum;
+
+	private Integer pageSize;
+
 	/**
 	 * @see Model#getToken()
 	 */
@@ -51,4 +55,19 @@ public class BaseModel implements Model {
 		this.sorted = sorted;
 	}
 
+	public Integer getPageNum() {
+		return pageNum;
+	}
+
+	public void setPageNum(Integer pageNum) {
+		this.pageNum = pageNum;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
 }

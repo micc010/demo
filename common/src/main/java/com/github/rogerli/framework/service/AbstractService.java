@@ -1,11 +1,13 @@
 package com.github.rogerli.framework.service;
 
+import com.github.pagehelper.PageHelper;
 import com.github.rogerli.framework.dao.Mapper;
 import com.github.rogerli.framework.model.BaseModel;
+import com.github.rogerli.utils.RestfulUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -88,6 +90,17 @@ public abstract class AbstractService<T extends BaseModel, PK, E extends Mapper>
 
     @Override
     public List<T> findList(T query) {
+        if (query.getPageNum() != null && query.getPageNum() > 0
+                && query.getPageSize() != null && query.getPageSize() > 0) {
+            PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        }
+        if(StringUtils.hasText(query.getSortBy())){
+            RestfulUtils.checkOrder(query.getSorted());
+            String sortBy = query.getSortBy();
+            sortBy.replaceAll(",", " " + query.getSorted() + ",");
+            sortBy += " " + query.getSorted();
+            PageHelper.orderBy(sortBy);
+        }
         return getMapper().findList(query);
     }
 

@@ -34,8 +34,8 @@ public class PasswordTest {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Test
-    @Ignore
+//    @Ignore
     public void test3() {
-        System.out.println(passwordEncoder.encode("password"));
+        System.out.println(passwordEncoder.encode("123456"));
     }
 }
