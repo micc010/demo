@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class BloomFilterTokenVerifier implements TokenVerifier {
 
     /**
-     * TODO 校验是否已经在redis生成
+     * 校验是否已经在redis生成
      *
      * @param jti
      * @return

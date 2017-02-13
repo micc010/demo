@@ -104,7 +104,6 @@ public class MybatisTool {
                 } else {
                     renderRestful(className, "jsonwebtemplate.ftl");
                     renderWeb(className);
-                    // TODO
                     renderTmpl(className, columnInfoList);
                 }
             }
