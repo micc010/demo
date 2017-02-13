@@ -4,6 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.rogerli.config.jwt.model.UserContext;
 import com.github.rogerli.config.jwt.token.JwtToken;
 import com.github.rogerli.config.jwt.token.JwtTokenFactory;
+import com.github.rogerli.system.login.entity.Login;
+import com.github.rogerli.system.login.service.LoginService;
+import com.github.rogerli.system.purview.entity.Purview;
+import com.github.rogerli.system.purview.service.PurviewService;
+import com.github.rogerli.system.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +38,8 @@ public class AjaxAwareAuthenticationSuccessHandler implements AuthenticationSucc
 
     private final ObjectMapper mapper;
     private final JwtTokenFactory tokenFactory;
+    @Autowired
+    private LoginService loginService;
 
     @Autowired
     public AjaxAwareAuthenticationSuccessHandler(final ObjectMapper mapper, final JwtTokenFactory tokenFactory) {
@@ -53,6 +61,12 @@ public class AjaxAwareAuthenticationSuccessHandler implements AuthenticationSucc
         tokenMap.put("token", accessToken.getToken());
         tokenMap.put("refreshToken", refreshToken.getToken());
         tokenMap.put("status", HttpStatus.OK.value());
+
+        // 返回权限清单
+        Login login = loginService.findByUsername(userContext.getUsername());
+        login.setId(login.getId());
+        List<Purview> list = loginService.findUserPurview(login);
+        tokenMap.put("urls", list);
 
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);

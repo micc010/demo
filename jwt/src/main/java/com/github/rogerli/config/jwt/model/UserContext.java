@@ -15,16 +15,18 @@ public class UserContext {
 
     private int status;
     private final String username;
+    private final String organId;
     private final List<GrantedAuthority> authorities;
 
-    private UserContext(String username, List<GrantedAuthority> authorities) {
+    private UserContext(String username, String organId, List<GrantedAuthority> authorities) {
         this.username = username;
+        this.organId = organId;
         this.authorities = authorities;
     }
     
-    public static UserContext create(String username, List<GrantedAuthority> authorities) {
+    public static UserContext create(String username, String organId, List<GrantedAuthority> authorities) {
         if (StringUtils.isEmpty(username)) throw new IllegalArgumentException("Username is blank: " + username);
-        return new UserContext(username, authorities);
+        return new UserContext(username, organId, authorities);
     }
 
     public int getStatus() {
@@ -38,6 +40,8 @@ public class UserContext {
     public String getUsername() {
         return username;
     }
+
+    public String getOrganId() {return organId;}
 
     public List<GrantedAuthority> getAuthorities() {
         return authorities;

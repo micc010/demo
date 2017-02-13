@@ -8,6 +8,7 @@
         <result column="SALT" property="salt" jdbcType="VARCHAR"/>
         <result column="LOCKED" property="locked" jdbcType="INTEGER"/>
         <result column="USER_ID" property="userId" jdbcType="VARCHAR"/>
+        <result column="ORGAN_ID" property="organId" jdbcType="VARCHAR"/>
     </resultMap>
     <resultMap id="RoleResultMap" type="com.github.rogerli.system.login.model.LoginRole" extends="BaseResultMap">
         <collection property="roleList" ofType="com.github.rogerli.system.role.entity.Role">
@@ -22,10 +23,10 @@
         </collection>
     </resultMap>
     <sql id="Base_Column_List">
-    ID, USER_NAME, PASSWORD, SALT, LOCKED, USER_ID
+    ID, USER_NAME, PASSWORD, SALT, LOCKED, USER_ID, ORGAN_ID
   </sql>
     <sql id="Login_Column_List">
-        lg.ID, lg.USER_NAME, lg.PASSWORD, lg.SALT, lg.LOCKED, lg.USER_ID
+        lg.ID, lg.USER_NAME, lg.PASSWORD, lg.SALT, lg.LOCKED, lg.USER_ID, lg.ORGAN_ID
     </sql>
     <select id="findByKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
@@ -42,10 +43,10 @@
             select replace(uuid(),'-','') from dual
         </selectKey>
         insert into r_sys_login (ID, USER_NAME, PASSWORD,
-          SALT, LOCKED, USER_ID
+          SALT, LOCKED, USER_ID, ORGAN_ID
           )
         values (#{id,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-          #{salt,jdbcType=VARCHAR}, #{locked,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
+          #{salt,jdbcType=VARCHAR}, #{locked,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{organId,jdbcType=VARCHAR}
           )
   </insert>
     <insert id="insertSelective" parameterType="com.github.rogerli.system.login.entity.Login">
@@ -72,6 +73,9 @@
             <if test="userId != null">
                 USER_ID,
             </if>
+            <if test="organId != null">
+                ORGAN_ID,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -91,6 +95,9 @@
             </if>
             <if test="userId != null">
                 #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="organId != null">
+                #{organId,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -112,6 +119,9 @@
             <if test="userId != null">
                 USER_ID = #{userId,jdbcType=VARCHAR},
             </if>
+            <if test="organId != null">
+                ORGAN_ID = #{organId,jdbcType=VARCHAR},
+            </if>
         </set>
         where ID = #{id,jdbcType=VARCHAR}
     </update>
@@ -121,7 +131,8 @@
           PASSWORD = #{password,jdbcType=VARCHAR},
           SALT = #{salt,jdbcType=VARCHAR},
           LOCKED = #{locked,jdbcType=INTEGER},
-          USER_ID = #{userId,jdbcType=VARCHAR}
+          USER_ID = #{userId,jdbcType=VARCHAR},
+          ORGAN_ID = #{organId,jdbcType=VARCHAR}
         where ID = #{id,jdbcType=VARCHAR}
   </update>
     <select id="findList" resultMap="BaseResultMap" parameterType="com.github.rogerli.system.login.entity.Login">
@@ -134,6 +145,9 @@
             </if>
             <if test="locked != null">
                 and LOCKED = #{locked,jdbcType=INTEGER}
+            </if>
+            <if test="organId != null">
+                and ORGAN_ID = #{organId,jdbcType=VARCHAR}
             </if>
         </trim>
     </select>
@@ -171,7 +185,7 @@
         <include refid="com.github.rogerli.system.purview.dao.PurviewMapper.Base_Column_List"/>
         from r_sys_purview
         <trim prefix="where" prefixOverrides="and|or">
-            ID in (select rp.PURVIEW_ID from r_sys_role_purview rp, r_sys_login_role ur where rp.ROLE_ID = ur.ROLE_ID and ur.USER_ID = #{id,jdbcType=VARCHAR})
+            ID in (select rp.PURVIEW_ID from r_sys_role_purview rp, r_sys_login_role ur where rp.ROLE_ID = ur.ROLE_ID and ur.LOGIN_ID = #{id,jdbcType=VARCHAR})
         </trim>
     </select>
     <select id="findUserRole" resultMap="RoleResultMap"

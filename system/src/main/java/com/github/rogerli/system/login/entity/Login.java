@@ -28,6 +28,9 @@ public class Login extends BaseModel implements Serializable {
     @NotBlank
     private String userId;
 
+    @NotBlank
+    private String organId;
+
     public String getId() {
         return id;
     }
@@ -74,5 +77,13 @@ public class Login extends BaseModel implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getOrganId() {
+        return organId;
+    }
+
+    public void setOrganId(String organId) {
+        this.organId = organId;
     }
 }

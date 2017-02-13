@@ -17,7 +17,10 @@ import com.github.rogerli.system.role.entity.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +34,9 @@ import java.util.Optional;
 public class LoginService extends AbstractService<Login, String, LoginMapper> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Login.class);
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @Autowired
     private LoginMapper loginMapper;
@@ -77,6 +83,22 @@ public class LoginService extends AbstractService<Login, String, LoginMapper> {
      */
     public LoginRole findUserRole(Login query){
         return getMapper().findUserRole(query);
+    }
+
+    /**
+     *
+     * @param user
+     * @return
+     */
+    public Login saveUser(Login user){
+        Assert.notNull(user);
+        user.setPassword(encoder.encode(user.getPassword()));
+        if (StringUtils.hasText(user.getId())){
+            getMapper().updateByKey(user);
+        } else {
+            getMapper().insert(user);
+        }
+        return user;
     }
 
 }

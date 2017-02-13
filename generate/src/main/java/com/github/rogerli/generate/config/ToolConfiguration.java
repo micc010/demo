@@ -27,6 +27,7 @@ public class ToolConfiguration {
     private String webNameSpace;
     private String restfulNameSpace;
     private String fileLocation;
+    private String tmplLocation;
 
 
     public void loadParam(String configurationLocation) throws IOException {
@@ -55,6 +56,7 @@ public class ToolConfiguration {
         webNameSpace = properties.getProperty("webNameSpace");
         restfulNameSpace = properties.getProperty("restfulNameSpace");
         fileLocation = properties.getProperty("fileLocation");
+        tmplLocation = properties.getProperty("tmplLocation");
         String[] tbList = tableNameList.split(",");
         for (int i = 0; i < tbList.length; i++) {
             String[] arr = tbList[i].split("@");
@@ -131,6 +133,18 @@ public class ToolConfiguration {
         this.fileLocation = fileLocation;
     }
 
+    public String getTmplLocation() {
+        if (tmplLocation.endsWith("/")) {
+            return tmplLocation;
+        } else {
+            return tmplLocation + "/";
+        }
+    }
+
+    public void setTmplLocation(String tmplLocation) {
+        this.tmplLocation = tmplLocation;
+    }
+
     private String getPackageName(String className) {
         return packageName.toLowerCase() + "." + moduleName + "." + className.toLowerCase();
     }
@@ -205,6 +219,10 @@ public class ToolConfiguration {
 
     public String getFormPath(String className) {
         return getPackagePath(className) + "/" + webNameSpace + "/";
+    }
+
+    public String getTmplPath(String className) {
+        return null;
     }
 
     public String getRestfulPackage(String className) {

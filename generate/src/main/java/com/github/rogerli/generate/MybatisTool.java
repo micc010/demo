@@ -104,6 +104,8 @@ public class MybatisTool {
                 } else {
                     renderRestful(className, "jsonwebtemplate.ftl");
                     renderWeb(className);
+                    // TODO
+                    renderTmpl(className, columnInfoList);
                 }
             }
         } catch (SQLException e) {
@@ -296,6 +298,40 @@ public class MybatisTool {
             template = configuration.getTemplate(templateName);
             FileOutputStream fos = new FileOutputStream(new File(restfulPath + controllerName + ".java"));
             template.process(data, new OutputStreamWriter(fos));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void renderTmpl(String className, List<ColumnInfo> tableInfoList) {
+        String entityName = toolConfiguration.getEntityName(className);
+
+        String tmplPath = toolConfiguration.getTmplPath(className);
+
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("entityName", entityName);
+        data.put("moduleName", toolConfiguration.getModuleName());
+        data.put("propertyList", tableInfoList);
+
+        Template template;
+        try {
+            File subFile = new File(tmplPath);
+            subFile.mkdirs();
+
+            // TODO view edit list
+            template = configuration.getTemplate("htmllisttemplate.ftl");
+            FileOutputStream view = new FileOutputStream(new File(tmplPath + entityName.toLowerCase() + "_view.ftl"));
+            template.process(data, new OutputStreamWriter(view));
+
+            template = configuration.getTemplate("htmllisttemplate.ftl");
+            FileOutputStream edit = new FileOutputStream(new File(tmplPath + entityName.toLowerCase() + "_edit.ftl"));
+            template.process(data, new OutputStreamWriter(edit));
+
+            template = configuration.getTemplate("htmllisttemplate.ftl");
+            FileOutputStream list = new FileOutputStream(new File(tmplPath + entityName.toLowerCase() + "_list.ftl"));
+            template.process(data, new OutputStreamWriter(list));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TemplateException e) {

@@ -20,15 +20,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Roger
  * @create 2017/1/5 14:55
  */
-public abstract class AbstractRestfulController<T extends BaseModel, PK> extends AbstractController {
+public abstract class AbstractJsonController<T extends BaseModel, PK> extends AbstractController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(AbstractRestfulController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(AbstractJsonController.class);
 
     protected abstract Service<T, PK> getService();
 
@@ -37,14 +39,14 @@ public abstract class AbstractRestfulController<T extends BaseModel, PK> extends
      * @return
      */
     @RequestMapping(
-            value = {"/{id}"},
-            method = {RequestMethod.DELETE},
+            value = {"/delete"},
+            method = {RequestMethod.POST},
             consumes = {"application/json"},
             produces = {"application/json"}
     )
     @ResponseBody
     @LogAction
-    public Map<String, Object> delete(@PathVariable PK id) {
+    public Map<String, Object> delete(PK id) {
         LOGGER.debug("======delete:" + String.valueOf(id) + "======");
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         getService().deleteByKey(id);
@@ -59,7 +61,7 @@ public abstract class AbstractRestfulController<T extends BaseModel, PK> extends
      * @throws IllegalValidateException
      */
     @RequestMapping(
-            value = {"/"},
+            value = {"/add"},
             method = {RequestMethod.POST},
             consumes = {"application/json"},
             produces = {"application/json"}
@@ -81,13 +83,13 @@ public abstract class AbstractRestfulController<T extends BaseModel, PK> extends
      * @throws IllegalValidateException
      */
     @RequestMapping(
-            value = {"/{id}"},
-            method = {RequestMethod.PUT},
+            value = {"/save"},
+            method = {RequestMethod.POST},
             consumes = {"application/json"},
             produces = {"application/json"}
     )
     @ResponseBody
-    public Map<String, Object> save(@PathVariable PK id, @RequestBody T entity, BindingResult bindingResult) throws IllegalValidateException {
+    public Map<String, Object> save(@RequestBody T entity, BindingResult bindingResult) throws IllegalValidateException {
         LOGGER.debug("======save======");
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         RestfulUtils.bindErrors(jsonMap, bindingResult);
@@ -97,13 +99,13 @@ public abstract class AbstractRestfulController<T extends BaseModel, PK> extends
     }
 
     @RequestMapping(
-            value = {"/{id}"},
+            value = {"/find"},
             method = {RequestMethod.GET},
             consumes = {"application/json"},
             produces = {"application/json"}
     )
     @ResponseBody
-    public Map<String, Object> find(@PathVariable PK id) {
+    public Map<String, Object> find(PK id) {
         LOGGER.debug("======find:" + String.valueOf(id) + "======");
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         Object t = getService().findByKey(id);
@@ -112,7 +114,7 @@ public abstract class AbstractRestfulController<T extends BaseModel, PK> extends
     }
 
     @RequestMapping(
-            value = {""},
+            value = {"/page"},
             method = {RequestMethod.GET, RequestMethod.POST},
             produces = {"application/json"}
     )

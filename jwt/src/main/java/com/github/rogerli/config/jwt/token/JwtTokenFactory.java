@@ -12,16 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import redis.clients.jedis.JedisPool;
 
 import java.util.Arrays;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -66,6 +60,7 @@ public class JwtTokenFactory {
         Claims claims = Jwts.claims().setSubject(userContext.getUsername());
         claims.put("scopes", userContext.getAuthorities().stream()
                 .map(s -> s.toString()).collect(Collectors.toList()));
+        claims.put("organId", userContext.getOrganId());
 
         DateTime currentTime = new DateTime();
 
@@ -95,6 +90,7 @@ public class JwtTokenFactory {
 
         Claims claims = Jwts.claims().setSubject(userContext.getUsername());
         claims.put("scopes", Arrays.asList(RestfulUtils.ROLE_REFRESH_TOKEN));
+        claims.put("organId", userContext.getOrganId());
 
         // 生成jti
         String jti = jtiGenerator.generateId(currentTime.toDate(),

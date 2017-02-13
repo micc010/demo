@@ -30,4 +30,9 @@ public class ${className} extends AbstractTmplController<${entityName}, String> 
         return ${entityName?uncap_first}Service;
     }
 
+    @Override
+    protected String getFilePath() {
+        return "${moduleName}/${entityName?lower_case}";
+    }
+
 }

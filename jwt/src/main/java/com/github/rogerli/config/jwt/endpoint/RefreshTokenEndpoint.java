@@ -90,7 +90,7 @@ public class RefreshTokenEndpoint {
                 .map(authority -> new SimpleGrantedAuthority(authority.getRole()))
                 .collect(Collectors.toList());
 
-        UserContext userContext = UserContext.create(login.getUserName(), authorities);
+        UserContext userContext = UserContext.create(login.getUserName(), login.getOrganId(), authorities);
 
         JwtToken jwtToken = tokenFactory.createAccessJwtToken(userContext);
 
