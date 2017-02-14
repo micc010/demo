@@ -25,9 +25,4 @@ public class ${className} extends AbstractRestfulController<${entityName}, Strin
         return ${entityName?uncap_first}Service;
     }
 
-    @Override
-    protected void filter(BaseModel query){
-
-    }
-
 }

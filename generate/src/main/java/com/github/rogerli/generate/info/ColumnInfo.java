@@ -8,6 +8,9 @@ public class ColumnInfo {
     private String javaType;
     private String methodName;
 
+    private String columnComment;
+    private int columnSize;
+
     public String getJavaType() {
         return javaType;
     }
@@ -46,6 +49,9 @@ public class ColumnInfo {
         if (jdbcType.equals("NUMBER")) {
             jdbcType = "NUMERIC";
         }
+        if (jdbcType.equals("NUMBER")) {
+            jdbcType = "NUMERIC";
+        }
         if (jdbcType.equals("CHAR")) {
             jdbcType = "VARCHAR";
         }
@@ -66,11 +72,27 @@ public class ColumnInfo {
         this.propertyName = propertyName;
     }
 
+    public int getColumnSize() {
+        return columnSize;
+    }
+
+    public void setColumnSize(int columnSize) {
+        this.columnSize = columnSize;
+    }
+
     public String getMethodName() {
         return methodName;
     }
 
     public void setMethodName(String methodName) {
         this.methodName = methodName;
+    }
+
+    public String getColumnComment() {
+        return columnComment;
+    }
+
+    public void setColumnComment(String columnComment) {
+        this.columnComment = columnComment;
     }
 }

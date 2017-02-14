@@ -64,7 +64,7 @@
 		<!-- 内容开始  -->
 		<div class="wrapper wrapper-content">
 			<div class="page-header clearfix">
-				<h1 class="col-sm-11">预警指标</h1>
+				<h1 class="col-sm-11">${entity.tableComment!''}</h1>
 				<div class="col-sm-1">
 					<form name="form_search" id="form_search" method="post" class="pull-right">
 						<div class="input-group-btn">
@@ -81,7 +81,7 @@
 						<tr>
 							<th width="50">编号</th>
 						<#list propertyList as property>
-							<th width="100">${property.propertyName}</th>
+							<th width="100">${property.columnComment}</th>
 						</#list>
 							<th width="100">操作</th>
 						</tr>
@@ -114,11 +114,6 @@
 						data:{
 							project : data
 						}
-					});
-					vm.filter('myfilter', function (value) {
-						var number = Math.floor(Math.random()*(2-1+1)+1);
-						if(number ==  1) return '缺口';
-						if(number ==  2) return '超支';
 					})
 				}
 		);

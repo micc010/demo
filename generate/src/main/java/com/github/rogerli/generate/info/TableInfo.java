@@ -18,6 +18,8 @@ public class TableInfo {
 
     private String keyName;
 
+    private String tableComment;
+
     public String getTableName() {
         return tableName;
     }
@@ -41,5 +43,13 @@ public class TableInfo {
 
     public void setKeyName(String keyName) {
         this.keyName = keyName;
+    }
+
+    public String getTableComment() {
+        return tableComment;
+    }
+
+    public void setTableComment(String tableComment) {
+        this.tableComment = tableComment;
     }
 }

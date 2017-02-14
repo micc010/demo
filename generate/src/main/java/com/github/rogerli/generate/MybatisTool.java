@@ -41,6 +41,7 @@ public class MybatisTool {
         init();
         connectToDb();
         createFile();
+        closeConnection();
     }
 
     private void init() {
@@ -60,6 +61,14 @@ public class MybatisTool {
             connection = DriverManager.getConnection(toolConfiguration.getUrl(), toolConfiguration.getUsername(), toolConfiguration.getPassword());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void closeConnection() {
+        try {
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -91,20 +100,39 @@ public class MybatisTool {
                     columnInfo.setPropertyName(toolConfiguration.colNameToPropertyName(columnInfo.getColumnName()));
                     columnInfo.setJdbcType(rsmd.getColumnTypeName(i));
                     columnInfo.setJavaType(rsmd.getColumnClassName(i));
+                    columnInfo.setColumnSize(rsmd.getColumnDisplaySize(i));
                     columnInfo.setMethodName(toolConfiguration.upperFirstChar(columnInfo.getPropertyName()));
                     columnInfoList.add(columnInfo);
                 }
+
+                DatabaseMetaData dbmd = connection.getMetaData();
+                ResultSet rs = dbmd.getTables(null, null, info.getTableName(), null);
+                while (rs.next()) {
+                    info.setTableComment(rs.getString("REMARKS"));
+                }
+                rs.close();
+
+                rs = dbmd.getColumns(null, null, info.getTableName(), null);
+                while (rs.next()) {
+                    String columnName = rs.getString("COLUMN_NAME");
+                    for (ColumnInfo col :
+                            columnInfoList) {
+                        if (col.getColumnName().equals(columnName)) {
+                            col.setColumnComment(rs.getString("REMARKS"));
+                            break;
+                        }
+                    }
+                }
+                rs.close();
 
                 renderModel(className, columnInfoList);
                 renderDao(className);
                 renderXmlMapper(info, className, columnInfoList);
                 renderService(className);
-                if (toolConfiguration.isRestful()) {
-                    renderRestful(className, "restfultemplate.ftl");
-                } else {
-                    renderRestful(className, "jsonwebtemplate.ftl");
+                renderRestful(className, "restfultemplate.ftl");
+                if (!toolConfiguration.isRestful()) {
                     renderWeb(className);
-                    renderTmpl(className, columnInfoList);
+                    renderTmpl(className, info, columnInfoList);
                 }
             }
         } catch (SQLException e) {
@@ -304,7 +332,7 @@ public class MybatisTool {
         }
     }
 
-    private void renderTmpl(String className, List<ColumnInfo> tableInfoList) {
+    private void renderTmpl(String className, TableInfo info, List<ColumnInfo> tableInfoList) {
         String entityName = toolConfiguration.getEntityName(className);
 
         String tmplPath = toolConfiguration.getTmplPath(className);
@@ -313,6 +341,7 @@ public class MybatisTool {
         data.put("entityName", entityName);
         data.put("moduleName", toolConfiguration.getModuleName());
         data.put("propertyList", tableInfoList);
+        data.put("entity", info);
 
         Template template;
         try {
@@ -320,11 +349,11 @@ public class MybatisTool {
             subFile.mkdirs();
 
             // TODO view edit list
-            template = configuration.getTemplate("htmllisttemplate.ftl");
+            template = configuration.getTemplate("htmlviewtemplate.ftl");
             FileOutputStream view = new FileOutputStream(new File(tmplPath + entityName.toLowerCase() + "_view.ftl"));
             template.process(data, new OutputStreamWriter(view));
 
-            template = configuration.getTemplate("htmllisttemplate.ftl");
+            template = configuration.getTemplate("htmledittemplate.ftl");
             FileOutputStream edit = new FileOutputStream(new File(tmplPath + entityName.toLowerCase() + "_edit.ftl"));
             template.process(data, new OutputStreamWriter(edit));
 

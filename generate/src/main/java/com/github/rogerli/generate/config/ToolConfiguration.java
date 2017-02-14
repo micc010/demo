@@ -222,7 +222,7 @@ public class ToolConfiguration {
     }
 
     public String getTmplPath(String className) {
-        return null;
+        return getTmplLocation() + className.toLowerCase() + "/";
     }
 
     public String getRestfulPackage(String className) {
