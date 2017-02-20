@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.github.rogerli.system.user.dao.UserMapper">
-    <cache eviction="FIFO" type="com.github.rogerli.framework.cache.RedisMybatisCache" size="1000" readOnly="true"/>
+    <!--<cache eviction="FIFO" type="com.github.rogerli.framework.cache.RedisMybatisCache" size="1000" readOnly="true"/>-->
     <resultMap id="BaseResultMap" type="com.github.rogerli.system.user.entity.User">
         <id column="ID" property="id" jdbcType="VARCHAR"/>
         <result column="FULL_NAME" property="fullName" jdbcType="VARCHAR"/>
@@ -14,6 +14,18 @@
         <result column="SORT" property="sort" jdbcType="INTEGER"/>
         <result column="USER_CODE" property="userCode" jdbcType="VARCHAR"/>
         <result column="AVAILABLE" property="available" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="MeResultMap" type="com.github.rogerli.system.user.entity.UserMeModel">
+        <result column="FULL_NAME" property="fullName" jdbcType="VARCHAR"/>
+        <result column="SEX" property="sex" jdbcType="CHAR"/>
+        <result column="AGE" property="age" jdbcType="INTEGER"/>
+        <result column="DUTY" property="duty" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="MOBILE" property="mobile" jdbcType="VARCHAR"/>
+        <result column="SORT" property="sort" jdbcType="INTEGER"/>
+        <result column="ORGAN_NAME" property="organName" jdbcType="VARCHAR"/>
+        <result column="USER_CODE" property="userCode" jdbcType="VARCHAR"/>
     </resultMap>
     <resultMap id="RoleResultMap" extends="BaseResultMap" type="com.github.rogerli.system.login.model.LoginRole">
         <collection property="roleList" ofType="com.github.rogerli.system.role.entity.Role">
@@ -212,5 +224,13 @@
                 and AVAILABLE = #{available,jdbcType=INTEGER}
             </if>
         </trim>
+    </select>
+    <select id="findByUsername" resultMap="MeResultMap" parameterType="com.github.rogerli.system.user.entity.User">
+        select
+        u.FULL_NAME, u.SEX, u.AGE, u.DUTY, u.EMAIL, u.PHONE, u.MOBILE, u.USER_CODE,
+        (select o.NAME from r_sys_organ o where o.ID = l.ORGAN_ID) ORGAN_NAME
+        from r_sys_user u, r_sys_login l
+        where u.ID = l.USER_ID
+        and l.USER_NAME = #{userName,jdbcType=VARCHAR}
     </select>
 </mapper>

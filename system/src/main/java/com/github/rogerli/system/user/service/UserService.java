@@ -11,6 +11,7 @@ package com.github.rogerli.system.user.service;
 import com.github.rogerli.framework.service.AbstractService;
 import com.github.rogerli.system.user.dao.UserMapper;
 import com.github.rogerli.system.user.entity.User;
+import com.github.rogerli.system.user.entity.UserMeModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +35,7 @@ public class UserService extends AbstractService<User, String, UserMapper>{
         return userMapper;
     }
 
+    public UserMeModel findByUsername(String username) {
+        return userMapper.findByUsername(username);
+    }
 }
