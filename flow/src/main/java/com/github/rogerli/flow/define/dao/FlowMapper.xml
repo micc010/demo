@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.rogerli.flow.define.dao.FlowMapper">
+    <resultMap id="BaseResultMap" type="com.github.rogerli.flow.define.entity.Flow">
+        <id column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+        <result column="DISPLAY_NAME" jdbcType="VARCHAR" property="displayName"/>
+        <result column="PARENT_ID" jdbcType="VARCHAR" property="parentId"/>
+        <result column="JSON_URL" jdbcType="VARCHAR" property="jsonUrl"/>
+    </resultMap>
+    <resultMap id="FlowResultMap" type="com.github.rogerli.flow.define.entity.Flow">
+        <id column="ID" javaType="string" jdbcType="VARCHAR" property="id"/>
+        <result column="NAME" javaType="string" jdbcType="VARCHAR" property="name"/>
+        <result column="REMARK" javaType="string" jdbcType="VARCHAR" property="remark"/>
+        <result column="DISPLAY_NAME" javaType="string" jdbcType="VARCHAR" property="displayName"/>
+        <result column="PARENT_ID" javaType="string" jdbcType="VARCHAR" property="parentId"/>
+        <result column="JSON_URL" jdbcType="VARCHAR" property="jsonUrl"/>
+        <collection ofType="com.github.rogerli.flow.define.entity.Node" property="nodeList" resultMap="NodeResultMap"/>
+        <collection ofType="com.github.rogerli.flow.define.entity.Path" property="pathList" resultMap="PathResultMap"/>
+    </resultMap>
+    <resultMap id="NodeResultMap" type="com.github.rogerli.flow.define.entity.Node">
+        <id column="N_ID" javaType="string" jdbcType="VARCHAR" property="id"/>
+        <result column="ID" javaType="string" jdbcType="VARCHAR" property="flowId"/>
+        <result column="N_NAME" javaType="string" jdbcType="VARCHAR" property="name"/>
+        <result column="N_DISPLAY_NAME" javaType="string" jdbcType="VARCHAR" property="displayName"/>
+        <result column="NODE_TYPE" javaType="string" jdbcType="VARCHAR" property="nodeType"/>
+        <result column="N_URL" javaType="string" jdbcType="VARCHAR" property="url"/>
+        <result column="N_VIEW_URL" jdbcType="VARCHAR" property="viewUrl"/>
+        <result column="CYCLE_TYPE" javaType="string" jdbcType="VARCHAR" property="cycleType"/>
+    </resultMap>
+    <resultMap id="PathResultMap" type="com.github.rogerli.flow.define.entity.Path">
+        <id column="P_ID" javaType="string" jdbcType="VARCHAR" property="id"/>
+        <result column="ID" javaType="string" jdbcType="VARCHAR" property="flowId"/>
+        <result column="PREFIX_ID" javaType="string" jdbcType="VARCHAR" property="prefixId"/>
+        <result column="SUFFIX_ID" javaType="string" jdbcType="VARCHAR" property="suffixId"/>
+        <result column="P_NAME" javaType="string" jdbcType="VARCHAR" property="name"/>
+        <result column="P_DISPLAY_NAME" javaType="string" jdbcType="VARCHAR" property="displayName"/>
+        <result column="IS_DEFAULT" javaType="string" jdbcType="VARCHAR" property="isDefault"/>
+        <result column="SIGN" javaType="string" jdbcType="VARCHAR" property="sign"/>
+        <result column="PATH_TYPE" javaType="string" jdbcType="VARCHAR" property="pathType"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, NAME, REMARK, DISPLAY_NAME, PARENT_ID,JSON_URL
+    </sql>
+    <select id="findByKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from R_WF_DEF_FLOW
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByKey" parameterType="java.lang.String">
+        delete from R_WF_DEF_FLOW
+        where ID = #{id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.github.rogerli.flow.define.entity.Flow">
+        insert into R_WF_DEF_FLOW (ID, NAME, REMARK,
+        DISPLAY_NAME, PARENT_ID)
+        values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+        #{displayName,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.github.rogerli.flow.define.entity.Flow">
+        insert into R_WF_DEF_FLOW
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="name != null">
+                NAME,
+            </if>
+            <if test="remark != null">
+                REMARK,
+            </if>
+            <if test="displayName != null">
+                DISPLAY_NAME,
+            </if>
+            <if test="parentId != null">
+                PARENT_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="displayName != null">
+                #{displayName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByKeySelective" parameterType="com.github.rogerli.flow.define.entity.Flow">
+        update R_WF_DEF_FLOW
+        <set>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="displayName != null">
+                DISPLAY_NAME = #{displayName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                PARENT_ID = #{parentId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByKey" parameterType="com.github.rogerli.flow.define.entity.Flow">
+        update R_WF_DEF_FLOW
+        set NAME = #{name,jdbcType=VARCHAR},
+        REMARK = #{remark,jdbcType=VARCHAR},
+        DISPLAY_NAME = #{displayName,jdbcType=VARCHAR},
+        PARENT_ID = #{parentId,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <select id="findList" parameterType="com.github.rogerli.flow.define.entity.Flow" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM R_WF_DEF_FLOW
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="name != null and name != ''">AND NAME like '${name}%'</if>
+            <if test="remark != null">AND REMARK = #{remark,jdbcType=VARCHAR}</if>
+            <if test="displayName != null and displayName != ''">AND DISPLAY_NAME like '${displayName}%'</if>
+            <if test="parentId != null">AND PARENT_ID = #{parentId,jdbcType=VARCHAR}</if>
+        </trim>
+    </select>
+    <select id="selectFlowById" parameterType="String" resultMap="FlowResultMap">
+        SELECT F.ID,F.NAME,F.REMARK,F.DISPLAY_NAME,F.PARENT_ID,JSON_URL,
+        N.ID N_ID,N.NAME N_NAME,N.DISPLAY_NAME N_DISPLAY_NAME,N.NODE_TYPE,N.URL N_URL,N.VIEW_URL N_VIEW_URL,N.CYCLE_TYPE,
+        P.ID P_ID,P.PREFIX_ID,P.SUFFIX_ID,P.NAME P_NAME,P.DISPLAY_NAME P_DISPLAY_NAME,P.IS_DEFAULT,P.SIGN
+        FROM R_WF_DEF_FLOW F
+        INNER JOIN R_WF_DEF_NODE N
+        ON F.ID = N.FLOW_ID
+        INNER JOIN R_WF_DEF_PATH P
+        ON P.FLOW_ID = F.ID
+        WHERE F.ID = #{id,jdbcType=VARCHAR}
+    </select>
+</mapper>

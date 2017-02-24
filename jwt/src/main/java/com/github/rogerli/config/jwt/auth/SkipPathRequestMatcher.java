@@ -32,6 +32,6 @@ public class SkipPathRequestMatcher implements RequestMatcher {
         if (matchers.matches(request)) {
             return false;
         }
-        return processingMatcher.matches(request) ? true : false;
+        return processingMatcher.matches(request);
     }
 }

@@ -15,6 +15,7 @@
         <module>form</module>
         <module>jwt</module>
         <module>generate</module>
+        <module>flow</module>
     </modules>
 
     <properties>

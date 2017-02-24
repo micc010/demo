@@ -16,7 +16,6 @@ public interface Mapper<T extends BaseModel, PK> {
      * @param id
      * @return
      */
-
     int deleteByKey(PK id);
 
     /**

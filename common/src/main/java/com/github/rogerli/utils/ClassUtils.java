@@ -227,7 +227,7 @@ public class ClassUtils {
 	/**
 	 * @since 1.0
 	 */
-	private static interface ClassLoaderAccessor {
+	private interface ClassLoaderAccessor {
 		Class loadClass(String fqcn);
 
 		InputStream getResourceStream(String name);

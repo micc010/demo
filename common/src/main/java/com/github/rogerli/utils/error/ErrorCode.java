@@ -28,7 +28,7 @@ public enum ErrorCode {
 
     private int code;
 
-    private ErrorCode(int code) {
+    ErrorCode(int code) {
         this.code = code;
     }
 

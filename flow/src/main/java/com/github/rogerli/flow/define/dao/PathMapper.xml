@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.rogerli.flow.define.dao.PathMapper">
+    <resultMap id="BaseResultMap" type="com.github.rogerli.flow.define.entity.Path">
+        <id column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="FLOW_ID" jdbcType="VARCHAR" property="flowId"/>
+        <result column="PREFIX_ID" jdbcType="VARCHAR" property="prefixId"/>
+        <result column="SUFFIX_ID" jdbcType="VARCHAR" property="suffixId"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="DISPLAY_NAME" jdbcType="VARCHAR" property="displayName"/>
+        <result column="IS_DEFAULT" jdbcType="VARCHAR" property="isDefault"/>
+        <result column="SIGN" jdbcType="VARCHAR" property="sign"/>
+        <result column="PATH_TYPE" jdbcType="VARCHAR" property="pathType"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, FLOW_ID, PREFIX_ID, SUFFIX_ID, NAME, DISPLAY_NAME, IS_DEFAULT, SIGN, PATH_TYPE
+    </sql>
+    <select id="findByKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from R_WF_DEF_PATH
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByKey" parameterType="java.lang.String">
+        delete from R_WF_DEF_PATH
+        where ID = #{id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.github.rogerli.flow.define.entity.Path">
+        insert into R_WF_DEF_PATH (ID, FLOW_ID, PREFIX_ID,
+        SUFFIX_ID, NAME, DISPLAY_NAME,
+        IS_DEFAULT, SIGN, PATH_TYPE)
+        values (#{id,jdbcType=VARCHAR}, #{flowId,jdbcType=VARCHAR}, #{prefixId,jdbcType=VARCHAR},
+        #{suffixId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{displayName,jdbcType=VARCHAR},
+        #{isDefault,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{pathType,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.github.rogerli.flow.define.entity.Path">
+        insert into R_WF_DEF_PATH
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="flowId != null">
+                FLOW_ID,
+            </if>
+            <if test="prefixId != null">
+                PREFIX_ID,
+            </if>
+            <if test="suffixId != null">
+                SUFFIX_ID,
+            </if>
+            <if test="name != null">
+                NAME,
+            </if>
+            <if test="displayName != null">
+                DISPLAY_NAME,
+            </if>
+            <if test="isDefault != null">
+                IS_DEFAULT,
+            </if>
+            <if test="sign != null">
+                SIGN,
+            </if>
+            <if test="pathType != null">
+                PATH_TYPE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="flowId != null">
+                #{flowId,jdbcType=VARCHAR},
+            </if>
+            <if test="prefixId != null">
+                #{prefixId,jdbcType=VARCHAR},
+            </if>
+            <if test="suffixId != null">
+                #{suffixId,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="displayName != null">
+                #{displayName,jdbcType=VARCHAR},
+            </if>
+            <if test="isDefault != null">
+                #{isDefault,jdbcType=VARCHAR},
+            </if>
+            <if test="sign != null">
+                #{sign,jdbcType=VARCHAR},
+            </if>
+            <if test="pathType != null">
+                #{pathType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByKeySelective" parameterType="com.github.rogerli.flow.define.entity.Path">
+        update R_WF_DEF_PATH
+        <set>
+            <if test="flowId != null">
+                FLOW_ID = #{flowId,jdbcType=VARCHAR},
+            </if>
+            <if test="prefixId != null">
+                PREFIX_ID = #{prefixId,jdbcType=VARCHAR},
+            </if>
+            <if test="suffixId != null">
+                SUFFIX_ID = #{suffixId,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="displayName != null">
+                DISPLAY_NAME = #{displayName,jdbcType=VARCHAR},
+            </if>
+            <if test="isDefault != null">
+                IS_DEFAULT = #{isDefault,jdbcType=VARCHAR},
+            </if>
+            <if test="sign != null">
+                SIGN = #{sign,jdbcType=VARCHAR},
+            </if>
+            <if test="pathType != null">
+                PATH_TYPE = #{pathType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByKey" parameterType="com.github.rogerli.flow.define.entity.Path">
+        update R_WF_DEF_PATH
+        set FLOW_ID = #{flowId,jdbcType=VARCHAR},
+        PREFIX_ID = #{prefixId,jdbcType=VARCHAR},
+        SUFFIX_ID = #{suffixId,jdbcType=VARCHAR},
+        NAME = #{name,jdbcType=VARCHAR},
+        DISPLAY_NAME = #{displayName,jdbcType=VARCHAR},
+        IS_DEFAULT = #{isDefault,jdbcType=VARCHAR},
+        SIGN = #{sign,jdbcType=VARCHAR}
+        PATH_TYPE = #{pathType,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <select id="findList" parameterType="com.github.rogerli.flow.define.entity.Path" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM R_WF_DEF_PATH
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="flowId != null">AND FLOW_ID = #{flowId,jdbcType=VARCHAR}</if>
+            <if test="prefixId != null">AND PREFIX_ID = #{prefixId,jdbcType=VARCHAR}</if>
+            <if test="suffixId != null">AND SUFFIX_ID = #{suffixId,jdbcType=VARCHAR}</if>
+            <if test="name != null and name != ''">AND NAME like '${name}%'</if>
+            <if test="displayName != null and displayName != ''">AND DISPLAY_NAME like '${displayName}%'</if>
+            <if test="isDefault != null">AND IS_DEFAULT = #{isDefault,jdbcType=VARCHAR}</if>
+            <if test="sign != null">AND SIGN = #{sign,jdbcType=VARCHAR}</if>
+            <if test="pathType != null">AND PATH_TYPE = #{pathType,jdbcType=VARCHAR}</if>
+        </trim>
+    </select>
+    <delete id="deleteByFlowId" parameterType="String">DELETE FROM R_WF_DEF_PATH
+        WHERE FLOW_ID = #{flowId,jdbcType=VARCHAR}
+    </delete>
+</mapper>
