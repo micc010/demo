@@ -67,7 +67,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 //        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {RestController.class, RestControllerAdvice.class})}
 //)
 @AutoConfigureAfter({LocalizationConfiguration.class})
-public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
+public class JwtWebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtWebMvcConfiguration.class);
 
@@ -75,7 +75,7 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
     private MessageSource messageSource;
 
     @Override
-    protected Validator getValidator() {
+    public Validator getValidator() {
         LOGGER.info("======Validator======");
         LocalValidatorFactoryBean localValidatorFactoryBean =
                 new LocalValidatorFactoryBean();
@@ -89,8 +89,8 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
      *
      * @return
      */
-    @Override
-    protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
+    @Bean
+    public RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
         LOGGER.info("======RequestMappingHandlerMapping======");
         return new RestfulRequestMappingHandlerMapping();
 //        return  new RequestMappingHandlerMapping();
@@ -114,7 +114,7 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
      * @since 4.2
      */
     @Override
-    protected void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(CorsRegistry registry) {
         configCorsParams(registry.addMapping("/**"));
     }
 
@@ -144,7 +144,7 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
      * @param registry
      */
     @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         LOGGER.info("======addResourceHandlers======");
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/",
                 "classpath:/public/",
@@ -159,7 +159,7 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
      * @param argumentResolvers
      */
     @Override
-    protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         LOGGER.info("======addArgumentResolvers======");
         super.addArgumentResolvers(argumentResolvers);
     }
@@ -170,7 +170,7 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
      * @param returnValueHandlers
      */
     @Override
-    protected void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
+    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
         LOGGER.info("======addReturnValueHandlers======");
         super.addReturnValueHandlers(returnValueHandlers);
     }
@@ -191,7 +191,7 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
      * @param converters
      */
     @Override
-    protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         LOGGER.info("======MappingJackson2HttpMessageConverter======");
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         List<MediaType> list = new ArrayList<MediaType>();
@@ -203,35 +203,20 @@ public class JwtWebMvcConfiguration extends WebMvcConfigurationSupport {
         converters.add(converter);
     }
 
-    /**
-     * 配置messageConverter, 默认的有
-     * ByteArrayHttpMessageConverter
-     * ResourceHttpMessageConverter
-     * SourceHttpMessageConverter
-     * AllEncompassingFormHttpMessageConverter
-     * 根据环境还可能有
-     * romePresent：AtomFeedHttpMessageConverter，RssChannelHttpMessageConverter
-     * jackson2XmlPresent：MappingJackson2XmlHttpMessageConverter
-     * jaxb2Present：Jaxb2RootElementHttpMessageConverter
-     * jackson2Present：MappingJackson2HttpMessageConverter
-     * gsonPresent：GsonHttpMessageConverter
-     *
-     * @param converters
-     */
-    @Override
-    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-
-    }
-
-    @Bean(name = "multipartResolver")
-    public CommonsMultipartResolver commonsMultipartResolver() {
-        LOGGER.info("======CommonsMultipartResolver======");
-        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        resolver.setMaxUploadSize(5000000);
-        resolver.setMaxInMemorySize(8192);
-        resolver.setDefaultEncoding("UTF-8");
-        return resolver;
-    }
+//    @Override
+//    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+//
+//    }
+//
+//    @Bean(name = "multipartResolver")
+//    public CommonsMultipartResolver commonsMultipartResolver() {
+//        LOGGER.info("======CommonsMultipartResolver======");
+//        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+//        resolver.setMaxUploadSize(5000000);
+//        resolver.setMaxInMemorySize(8192);
+//        resolver.setDefaultEncoding("UTF-8");
+//        return resolver;
+//    }
 
 
 //    @Bean
