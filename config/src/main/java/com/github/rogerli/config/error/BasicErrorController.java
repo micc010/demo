@@ -83,8 +83,12 @@ public class BasicErrorController implements ErrorController {
                 isIncludeStackTrace(request, MediaType.ALL));
         response.setStatus(HttpStatus.OK.value());
         RestfulUtils.fillOk(body, getStatus(request));
-        body.put("code", ErrorCode.NOT_FOUND.getCode());
-        body.put("message", "Not found");
+        if (!body.containsKey("code")) {
+            body.put("code", ErrorCode.NOT_FOUND.getCode());
+        }
+        if (!body.containsKey("message")) {
+            body.put("message", "Not found");
+        }
         return body;
     }
 
