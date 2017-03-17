@@ -16,6 +16,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface LoginAction {
+public @interface OperationAction {
     String value() default "";
+
+    String type() default "";
 }

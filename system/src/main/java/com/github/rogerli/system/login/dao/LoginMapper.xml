@@ -23,6 +23,10 @@
             <result column="RIS_ADMIN" property="isAdmin" jdbcType="INTEGER"/>
         </collection>
     </resultMap>
+    <resultMap id="LoginResultMap" type="com.github.rogerli.system.login.model.LoginModel" extends="BaseResultMap">
+        <result column="FULL_NAME" property="fullName" jdbcType="VARCHAR"/>
+        <result column="ORGAN_NAME" property="organName" jdbcType="VARCHAR"/>
+    </resultMap>
     <sql id="Base_Column_List">
     ID, USER_NAME, PASSWORD, SALT, LOCKED, USER_ID, ORGAN_ID
   </sql>
@@ -199,5 +203,27 @@
         left join r_sys_role sr
         on ur.ROLE_ID = sr.ID
         where su.ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="findLoginList" resultMap="LoginResultMap" parameterType="com.github.rogerli.system.login.model.LoginModel">
+        select
+        r_sys_login.ID, r_sys_login.USER_NAME, r_sys_login.LOCKED, r_sys_login.USER_ID, r_sys_login.ORGAN_ID,
+        r_sys_organ.`NAME` ORGAN_NAME,
+        r_sys_user.FULL_NAME FULL_NAME
+        from r_sys_login
+        left join r_sys_organ
+        on r_sys_organ.ID = r_sys_login.ORGAN_ID
+        left join r_sys_user
+        on r_sys_user.ID = r_sys_login.USER_ID
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="userName != null">
+                or r_sys_login.USER_NAME like CONCAT('%',#{userName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="fullName != null">
+                or r_sys_user.FULL_NAME like CONCAT('%',#{fullName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="organName != null">
+                or r_sys_organ.NAME like CONCAT('%',#{organName,jdbcType=VARCHAR},'%')
+            </if>
+        </trim>
     </select>
 </mapper>

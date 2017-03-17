@@ -54,6 +54,8 @@ public class CustomUserDetailService implements UserDetailsService {
         Set<GrantedAuthority> authorities = new HashSet<>();
         roleService.findRoleListByLogin(login).forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getRole())));
 
+        authorities.add(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return new CustomUserDetails(username, login.getPassword(), authorities);
     }

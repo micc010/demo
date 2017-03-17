@@ -11,7 +11,7 @@
 
 		<link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
 
-		<title>南宁城建计划</title>
+		<title>编辑</title>
 
 		<link rel="stylesheet" href="../../../css/metro.min.css" />
 		<link rel="stylesheet" href="../../../css/metro-icons.css" />
@@ -91,7 +91,6 @@
 						<#elseif "${property.jdbcType}" == "TIMESTAMP">
 						<td><input class="form-control" type="text" id="${property.propertyName}" name="${property.propertyName}" value="{{val.${property.propertyName}}}"></td>
 						<#else>
-						${property.jdbcType}
 						<td><input class="form-control" type="text" id="${property.propertyName}" name="${property.propertyName}" value="{{val.${property.propertyName}}}"></td>
 						</#if>
 					<#if property_index%2 == 1>

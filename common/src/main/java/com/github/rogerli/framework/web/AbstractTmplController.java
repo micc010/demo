@@ -32,6 +32,7 @@ public abstract class AbstractTmplController<T extends BaseModel, PK> extends Ab
         LOGGER.debug("======edit======");
         ModelAndView mv = new ModelAndView(getFilePath() + "/edit");
         mv.addObject("id", id);
+        mv.addObject("path", getContentPath());
         return mv;
     }
 
@@ -43,6 +44,7 @@ public abstract class AbstractTmplController<T extends BaseModel, PK> extends Ab
         LOGGER.debug("======view======");
         ModelAndView mv = new ModelAndView(getFilePath() + "/view");
         mv.addObject("id", id);
+        mv.addObject("path", getContentPath());
         return mv;
     }
 
@@ -54,9 +56,12 @@ public abstract class AbstractTmplController<T extends BaseModel, PK> extends Ab
         LOGGER.debug("======list======");
         ModelAndView mv = new ModelAndView(getFilePath() + "/list");
         mv.addObject("query", query);
+        mv.addObject("path", getContentPath());
         return mv;
     }
 
     protected abstract String getFilePath();
+
+    protected abstract String getContentPath();
 
 }

@@ -47,13 +47,21 @@ public class CustomFilterSecurityMetadataSource implements FilterInvocationSecur
         Purview query = new Purview();
         query.setUrl(fi.getRequestUrl());
         List<Role> roleList = roleService.findRoleListByPurview(query);
-        for (Role role :
-                roleList) {
-            //以角色名称来存放
-            SecurityConfig securityConfig = new SecurityConfig(role.getRole());
+
+        if (roleList == null || roleList.size() == 0) {
+            SecurityConfig securityConfig = new SecurityConfig("ROLE_ANONYMOUS");
             securityConfigList.add(securityConfig);
-            LOGGER.info("url need role " + role.getRole());
+            LOGGER.info("url not need role");
+        } else {
+            for (Role role :
+                    roleList) {
+                //以角色名称来存放
+                SecurityConfig securityConfig = new SecurityConfig(role.getRole());
+                securityConfigList.add(securityConfig);
+                LOGGER.info("url need role " + role.getRole());
+            }
         }
+
         return securityConfigList;
     }
 

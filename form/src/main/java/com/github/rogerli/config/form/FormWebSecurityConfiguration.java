@@ -94,7 +94,7 @@ public class FormWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addHeaderWriter(new HstsHeaderWriter());
 
         // 一般请求
-        http.formLogin().loginPage("/login").failureUrl("/login?error").defaultSuccessUrl("/home").permitAll()
+        http.formLogin().loginPage("/login").permitAll().failureUrl("/login?error").defaultSuccessUrl("/home")
                 .and()
                 .logout().logoutSuccessUrl("/login?logout").permitAll()
                 .invalidateHttpSession(true)

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author roger.li
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({"rawtypes", "unchecked"})
 @Transactional
 public abstract class AbstractService<T extends BaseModel, PK, E extends Mapper> implements Service<T, PK> {
 
@@ -66,15 +66,17 @@ public abstract class AbstractService<T extends BaseModel, PK, E extends Mapper>
     }
 
     @Override
-    public int updateByKey(T entity) {
+    public T updateByKey(T entity) {
         Assert.notNull(entity);
-        return getMapper().updateByKey(entity);
+        getMapper().updateByKey(entity);
+        return entity;
     }
 
     @Override
-    public int updateByKeySelective(T entity) {
+    public T updateByKeySelective(T entity) {
         Assert.notNull(entity);
-        return getMapper().updateByKeySelective(entity);
+        getMapper().updateByKeySelective(entity);
+        return entity;
     }
 
     public int updateInBatch(List<T> list) {
@@ -94,7 +96,7 @@ public abstract class AbstractService<T extends BaseModel, PK, E extends Mapper>
                 && query.getPageSize() != null && query.getPageSize() > 0) {
             PageHelper.startPage(query.getPageNum(), query.getPageSize());
         }
-        if(StringUtils.hasText(query.getSortBy())){
+        if (StringUtils.hasText(query.getSortBy())) {
             RestfulUtils.checkOrder(query.getSorted());
             String sortBy = query.getSortBy();
             sortBy.replaceAll(",", " " + query.getSorted() + ",");

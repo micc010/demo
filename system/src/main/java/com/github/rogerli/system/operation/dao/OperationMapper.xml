@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.rogerli.system.operation.dao.OperationMapper">
+    <resultMap id="BaseResultMap" type="com.github.rogerli.system.operation.entity.Operation">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="work_id" jdbcType="VARCHAR" property="workId"/>
+        <result column="work_type" jdbcType="VARCHAR" property="workType"/>
+        <result column="old_value" jdbcType="VARCHAR" property="oldValue"/>
+        <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate"/>
+        <result column="modify_user" jdbcType="VARCHAR" property="modifyUser"/>
+        <result column="modify_organ" jdbcType="VARCHAR" property="modifyOrgan"/>
+        <result column="new_value" jdbcType="VARCHAR" property="newValue"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="work_class" jdbcType="VARCHAR" property="workClass"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id,work_id,work_type,old_value,modify_date,modify_user,modify_organ,new_value,remark,work_class
+    </sql>
+    <select id="findByKey" parameterType="String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_operation
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByKey" parameterType="String">
+        delete from r_sys_operation
+        where id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.github.rogerli.system.operation.entity.Operation">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        insert into r_sys_operation(id,work_id,work_type,old_value,modify_date,modify_user,modify_organ,new_value,remark,work_class)
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{id,jdbcType=VARCHAR},
+        #{workId,jdbcType=VARCHAR},
+        #{workType,jdbcType=VARCHAR},
+        #{oldValue,jdbcType=VARCHAR},
+        #{modifyDate,jdbcType=TIMESTAMP},
+        #{modifyUser,jdbcType=VARCHAR},
+        #{modifyOrgan,jdbcType=VARCHAR},
+        #{newValue,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},
+        #{workClass,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    <insert id="insertSelective" parameterType="com.github.rogerli.system.operation.entity.Operation">
+            <selectKey keyProperty="id" resultType="String" order="BEFORE">
+                select replace(uuid(),'-','') from dual
+            </selectKey>
+        insert into r_sys_operation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+            id,
+            </if>
+            <if test="workId != null">
+            work_id,
+            </if>
+            <if test="workType != null">
+            work_type,
+            </if>
+            <if test="oldValue != null">
+            old_value,
+            </if>
+            <if test="modifyDate != null">
+            modify_date,
+            </if>
+            <if test="modifyUser != null">
+            modify_user,
+            </if>
+            <if test="modifyOrgan != null">
+            modify_organ,
+            </if>
+            <if test="newValue != null">
+            new_value,
+            </if>
+            <if test="remark != null">
+            remark,
+            </if>
+            <if test="workClass != null">
+            work_class,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+            #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="workId != null">
+            #{workId,jdbcType=VARCHAR},
+            </if>
+            <if test="workType != null">
+            #{workType,jdbcType=VARCHAR},
+            </if>
+            <if test="oldValue != null">
+            #{oldValue,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyDate != null">
+            #{modifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyUser != null">
+            #{modifyUser,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyOrgan != null">
+            #{modifyOrgan,jdbcType=VARCHAR},
+            </if>
+            <if test="newValue != null">
+            #{newValue,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+            #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="workClass != null">
+            #{workClass,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByKeySelective" parameterType="com.github.rogerli.system.operation.entity.Operation">
+        update r_sys_operation
+        <trim prefix="set" prefixOverrides=",">
+                <if test="workId != null">
+                    ,work_id = #{workId,jdbcType=VARCHAR}
+                </if>
+                <if test="workType != null">
+                    ,work_type = #{workType,jdbcType=VARCHAR}
+                </if>
+                <if test="oldValue != null">
+                    ,old_value = #{oldValue,jdbcType=VARCHAR}
+                </if>
+                <if test="modifyDate != null">
+                    ,modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+                </if>
+                <if test="modifyUser != null">
+                    ,modify_user = #{modifyUser,jdbcType=VARCHAR}
+                </if>
+                <if test="modifyOrgan != null">
+                    ,modify_organ = #{modifyOrgan,jdbcType=VARCHAR}
+                </if>
+                <if test="newValue != null">
+                    ,new_value = #{newValue,jdbcType=VARCHAR}
+                </if>
+                <if test="remark != null">
+                    ,remark = #{remark,jdbcType=VARCHAR}
+                </if>
+                <if test="workClass != null">
+                    ,work_class = #{workClass,jdbcType=VARCHAR}
+                </if>
+        </trim>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByKey" parameterType="com.github.rogerli.system.operation.entity.Operation">
+        update r_sys_operation
+        <trim prefix="set" prefixOverrides=",">
+                ,work_id = #{workId,jdbcType=VARCHAR}
+                ,work_type = #{workType,jdbcType=VARCHAR}
+                ,old_value = #{oldValue,jdbcType=VARCHAR}
+                ,modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+                ,modify_user = #{modifyUser,jdbcType=VARCHAR}
+                ,modify_organ = #{modifyOrgan,jdbcType=VARCHAR}
+                ,new_value = #{newValue,jdbcType=VARCHAR}
+                ,remark = #{remark,jdbcType=VARCHAR}
+                ,work_class = #{workClass,jdbcType=VARCHAR}
+        </trim>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <select id="findList" parameterType="com.github.rogerli.system.operation.entity.Operation" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from r_sys_operation
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id != null">
+                and id = #{id,jdbcType=VARCHAR}
+            </if>
+            <if test="workId != null">
+                and work_id = #{workId,jdbcType=VARCHAR}
+            </if>
+            <if test="workType != null">
+                and work_type = #{workType,jdbcType=VARCHAR}
+            </if>
+            <if test="oldValue != null">
+                and old_value = #{oldValue,jdbcType=VARCHAR}
+            </if>
+            <if test="modifyDate != null">
+                and modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="modifyUser != null">
+                and modify_user = #{modifyUser,jdbcType=VARCHAR}
+            </if>
+            <if test="modifyOrgan != null">
+                and modify_organ = #{modifyOrgan,jdbcType=VARCHAR}
+            </if>
+            <if test="newValue != null">
+                and new_value = #{newValue,jdbcType=VARCHAR}
+            </if>
+            <if test="remark != null">
+                and remark = #{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="workClass != null">
+                and work_class = #{workClass,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </select>
+</mapper>

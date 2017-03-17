@@ -9,7 +9,6 @@
 package com.github.rogerli.framework.web;
 
 import com.github.pagehelper.PageInfo;
-import com.github.rogerli.framework.annotation.LogAction;
 import com.github.rogerli.framework.model.BaseModel;
 import com.github.rogerli.framework.service.Service;
 import com.github.rogerli.framework.web.exception.IllegalValidateException;
@@ -43,7 +42,6 @@ public abstract class AbstractRestfulController<T extends BaseModel, PK> extends
             produces = {"application/json"}
     )
     @ResponseBody
-    @LogAction
     public Map<String, Object> delete(@PathVariable PK id) {
         LOGGER.debug("======delete:" + String.valueOf(id) + "======");
         Map<String, Object> jsonMap = new HashMap<String, Object>();

@@ -8,12 +8,15 @@
  */
 package com.github.rogerli.system.login.service;
 
+import com.github.pagehelper.PageHelper;
 import com.github.rogerli.framework.service.AbstractService;
 import com.github.rogerli.system.login.dao.LoginMapper;
 import com.github.rogerli.system.login.entity.Login;
+import com.github.rogerli.system.login.model.LoginModel;
 import com.github.rogerli.system.login.model.LoginRole;
 import com.github.rogerli.system.purview.entity.Purview;
 import com.github.rogerli.system.role.entity.Role;
+import com.github.rogerli.utils.RestfulUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +102,26 @@ public class LoginService extends AbstractService<Login, String, LoginMapper> {
             getMapper().insert(user);
         }
         return user;
+    }
+
+    /**
+     *
+     * @param query
+     * @return
+     */
+    public List<LoginModel> findLoginList(LoginModel query) {
+        if (query.getPageNum() != null && query.getPageNum() > 0
+                && query.getPageSize() != null && query.getPageSize() > 0) {
+            PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        }
+        if(StringUtils.hasText(query.getSortBy())){
+            RestfulUtils.checkOrder(query.getSorted());
+            String sortBy = query.getSortBy();
+            sortBy.replaceAll(",", " " + query.getSorted() + ",");
+            sortBy += " " + query.getSorted();
+            PageHelper.orderBy(sortBy);
+        }
+        return loginMapper.findLoginList(query);
     }
 
 }

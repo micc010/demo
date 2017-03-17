@@ -350,15 +350,15 @@ public class MybatisTool {
 
             // TODO view edit list
             template = configuration.getTemplate("htmlviewtemplate.ftl");
-            FileOutputStream view = new FileOutputStream(new File(tmplPath + entityName.toLowerCase() + "_view.ftl"));
+            FileOutputStream view = new FileOutputStream(new File(tmplPath + "view.ftl"));
             template.process(data, new OutputStreamWriter(view));
 
             template = configuration.getTemplate("htmledittemplate.ftl");
-            FileOutputStream edit = new FileOutputStream(new File(tmplPath + entityName.toLowerCase() + "_edit.ftl"));
+            FileOutputStream edit = new FileOutputStream(new File(tmplPath + "edit.ftl"));
             template.process(data, new OutputStreamWriter(edit));
 
             template = configuration.getTemplate("htmllisttemplate.ftl");
-            FileOutputStream list = new FileOutputStream(new File(tmplPath + entityName.toLowerCase() + "_list.ftl"));
+            FileOutputStream list = new FileOutputStream(new File(tmplPath + "list.ftl"));
             template.process(data, new OutputStreamWriter(list));
         } catch (IOException e) {
             e.printStackTrace();

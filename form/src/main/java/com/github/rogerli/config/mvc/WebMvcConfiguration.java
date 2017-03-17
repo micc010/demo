@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
@@ -29,11 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,15 +50,15 @@ import static java.nio.charset.StandardCharsets.UTF_8;
                 RestController.class, ControllerAdvice.class, RestControllerAdvice.class})}
 )
 @AutoConfigureAfter({LocalizationConfiguration.class})
-public class WebMvcConfiguration extends WebMvcConfigurationSupport {
-
+//public class WebMvcConfiguration extends WebMvcConfigurationSupport {
+public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfiguration.class);
 
     @Autowired
     private MessageSource messageSource;
 
     @Override
-    protected Validator getValidator() {
+    public Validator getValidator() {
         LOGGER.info("======Validator======");
         LocalValidatorFactoryBean localValidatorFactoryBean =
                 new LocalValidatorFactoryBean();
@@ -70,17 +67,17 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         return localValidatorFactoryBean;
     }
 
-    /**
-     * 优化restful
-     *
-     * @return
-     */
-    @Override
-    protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
-        LOGGER.info("======RequestMappingHandlerMapping======");
-        return new RestfulRequestMappingHandlerMapping();
-//        return  new RequestMappingHandlerMapping();
-    }
+//    /**
+//     * 优化restful
+//     *
+//     * @return
+//     */
+//    @Bean
+//    public RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
+//        LOGGER.info("======RequestMappingHandlerMapping======");
+//        return new RestfulRequestMappingHandlerMapping();
+////        return  new RequestMappingHandlerMapping();
+//    }
 
     /**
      * 默认视图
@@ -106,7 +103,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * @param registry
      */
     @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         LOGGER.info("======addResourceHandlers======");
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/",
                 "classpath:/public/",
@@ -121,7 +118,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * @param argumentResolvers
      */
     @Override
-    protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         LOGGER.info("======addArgumentResolvers======");
         super.addArgumentResolvers(argumentResolvers);
     }
@@ -132,7 +129,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * @param returnValueHandlers
      */
     @Override
-    protected void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
+    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
         LOGGER.info("======addReturnValueHandlers======");
         super.addReturnValueHandlers(returnValueHandlers);
     }
@@ -153,7 +150,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * @param converters
      */
     @Override
-    protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         LOGGER.info("======MappingJackson2HttpMessageConverter======");
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         List<MediaType> list = new ArrayList<MediaType>();
@@ -164,35 +161,35 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         converters.add(converter);
     }
 
-    /**
-     * 配置messageConverter, 默认的有
-     * ByteArrayHttpMessageConverter
-     * ResourceHttpMessageConverter
-     * SourceHttpMessageConverter
-     * AllEncompassingFormHttpMessageConverter
-     * 根据环境还可能有
-     * romePresent：AtomFeedHttpMessageConverter，RssChannelHttpMessageConverter
-     * jackson2XmlPresent：MappingJackson2XmlHttpMessageConverter
-     * jaxb2Present：Jaxb2RootElementHttpMessageConverter
-     * jackson2Present：MappingJackson2HttpMessageConverter
-     * gsonPresent：GsonHttpMessageConverter
-     *
-     * @param converters
-     */
-    @Override
-    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+//    /**
+//     * 配置messageConverter, 默认的有
+//     * ByteArrayHttpMessageConverter
+//     * ResourceHttpMessageConverter
+//     * SourceHttpMessageConverter
+//     * AllEncompassingFormHttpMessageConverter
+//     * 根据环境还可能有
+//     * romePresent：AtomFeedHttpMessageConverter，RssChannelHttpMessageConverter
+//     * jackson2XmlPresent：MappingJackson2XmlHttpMessageConverter
+//     * jaxb2Present：Jaxb2RootElementHttpMessageConverter
+//     * jackson2Present：MappingJackson2HttpMessageConverter
+//     * gsonPresent：GsonHttpMessageConverter
+//     *
+//     * @param converters
+//     */
+//    @Override
+//    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+//
+//    }
 
-    }
-
-    @Bean(name = "multipartResolver")
-    public CommonsMultipartResolver commonsMultipartResolver() {
-        LOGGER.info("======CommonsMultipartResolver======");
-        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        resolver.setMaxUploadSize(5000000);
-        resolver.setMaxInMemorySize(8192);
-        resolver.setDefaultEncoding("UTF-8");
-        return resolver;
-    }
+//    @Bean(name = "multipartResolver")
+//    public CommonsMultipartResolver commonsMultipartResolver() {
+//        LOGGER.info("======CommonsMultipartResolver======");
+//        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+//        resolver.setMaxUploadSize(5000000);
+//        resolver.setMaxInMemorySize(8192);
+//        resolver.setDefaultEncoding("UTF-8");
+//        return resolver;
+//    }
 
 
 //    @Bean

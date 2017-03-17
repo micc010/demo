@@ -11,7 +11,7 @@
 
 		<link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
 
-		<title>南宁城建计划</title>
+		<title>查看</title>
 
 		<link rel="stylesheet" href="../../../css/metro.min.css" />
 		<link rel="stylesheet" href="../../../css/metro-icons.css" />

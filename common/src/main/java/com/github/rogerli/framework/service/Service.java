@@ -58,14 +58,14 @@ public interface Service<T extends BaseModel, PK> {
      * @return
      */
     @Transactional
-    int updateByKey(T entity);
+    T updateByKey(T entity);
 
     /**
      * @param entity
      * @return
      */
     @Transactional
-    int updateByKeySelective(T entity);
+    T updateByKeySelective(T entity);
 
     /**
      * @param list
