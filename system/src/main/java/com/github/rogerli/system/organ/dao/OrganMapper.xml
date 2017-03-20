@@ -150,7 +150,7 @@
         <include refid="Base_Column_List"/>
         from r_sys_organ
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="userName != null">
+            <if test="name != null">
                 and NAME = #{name,jdbcType=VARCHAR}
             </if>
             <if test="code != null">
