@@ -129,10 +129,12 @@ public class MybatisTool {
                 renderDao(className);
                 renderXmlMapper(info, className, columnInfoList);
                 renderService(className);
-                renderRestful(className, "restfultemplate.ftl");
                 if (!toolConfiguration.isRestful()) {
+                    renderJson(className, "jsonwebtemplate.ftl");
                     renderWeb(className);
                     renderTmpl(className, info, columnInfoList);
+                } else {
+                    renderRestful(className, "restfultemplate.ftl");
                 }
             }
         } catch (SQLException e) {
@@ -293,6 +295,37 @@ public class MybatisTool {
             subFile.mkdirs();
             template = configuration.getTemplate("formwebtemplate.ftl");
             FileOutputStream fos = new FileOutputStream(new File(formPath + controllerName + ".java"));
+            template.process(data, new OutputStreamWriter(fos));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void renderJson(String className, String templateName) {
+        String packageName = toolConfiguration.getRestfulPackage(className);
+        String typeName = toolConfiguration.getEntityPackageName(className);
+        String entityName = toolConfiguration.getEntityName(className);
+        String controllerName = entityName + "JsonController";
+        String serviceName = toolConfiguration.getServicePackageName(className);
+
+        String restfulPath = toolConfiguration.getRestfulPath(className);
+
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("packageName", packageName);
+        data.put("className", controllerName);
+        data.put("entityName", entityName);
+        data.put("serviceName", serviceName);
+        data.put("typeName", typeName);
+        data.put("moduleName", toolConfiguration.getModuleName());
+
+        Template template;
+        try {
+            File subFile = new File(restfulPath);
+            subFile.mkdirs();
+            template = configuration.getTemplate(templateName);
+            FileOutputStream fos = new FileOutputStream(new File(restfulPath + controllerName + ".java"));
             template.process(data, new OutputStreamWriter(fos));
         } catch (IOException e) {
             e.printStackTrace();

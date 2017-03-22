@@ -151,7 +151,7 @@
         from r_sys_organ
         <trim prefix="where" prefixOverrides="and|or">
             <if test="name != null">
-                and NAME = #{name,jdbcType=VARCHAR}
+                and NAME like concat('%',#{name,jdbcType=VARCHAR},'%')
             </if>
             <if test="code != null">
                 and CODE = #{code,jdbcType=VARCHAR}

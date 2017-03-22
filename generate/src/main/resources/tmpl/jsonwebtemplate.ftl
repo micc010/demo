@@ -1,7 +1,7 @@
 package ${packageName};
 
 import com.github.rogerli.framework.service.Service;
-import com.github.rogerli.framework.web.AbstractRestfulController;
+import com.github.rogerli.framework.web.AbstractJsonController;
 import ${typeName};
 import ${serviceName};
 
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@RequestMapping("/${moduleName}/${entityName?lower_case}s")
-public class ${className} extends AbstractJsonController<${entityName}, String> {
+@RequestMapping(${entityName}TmplController.CONTENT_PATH)
+public class ${entityName}JsonController extends AbstractJsonController<${entityName}, String> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(${className}.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(${entityName}JsonController.class);
 
     @Autowired
     private ${entityName}Service ${entityName?uncap_first}Service;
@@ -23,11 +23,6 @@ public class ${className} extends AbstractJsonController<${entityName}, String> 
     @Override
     protected Service getService() {
         return ${entityName?uncap_first}Service;
-    }
-
-    @Override
-    protected void filter(BaseModel query){
-
     }
 
 }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.rogerli.config.jwt.model.UserContext;
 import com.github.rogerli.config.jwt.token.JwtToken;
 import com.github.rogerli.config.jwt.token.JwtTokenFactory;
+import com.github.rogerli.system.log.entity.Log;
+import com.github.rogerli.system.log.service.LogService;
 import com.github.rogerli.system.login.entity.Login;
 import com.github.rogerli.system.login.service.LoginService;
 import com.github.rogerli.system.purview.entity.Purview;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +43,9 @@ public class AjaxAwareAuthenticationSuccessHandler implements AuthenticationSucc
     private final JwtTokenFactory tokenFactory;
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private LogService logService;
 
     @Autowired
     public AjaxAwareAuthenticationSuccessHandler(final ObjectMapper mapper, final JwtTokenFactory tokenFactory) {
@@ -67,6 +73,15 @@ public class AjaxAwareAuthenticationSuccessHandler implements AuthenticationSucc
         login.setId(login.getId());
         List<Purview> list = loginService.findUserPurview(login);
         tokenMap.put("urls", list);
+
+        // 记录登录日志
+        Log log = new Log();
+        log.setLoginId(login.getId());
+        log.setLoginName(login.getUserName());
+        log.setLogIp(request.getRemoteAddr());
+        log.setLogTime(new Date());
+        log.setLogOperate("login");
+        logService.insertSelective(log);
 
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
