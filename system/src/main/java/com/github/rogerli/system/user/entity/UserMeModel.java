@@ -13,6 +13,7 @@ public class UserMeModel extends User implements Serializable {
     private String organId;
     private String organName;
     private List<GrantedAuthority> authorities;
+    private List<String> urls;
 
     public int getStatus() {
         return status;
@@ -52,5 +53,13 @@ public class UserMeModel extends User implements Serializable {
 
     public void setAuthorities(List<GrantedAuthority> authorities) {
         this.authorities = authorities;
+    }
+
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
     }
 }

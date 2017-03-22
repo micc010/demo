@@ -71,8 +71,8 @@ public class AjaxAwareAuthenticationSuccessHandler implements AuthenticationSucc
         // 返回权限清单
         Login login = loginService.findByUsername(userContext.getUsername());
         login.setId(login.getId());
-        List<Purview> list = loginService.findUserPurview(login);
-        tokenMap.put("urls", list);
+//        List<Purview> list = loginService.findUserPurview(login);
+//        tokenMap.put("urls", list);
 
         // 记录登录日志
         Log log = new Log();
